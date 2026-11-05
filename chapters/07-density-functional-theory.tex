@@ -1,75 +1,150 @@
-\chapter{从多体波函数到电子密度}
+\chapter{从多体波函数到电子密度}\label{dft:chapter}
 \sourcepages{手写笔记第 35--41 页及第 43--44 页}
-\section{降低变量维数的愿望与需要证明的事实}
-多电子波函数依赖全部 $3N$ 个空间坐标，电子数密度 $n(\bm r)$ 却只依赖三个。定义
+\section{为什么想改用密度描述材料}
+CI 告诉我们，只要有足够多的行列式，就能逐步改善多电子波函数。但代价也清楚：即使每个电子只需有限个轨道，多电子排布的组合数也会迅速增长。对许多原子组成的材料，完整求出波函数通常不是可行的日常方法。能否不保存全部多体信息，仍然得到基态能量和结构？密度泛函理论（density functional theory，DFT）从这个问题出发。
+
+电子数密度 $n(\bm r)$ 的含义是：$n(\bm r)\dd\bm r$ 给出小体积元内的平均电子数。它只依赖三个空间坐标，定义为
 \begin{equation}
-n(\bm r)=\left\langle\Psi\left|\sum_i\delta(\bm r-\bm r_i)\right|\Psi\right\rangle,\qquad \int n(\bm r)\dd\bm r=N.
+n(\bm r)=\left\langle\Psi\left|\sum_{i=1}^N\delta(\bm r-\bm r_i)\right|\Psi\right\rangle,
+\qquad \int n(\bm r)\dd\bm r=N.
 \end{equation}
-它是将其他粒子坐标与自旋求和积分后的边缘分布。通常边缘分布不决定联合分布，因此“只算密度”首先需要一个关于\emph{基态}的特殊结论，而不能仅凭变量少就成立。
+因此 $n$ 的积分是电子数 $N$，不是一。一个电子在什么位置的概率，与所有电子在某处的平均数量，不能混为一谈。
 
-固定粒子数和电子间作用，写 $\hat H_v=\hat T+\hat W+\sum_i v(\bm r_i)$。外势 $v$ 承载核的位置和电荷信息。本章只讨论标量局域外势；磁场和电流密度理论不能不加修改地套用以下论证。
+密度究竟丢失了什么？想象两个远离的区域 A、B，里面总共有两个电子。一种状态总是每处一个电子；另一种状态有一半概率两个都在 A，另一半概率两个都在 B。两种状态在每个区域的平均电子数都为一，但两电子同时靠近的概率不同，排斥能也可能不同。这个例子说明：一般来说，知道一体密度，并不等于知道任意多体态的全部联合概率。
 
-\section{Hohenberg--Kohn 反证法及其边界}
-先考虑非简并基态。假定两个并非只差常数的外势 $v,v'$ 给出相同密度 $n$，但对应不同基态 $\Psi,\Psi'$。严格变分不等式给出
+DFT 因而不能仅以“密度变量少”为理由成立。它需要一个针对\emph{基态}的特殊联系，并需要说明：那些不再显式保存的关联信息，最终放到了哪里。
+
+\section{基态密度为什么能确定外势}
+仍然固定核坐标，并采用原子单位。电子 Hamilton 算符写为
+\begin{equation}
+\hat H_v=\hat T+\hat W+\sum_i v(\bm r_i).
+\end{equation}
+$T$ 是电子动能，$W$ 是电子间 Coulomb 排斥，$v$ 是原子核产生的外势。本节比较的各体系具有相同电子数、相同 $T$ 与 $W$，只有 $v$ 不同。核间排斥在固定核电子问题中是常数，这里先不计入，计算总势能时再加回。
+
+为什么密度可能足以辨认外势？若两个不同的外势产生相同基态密度，我们就能用两次变分原理检验这一假设。先考虑非简并、且基态不同的情形。设 $H_v$ 和 $H_{v'}$ 的归一化基态为 $\Psi,\Psi'$，对应能量为 $E_v,E_{v'}$。把 $\Psi'$ 当作 $H_v$ 的试探态，由于它不是其基态，
+\begin{equation}
+E_v<\langle\Psi'|H_v|\Psi'\rangle
+=E_{v'}+\int[v(\bm r)-v'(\bm r)]n(\bm r)\dd\bm r.
+\end{equation}
+最后一步只用了两个 Hamilton 算符之差是一体外势，而一体外势的期望值由密度给出。交换两个体系再做一次，得到
+\begin{equation}
+E_{v'}<E_v+\int[v'(\bm r)-v(\bm r)]n(\bm r)\dd\bm r.
+\end{equation}
+若密度相同，两式相加后积分正好抵消，得到 $E_v+E_{v'}<E_v+E_{v'}$，矛盾。
+
+这就是 Hohenberg--Kohn 定理的核心反证。对通常的连续空间 Coulomb 体系，在所需正则性条件下，基态密度确定标量外势，允许相差一个常数。常数不能被密度辨认，因为给每个电子的势都加 $C$，只会把总能量加 $NC$，不会改变波函数。上述简短反证使用了非简并且不同的基态；共享基态与简并情形需更一般的论证，不能把严格不等式直接照搬过去。
+
+这条定理首先是一个\emph{存在性与唯一性结论}：基态密度中包含辨认电子问题所需的信息。它没有给出从密度直接算出能量的简单公式，也不表示所有具有相同密度的非基态都有相同能量。真正的计算困难仍然存在，只是可以换一种方式表述。
+
+\section{约束搜索：把看不见的多体信息放进泛函}
+用第一个例子的话说，同一个密度可以对应不同的电子共同排布。现在固定这个密度，在所有产生它的合法多电子波函数中，寻找内部能量最低的那个，定义
+\begin{equation}\label{dft:search}
+F[n]=\inf_{\Psi\to n}\langle\Psi|\hat T+\hat W|\Psi\rangle.
+\end{equation}
+符号 $\Psi\to n$ 表示波函数产生给定密度，$\inf$ 表示能量的下确界；若最低值能够达到，它就是通常的最小值。这里仍然要求波函数归一化、反对称且具有有限动能。密度的非负与归一化是必要条件，不能代替所有这些物理要求。
+
+对给定外势，能量泛函为 $E_v[n]=F[n]+\int vn$。为什么再次对密度最小化就能得到基态？因为所有允许波函数都可以按其产生的密度分组。先在每组中找到最低内部能量，再加上同组共有的外势能，最后比较各组，与一开始直接在所有波函数中找最低能量是同一件事：
+\begin{equation}
+E_0[v]=\inf_{n\to N}\left\{F[n]+\int v(\bm r)n(\bm r)\dd\bm r\right\}.
+\end{equation}
+这叫约束搜索。它还解释了 $F$ 为什么称为普适泛函：原子核产生的具体外势没有放进 $F$，相同电子相互作用的不同材料可以使用同一个 $F$。
+
+这里的“密度泛函”就是一种以\emph{整个密度函数}为输入、输出一个数的规则。它不必只看每一点的局部密度，也可以联系不同位置。两电子如何避开、波函数如何弯曲产生动能，这些信息并未被宣布无关，而是被式 \eqref{dft:search} 的内部最小化包含进去了。问题在于，精确 $F[n]$ 通常不知道。
+
+\section{先试最直接的办法：局域近似动能}
+既然想用密度，最直接的尝试是把动能也写成密度的简单函数。均匀、无相互作用的电子气提供了一个可以算清的参考。电子在体积 $\Omega$ 的盒子中取平面波，每个空间波矢可容纳自旋相反的两个电子。零温时从低能向高能填充，直到半径为 $k_F$ 的球。
+
+每个允许波矢在 $k$ 空间占体积 $(2\pi)^3/\Omega$。因此数电子数和求动能分别给出
 \begin{align}
-E_v&<\langle\Psi'|H_v|\Psi'\rangle=E_{v'}+\int(v-v')n\dd\bm r,\\
-E_{v'}&<E_v+\int(v'-v)n\dd\bm r.
+n&=\frac{2\cdot4\pi}{(2\pi)^3}\int_0^{k_F}k^2\dd k
+=\frac{k_F^3}{3\pi^2},\\
+\frac{T}{\Omega}&=\frac{2\cdot4\pi}{(2\pi)^3}\int_0^{k_F}\frac{k^2}{2}k^2\dd k
+=\frac{k_F^5}{10\pi^2}.
 \end{align}
-相加得到 $E_v+E_{v'}<E_v+E_{v'}$，矛盾。若两外势共享同一波函数，还需由两本征方程相减得到 $\sum_i[v(\bm r_i)-v'(\bm r_i)]\Psi=(E_v-E_{v'})\Psi$；在通常连续空间 Coulomb 问题所需的正则性与唯一延拓条件下，这要求势差为常数。此处不能以相除波函数的方式忽略节点与定义域问题。
-
-因此，在上述条件下基态密度确定外势至一个加常数，进而确定 Hamilton 算符。简并情况下，不能继续声称密度唯一挑出某一个纯态；也不能原封不动使用严格不等式。建立能量变分原则时，下面的约束搜索比把每个试探密度都反演成一个势更稳妥。
-
-\section{约束搜索把两次最小化分开}
-对于可由归一化反对称有限动能态产生的密度，定义
+消去 $k_F$，再把均匀密度换成随位置变化的局部密度，得到 Thomas--Fermi 动能近似
 \begin{equation}
-F[n]=\inf_{\Psi\to n}\langle\Psi|T+W|\Psi\rangle.
+T_{\rm TF}[n]=\frac3{10}(3\pi^2)^{2/3}\int n(\bm r)^{5/3}\dd\bm r.
 \end{equation}
-这里先固定密度，再在所有产生该密度的波函数中寻找最低内部能量。外势不参与这一步，所以 $F$ 对同一种粒子和作用是普适的。然后对密度最小化：
-\begin{equation}
-E_0[v]=\inf_{n\to N}\left\{F[n]+\int vn\dd\bm r\right\}.
-\end{equation}
-理由是每个波函数都有一个密度；把全部波函数按密度分组，组内先取最低值，再在各组之间取最低值，与直接对全部波函数最小化相同。
+它的物理图像是把每个小区域当作均匀电子气。密度越高，Pauli 原理要求填充到越高的动量，平均动能也越大。
 
-这也说明两种可表象性的差别：$N$ 可表象要求密度来自合法 $N$ 电子态；$v$ 可表象还要求它是某个外势的基态密度。仅有非负与积分等于 $N$ 并不足以保证有限动能等全部定义域条件。必要时用混合态密度算符 $\hat\Gamma$ 进行系综约束搜索，避免把纯态唯一性当作普适前提。
+这个近似能描述一部分平滑的密度变化，却很难准确描述原子的壳层、轨道节点和化学键中的量子结构。困难因此不只在电子排斥，\emph{动能本身}也需要足够精细的描述。Kohn--Sham 方法的关键选择是：不必为了“只谈密度”而放弃一切轨道；可以引入一个简单辅助体系，用它准确计算辅助动能。
 
-\section{为什么不能简单丢掉轨道：Thomas--Fermi 尝试}
-均匀无相互作用、非自旋极化电子气中，每个波矢可容纳两个电子。体积 $\Omega$ 内 $k$ 空间态密度为 $\Omega/(2\pi)^3$，故
+\section{Kohn--Sham：用辅助轨道再现真实密度}
+设想一组没有显式电子--电子相互作用的辅助粒子，在某个待定有效势 $v_s$ 中运动。要求它们的基态密度与真实相互作用体系相同。辅助轨道 $\phi_i$ 正交归一，若 $i$ 标记自旋轨道，零温非简并情形下占据数 $f_i$ 为零或一；必要时可使用分数占据。密度与辅助动能为
 \begin{equation}
-n=2\int_{|\bm k|<k_F}\frac{\dd^3k}{(2\pi)^3}=\frac{k_F^3}{3\pi^2}.
-\end{equation}
-同样对每个态的动能 $k^2/2$ 积分，得到 $T/\Omega=k_F^5/(10\pi^2)$。将局域密度代替常密度得到
-\begin{equation}
-T_{\rm TF}[n]=\frac3{10}(3\pi^2)^{2/3}\int n^{5/3}\dd\bm r.
-\end{equation}
-连同 $\int vn$、经典 Hartree 能和选定的交换关联近似，对 $n$ 作带粒子数约束的变分，可得 $\tfrac12(3\pi^2)^{2/3}n^{2/3}+v+v_H+v_{xc}=\mu$。问题是局域均匀气动能难以描述轨道节点和原子壳层。降低变量数量并没有使未知泛函自动变简单。
-
-\section{Kohn--Sham 辅助体系}
-为保留量子动能的轨道结构，引入一个与真实体系具有相同密度的无相互作用辅助体系。先在可用该辅助体系表示的密度范围内讨论，必要时允许分数占据。记自旋轨道占据数为 $f_i$，则
-\begin{equation}
-n=\sum_i f_i|\phi_i|^2,\qquad
+n(\bm r)=\sum_i f_i|\phi_i(\bm r)|^2,\qquad
 T_s=\sum_i f_i\langle\phi_i|-\nabla^2/2|\phi_i\rangle.
 \end{equation}
-定义 $E_H[n]=\tfrac12\iint n(\bm r)n(\bm r')/|\bm r-\bm r'|\dd\bm r\dd\bm r'$，并令 $E_{xc}=F-T_s-E_H$。因此
+若改用闭壳层空间轨道记号，每条占据空间轨道需计两个电子，不能把这两套占据约定混用。辅助体系能再现所需密度是 KS 构造的重要前提；以下在这种表示适用的范围内讨论。
+
+“没有显式相互作用”不等于忽略真实排斥。我们先把真实能量中容易计算的部分单列出来。外势能为 $\int vn$，把密度当作连续电荷云的经典排斥能为
 \begin{equation}
-E[n]=T_s+\int vn+E_H+E_{xc}+E_{NN}.
+E_H[n]=\frac12\iint\frac{n(\bm r)n(\bm r')}{|\bm r-\bm r'|}\dd\bm r\dd\bm r'.
 \end{equation}
-$E_{xc}$ 不仅包含非经典相互作用，还包含真实动能与辅助动能之差。将它误认为“只是一小部分 Coulomb 修正”会误解这个精确分解。
+这里 $E_H[n]$ 专指\emph{经典 Hartree 排斥项}，不同于第 5 章用 $E_H$ 表示的 Hartree 近似电子总能量。于是用定义
+\begin{equation}\label{dft:xc-definition}
+E_{xc}[n]=F[n]-T_s[n]-E_H[n]
+\end{equation}
+收集其余所有部分，得到总势能
+\begin{equation}\label{dft:energy}
+E[n]=T_s[n]+\int vn+E_H[n]+E_{xc}[n]+E_{NN}.
+\end{equation}
+这一步在使用精确 $E_{xc}$ 时是能量的重新分解，不是先把电子排斥近似掉。真实体系与辅助体系有相同密度，却一般有不同波函数和不同动能。因此 $E_{xc}$ 同时包含真实动能与 $T_s$ 的差，以及真实相互作用能与经典电荷云能量 $E_H$ 的差。
 
-对 Hartree 能变分时，两个密度因子各贡献相同的一项，消去 $1/2$，得到 $v_H(\bm r)=\int n(\bm r')/|\bm r-\bm r'|\dd\bm r'$。再定义 $v_{xc}=\delta E_{xc}/\delta n$。对正交轨道作带约束变分，利用 $\delta n/\delta\phi_i^*=f_i\phi_i$，得
+这也解释了 HF 与 KS 的区别。HF 行列式是对\emph{真实多电子波函数}的试探近似，能量来自真实 Hamilton 算符的期望值；KS 行列式首先是产生\emph{正确密度}的辅助工具，剩余物理通过 $E_{xc}$ 进入。不能仅因为它们都求解轨道，就认为二者只是换了一个交换项的同一种近似。
+
+\section{有效势从哪里来}
+有效势并不是猜出来的，它来自式 \eqref{dft:energy} 的变分。先考察经典排斥项。把 $n$ 换成 $n+\delta n$，保留一阶项：
 \begin{equation}
-[-\nabla^2/2+v+v_H+v_{xc}]\phi_i=\varepsilon_i\phi_i.
+\delta E_H=\frac12\iint\frac{\delta n(\bm r)n(\bm r')+n(\bm r)\delta n(\bm r')}{|\bm r-\bm r'|}\dd\bm r\dd\bm r'.
 \end{equation}
-这里假定交换关联项具有局域势表示；轨道依赖泛函的广义 KS 情形需另作处理。辅助行列式用于产生密度，通常不等于真实相互作用基态波函数。
-
-\section{自洽、总能量与有限温度}
-给出 $n_{\rm in}$，建势并解轨道，再算 $n_{\rm out}$。可用 $n_{\rm next}=(1-\alpha)n_{\rm in}+\alpha n_{\rm out}$ 混合。收敛要检查密度残差，而不能只看连续两次能量很接近。自洽点也不必是最低能解，尤其在磁性和多种占据可能时。
-
-自洽后对轨道方程取期望并按占据求和：$\sum_i f_i\varepsilon_i=T_s+\int vn+2E_H+\int nv_{xc}$。代回能量式得到
+第二项交换积分变量后与第一项相同，所以 $1/2$ 消去，得到
 \begin{equation}
-E=\sum_i f_i\varepsilon_i-E_H+E_{xc}-\int nv_{xc}\dd\bm r+E_{NN}.
+\delta E_H=\int v_H(\bm r)\delta n(\bm r)\dd\bm r,\qquad
+v_H(\bm r)=\int\frac{n(\bm r')}{|\bm r-\bm r'|}\dd\bm r'.
 \end{equation}
-未自洽时输入势与输出密度不同，不能随意使用这一简化形式；动能可从轨道直接计算，或明确用建轨道时的输入势扣除。
+同样用 $\delta E_{xc}=\int v_{xc}\delta n$ 定义 $v_{xc}=\delta E_{xc}/\delta n$。$E_{xc}$ 是能量，$v_{xc}$ 则描述密度在某处稍微改变时，这部分能量怎样改变；二者不能直接互换。
 
-有限电子温度下，应最小化自由能而非能量。对固定粒子数的密度算符 $\Gamma$，熵为 $S=-\kb\Tr\Gamma\ln\Gamma$，自由能为 $\Tr\Gamma H-TS$。在密度固定的态中约束搜索，可定义 $F_T[n]=\inf_{\Gamma\to n}\{\Tr\Gamma(T+W)+\kb T\Tr\Gamma\ln\Gamma\}$。外势项随后加入，保持“普适内部部分”与外势分开。
+为推导轨道方程，先考虑所有占据自旋轨道都有 $f_i=1$ 的情形。对第 $i$ 条轨道的复共轭变化，有 $\delta n=\phi_i\delta\phi_i^*$；辅助动能的对应变化为 $\int\delta\phi_i^*(-\nabla^2/2)\phi_i$。因此总能量的一阶变化中，乘在 $\delta\phi_i^*$ 前的系数是 $[-\nabla^2/2+v+v_H+v_{xc}]\phi_i$。
 
-在 KS 辅助态中，以 $0\le f_i\le1$ 的自旋轨道占据表示熵 $S_s=-\kb\sum_i[f_i\ln f_i+(1-f_i)\ln(1-f_i)]$。对占据变分，并固定平均电子数，给出 $\varepsilon_i-\mu+\kb T\ln[f_i/(1-f_i)]=0$，即 Fermi--Dirac 分布。数值展宽不一定代表真实电子温度，电子温度也不自动等于核温度。
+还需保持轨道正交，故如同 HF 一样引入矩阵乘子。把该乘子矩阵在占据子空间对角化后，得到 KS 方程
+\begin{equation}\label{dft:ks}
+\left[-\frac12\nabla^2+v(\bm r)+v_H(\bm r)+v_{xc}(\bm r)\right]\phi_i
+=\varepsilon_i\phi_i.
+\end{equation}
+它看起来像独立粒子的 Schrödinger 方程，但势依赖所有占据轨道共同给出的密度。真实电子之间的影响通过这种依赖仍然存在。这里讨论能够写为局域有效势的情形；下一章的部分轨道依赖泛函会给出更一般的有效算符。
+
+\section{为什么必须自洽，怎样读总能量}
+如果已经知道密度，就能构造 $v_H$ 与 $v_{xc}$，再求出轨道；可是密度恰恰要由轨道算出。因此实际求解是一个闭合过程：从合理的 $n_{\rm in}$ 出发建势，解式 \eqref{dft:ks}，按电子数占据轨道，再算 $n_{\rm out}$。当两者一致时，电子感受到的势与它们自身产生的密度相容，这就是自洽。
+
+直接把输出当成下一轮输入可能来回振荡。例如某次把电荷移到一个区域，它的排斥势随之上升，下一轮又可能把过多电荷推走。简单混合
+\begin{equation}
+n_{\rm next}=(1-\alpha)n_{\rm in}+\alpha n_{\rm out},\qquad 0<\alpha\le1
+\end{equation}
+让修正幅度变小，但它没有改变目标方程。应检查输入输出密度差是否缩小，也检查能量是否稳定；仅有一次很小的能量变化，不足以判断所有变量已收敛。自洽解还可能是某个局部驻点，而非最低能态。
+
+求出轨道后，不能把 $\sum_i f_i\varepsilon_i$ 直接当作总能量。对每条 KS 方程取期望并按占据数相加，有
+\begin{equation}
+\sum_i f_i\varepsilon_i=T_s+\int vn+\int nv_H+\int nv_{xc}.
+\end{equation}
+由 $E_H$ 的定义，$\int nv_H=2E_H$：每一片电荷都把其他电荷算作外部来源，求和后每对相互作用计了两次。将上式与式 \eqref{dft:energy} 比较，得
+\begin{equation}
+E=\sum_i f_i\varepsilon_i-E_H+E_{xc}-\int nv_{xc}+E_{NN}.
+\end{equation}
+每个扣除或补回的项都有目的：扣除重复的经典排斥，把交换关联势的期望值换成交换关联能本身，再加上核间排斥。未自洽时建势所用密度与轨道输出密度不同，应从原能量表达式计算，不能混用这条自洽后的简式。
+
+\section{有限温度改变的是平衡判据}
+零温基态选择最低能量；有限电子温度下，一些较高能量状态也会被占据，因为可访问的状态数同样影响平衡。这时应比较自由能 $\mathcal A=E-TS$，其中熵 $S$ 描述热混合的不确定性。能量较高但熵更大的状态，也可能具有较低自由能。
+
+用密度算符 $\Gamma=\sum_a p_a|\Psi_a\rangle\langle\Psi_a|$ 表示以概率 $p_a$ 混合的量子态，$\sum_a p_a=1$。$\Tr(\Gamma H)$ 表示对各态能量加权求和，熵为 $S=-\kb\Tr(\Gamma\ln\Gamma)$。约束搜索现在对产生给定密度的混合态进行：
+\begin{equation}
+F_T[n]=\inf_{\Gamma\to n}\left\{\Tr[\Gamma(\hat T+\hat W)]+\kb T\Tr(\Gamma\ln\Gamma)\right\}.
+\end{equation}
+再加外势项并对密度最小化，便得到有限温度 DFT 的自由能原则。它与零温的结构相同，只是内部能量换成了内部自由能。
+
+在常用的独立粒子辅助描述中，以化学势 $\mu$ 调节平均电子数，单个自旋轨道可以空着或被占据。若占据概率为 $f_i$，它贡献的熵为 $-\kb[f_i\ln f_i+(1-f_i)\ln(1-f_i)]$。对占据变化极小化相应自由能，得到
+\begin{equation}
+\varepsilon_i-\mu+\kb T\ln\frac{f_i}{1-f_i}=0,
+\qquad f_i=\frac1{1+e^{(\varepsilon_i-\mu)/(\kb T)}}.
+\end{equation}
+这是 Fermi--Dirac 占据，适用于这里以平均粒子数为约束的辅助系综。$T\to0$ 时，低于 $\mu$ 的态被占据，高于它的态为空；有限温度把这一边界变平滑。数值上为帮助积分而引入的展宽不一定是实际电子温度，更不能直接等同于原子核的温度。
