@@ -1,4 +1,4 @@
-# PHYS5120 中文自学教材
+# PHYS5120 课程讲义
 
 本目录是当前课程教材的主稿，统一先写**中文 LaTeX**。唯一编译入口为 [main.tex](main.tex)，公共排版与符号在 [preamble.tex](preamble.tex)。[中文 PDF](PHYS5120-中文教材.pdf) 用于阅读；修改以 LaTeX 源文件为准。原始协作笔记来自 [Overleaf 项目](https://www.overleaf.com/project/6130625f9c31a759aa64b17b)，原贡献者权益保留；本地修改不自动同步到 Overleaf。
 
