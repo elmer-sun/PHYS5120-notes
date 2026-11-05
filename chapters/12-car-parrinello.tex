@@ -1,0 +1,50 @@
+\section{Car--Parrinello molecular dynamics}
+DFT $\rightarrow$ $\rho,\{\phi_i\}\text{(Kohn-sham orbital)}$ $\rightarrow$ F $\rightarrow$ verlet $\rightarrow$ DFT
+
+There are two loops: DFT gives the first loop(self consistence), the second loop is the ion step loop (using verlet)
+unit
+
+Can we do the two minimization at the same time?
+\begin{align}
+    L_{cp} &= K-V \\
+    &= \frac{1}{2}\sum^p_{I=1}M_IR_I^2 - \sum^N_{i=1} \frac{1}{2}(2\mu)\int d\vec{r} \abs{\dot{\varphi}_i(\vec{r})}^2\\
+    &- E_{KS}[\{\varphi_i\},\{R_I\}]\\
+    &+ \sum_{ij}\Lambda_{ij}\left[\int d\vec{r}\varphi^*_i\varphi_j - \delta_{ij}\right]
+\end{align}
+
+\begin{align}
+    &E_{KS}[\{\varphi_i\},\{R_I\}]\\
+    &=\sum^N_{i=1}\int\varphi^*_i(r)\left(-\frac{\hbar^2}{2m}\nabla^2\right)\varphi_i(r)d\vec{r}+\int d\vec{r} V_{ext}(\vec{r})\rho(\vec{r})\\
+    &+\frac{1}{2}\int\int d\vec{r} d\vec{r}' \frac{\rho(\vec{r})\rho(\vec{r}')}{\abs{\vec{r}-\vec{r}'}} d\vec{r}\vec{r}' + E_{XC}[\rho]+E_{nn}[\{R_I\}]\\
+    \frac{d}{dt}\left(\frac{\partial L_{cp}}{\partial \dot{R}_I}\right)=\frac{\partial L_{cp}}{\partial R_I}\\
+    M_I \dot{R}_I = -\frac{\partial E_{KS}[\{\phi_i\}\{R_i\}]}{\partial R_I}   
+\end{align}
+
+From the calculation, we have:
+\begin{align}
+    \frac{d}{dt}\left(\frac{\delta L_{cp}}{\delta \dot{\varphi}_i^*(\vec{r})}\right)=\frac{\delta L_{cp}}{\delta \varphi_i^*(\vec{r})}\\
+    \mu\ddot{\varphi}_i(\vec{r}) = -\frac{\delta E_{KS}}{\delta \varphi^*_i(\vec{r})}+\sum_j\Lambda_{ij}\varphi_j(\vec{r})\\
+    \mu\ddot{\varphi}_i(\vec{r}) = -H_{KS}\varphi_i(\vec{r})+\sum_j\Lambda_{ij}\varphi_j(\vec{r})
+\end{align}
+
+If $\ddot{\varphi}_i(\vec{r})=0$, then the Newton's equation will become Schodinger equation $H_{KS}\varphi_i(\vec{r}) = \sum^{N}_{j}\Lambda_{ij}\varphi_j(\vec{r})$.\\
+Verlet:
+\begin{align}
+    \varphi^{(n+1)_i(\vec{r})} = 2\varphi^{(n)_i(\vec{r})}- \varphi^{(n-1)_i(\vec{r})} -\frac{(\Delta t)^2)}{\mu}\left[\hat{H}_{KS}\varphi_i^{(n)}-\sum^N_{j=1}\Lambda_{ij}\varphi_j(\vec{r})\right]
+\end{align}
+
+Let's use one electron in a two state system as an example, We follow PRA44, 6334(1991):\\
+-------- $\phi_1$\\
+-------- $\phi_2$\\
+
+We have: $\displaystyle \cos\frac{\theta}{2}\ket{\phi_1}+\sin\frac{\theta}{2}\ket{\phi_2}\qquad\braket{\phi_1}{\phi_2}=0$\\
+$\displaystyle H\ket{\phi_1}=\varepsilon_1\ket{\phi_1}\qquad H\ket{\phi_2}=\varepsilon_2\ket{\phi_2}$\\
+$\displaystyle L=\frac{1}{2}\left(\frac{\mu}{2}\right)\dot{\theta}^2-\bra{\phi}H\ket{\phi}=\frac{1}{4}\mu\dot{\theta}^2-\cos^2{\frac{\theta}{2}}\varepsilon_1+\sin^2\frac{\theta}{2}\varepsilon_2=\frac{1}{4}\mu\dot{\theta}^2-(\varepsilon_2-\varepsilon_1)\cos^2\frac{\theta}{2}-\varepsilon_2$\\
+
+\begin{align}
+    \frac{d}{dt}\left(\frac{\partial L}{\partial \theta}\right)=\frac{1}{2}\mu\dot{\theta}^2\\
+    \frac{\partial L}{\partial \theta}=-(\varepsilon_2-\varepsilon_1)\frac{\sin\theta}{2}\\
+    \text{Take two sides equal, we have: }\nonumber\\
+    \mu\ddot{\theta}=-(\varepsilon_2-\varepsilon_1)\sin\theta
+\end{align}
+

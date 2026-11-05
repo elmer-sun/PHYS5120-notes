@@ -1,0 +1,172 @@
+\section{Electronic correlation beyond Hartree--Fock}
+\subsection{General Correlation energy}
+\begin{align}
+    \text{We now know that }
+    \Phi_{\text{HF}}&=\frac{1}{\sqrt{N!}}
+    \begin{vmatrix}
+    \varphi_1(1) & \varphi_1(2) & \dots & \varphi_1(N) \\
+    \varphi_2(1) & \varphi_2(2) & \dots & \varphi_2(N) \\
+    \vdots & & & \vdots\\
+    \varphi_N(1) & \varphi_N(2) & \dots & \varphi_N(N) \\
+    \end{vmatrix}
+\end{align}
+
+Here all $\varphi$ are occupied orbitals.
+
+We now denoted $\Phi^a_i$ as the $i$ orbital replaced by the $a$ orbital. We then have:
+\begin{align}
+    \text{We then have }
+    \Phi^a_i&=\frac{1}{\sqrt{N!}}
+    \begin{vmatrix}
+    \varphi_1(1) & \varphi_1(2) & \dots & \varphi_1(N) \\
+    \varphi_2(1) & \varphi_2(2) & \dots & \varphi_2(N) \\
+    \vdots & & & \vdots\\
+    \varphi_a(1) & \varphi_a(2) & \dots & \varphi_a(N) \\
+    \vdots & & & \vdots\\
+    \varphi_N(1) & \varphi_N(2) & \dots & \varphi_N(N) \\
+    \end{vmatrix}
+\end{align}
+Here $\varphi_i$ is occupied orbital, and $\varphi_a$ is unoccupied orbital. Repeating for all other orbitals, we have the complete basis which is normalized and orthogonal to each other:
+$\{\Phi_{HF},\Phi^a_i,\Phi^{ab}_{ij},\Phi^{abc}_{ijk},\dots\}$
+
+Check that they are orthogonal: $\langle \Phi_{HF} \vert \Phi^a_i \rangle = 0$
+
+Single excitation wavefunction: (Replace one unoccupied electron by one occupied electron)
+\begin{align}
+    \Phi^{(1)}=\sum^{\text{occupy}}_i\sum^{\text{virtual}}_ac^a_i\Phi^a_i
+\end{align}
+Double excitation wavefunction
+\begin{align}
+    \Phi^{(2)} = \sum^{occ}_{i<j}\sum^{virt}_{a<b}c^{ab}_{ij}\Phi^{ab}_{ij}
+\end{align}
+Triple excitation wavefunction:
+\begin{align}
+    \Phi^{(3)}=\sum^{\text{occupy}}_{i<j<k}\sum^{\text{virtual}}_{a<b<c}c^{abc}_{ijk}\Phi^{abc}_{ijk}
+\end{align}
+Strongly Correlated Materials means that we cannot use one Slater determinant, but more Slater determinant. Weakly Correlated Materials means that $\Phi_0$ already has the main contribution.
+
+\subsection{Configuration interaction (CI)}
+Every wavefunction can be written as:
+\begin{align}
+    \Phi_{CI}=c_0\Phi_{HF}+\Phi^{(1)}+\Phi^{(2)}+\Phi^{(3)}+\cdots
+\end{align}
+This form includes every possible configuration of the system. We solve for Sch\"{o}dinger equation to obtain the CI version for Roothaan equaion:
+\begin{align}
+    \textbf{H}\ket{\Psi_{CI}}=E_{CI}\ket{\Psi_{CI}}\\
+    \textbf{H}\sum_{i=0} c_i\Phi^{(i)}=E_{CI}\sum_{i=0} c_i\Phi^{(i)}\\
+    \sum_i \bra{\Phi^{(i)}}\textbf{H}\ket{\Phi^{(i)}} c_i = \sum_i\braket{\Phi^{(i)}}{\Phi^{(i)}}c_iE_{CI}\\
+    \textbf{H}C=SCE_{CI}
+\end{align}
+
+\subsection{Møller-Plesset Perturbation (MP2)}
+To tackle the the Configuration interaction, one popular method is Møller-Plesset Perturbation. However, this method is only a good approximation for weakly-correlated material.\\
+
+For the Zeroth-Order term, we consider the Hamiltonian which has two parts. The first part is easy to solve and the second part is difficult to solve:
+\begin{align*}
+\hat{H}_0\ket{n^{(0)}}=E_n^{(0)}\ket{n^{(0)}}\\
+\hat{H}=\hat{H}_0+\lambda\hat{H}'
+\end{align*}
+
+The eigenenergy and the wavefunction can be writte as:
+\begin{align*}
+E_n=E_n^{(0)}+\lambda E_n^{(1)}+\lambda^2E_n^{(2)}\\
+\ket{n}=\ket{n^{(0)}}+\lambda\ket{n^{(1)}}+\lambda^2\ket{n^{(2)}}+\cdots
+\end{align*}
+
+Pertubation theory states that the eigenenergy of the first and second order correction is given by:
+\begin{align*}
+E^{(1)}_n=\bra{n^{(0)}}\hat{H}'\ket{n^{(0)}}\\
+E^{(2)}_n=\sum_{k\neq n}\frac{\abs{\bra{n^{(0)}}\hat{H}'\ket{n^{(0)}}}^2}{E^{(0)}_n-E^{(0)}_k}
+\end{align*}
+
+Recall that the Hamiltonian can be written as:
+\begin{align*}
+\hat{H}=\sum_i \left(-\frac{\hbar^2}{2m} \nabla_i^2+V_{ext}(R,r_i)\right)+\frac{1}{2}\sum_{i\neq j}\frac{e^2}{\abs{r_i-r_j}}
+\end{align*}
+
+As we already know the solution for Hartree-Fock, we define the Fock operator and treat it as the zeroth-order Hamiltonian.
+\begin{align}
+\text{Fock operator: }\hat{f}(i)=\hat{h}_1(i)+\sum^{N/2}_{j=1}(2\hat{j}_j(i)-\hat{k}_j(i))\\
+\hat{f}(i)\ket{\varphi_i}=\varepsilon_i\ket{\varphi_i}\label{eq:f_eigen}\\
+\hat{F}=\sum^N_{i=1}\hat{f}(i)=\hat{H}_0
+\end{align}
+
+The pertubation Hamiltonian can be defined as:
+\begin{align}
+\hat{H}'=\hat{H}-\hat{F}\qquad \lambda=1
+\end{align}
+
+Using Eq. \eqref{eq:f_eigen}, we can obtain the Zero Order Energy:
+\begin{align}
+\text{Zero Order: }E_{MP0} = \bra{\Phi_0}\hat{F}\ket{\Phi_0}=\sum_i\varepsilon_i
+\end{align}
+
+The First Order Correction and Second Order Correction is given by:
+\begin{align}
+\text{First Order: }E_{MP1} = \bra{\Phi_0}\hat{H}-\hat{F}\ket{\Phi_0} = E_{HF} - \sum_i\varepsilon_i\\
+\text{Second Order: }E_{MP2} = \sum_{\Phi_{other}=\{\Phi^a_i \Phi^{ab}_{ij} \Phi^{abc}_{ijk} \dots\}}\frac{\abs{\bra{\Phi_0}\hat{H}'\ket{\Phi_{other}}}^2}{E_{MP0}-E_{other}}\label{eq:MP2_2}
+\end{align}
+
+$E_{CI}$ will be lower than $E_{HF}$ as the degree of freedom increase. $E_{Mp2}$ lies between $E_{HF}$ and $E_{CI}$.
+
+Note that both $\hat{H}$ and $\hat{J}$ are only involving two body interaction, meaning that involving only $i$ and $j$. This means that there would be an extra orbital mismatch:
+\begin{align}
+    \left \langle\Phi_0 \left|\hat{H}-\hat{F}\right| \Phi^{abc}_{ijk}\right\rangle=0
+\end{align}
+
+For single excitation, we have:
+\begin{align}
+    \bra{\Phi_0}\hat{H}-\hat{F}\ket{\Phi^a_i}&=\bra{\Phi_0}\hat{H}\ket{\Phi^a_i}-\bra{\Phi_0}\hat{F}\ket{\Phi_i^a}\\
+    &=\underbrace{\bra{i}\hat{f}\ket{a}}_0-\underbrace{\sum_n \varepsilon_n \braket{\Phi_0}{\Phi^a_i}}_0=0 \text{(First term comes from Brillouin's theorem)}
+\end{align}
+The Second Order term therefore comes from double excitation. Eq. \eqref{eq:MP2_2} can therefore simplified to
+\begin{align}
+    E_{MP2}&=\sum^{occ}_{i<j}\sum^{vir}_{a<b} \frac{\vert{\langle{\Phi_0}\vert\hat{H}-\hat{F}\vert{\Phi^{ab}_{ij}}}\rangle\vert^2}{E_{MP0}-\Phi^{ab}_{ij}}\quad\quad(\text{80\% of the correlation energy.) }
+\end{align}
+
+\subsection{Coupled Cluster Theory}
+The coupled cluster theory is originated from neutron physics, but it is then later notice to be useful in condensed matter physics. We consider the Ansatz: $\Psi_{CC}=e^{\hat{T}}\Phi_{HF}$:
+\begin{align}
+    e^{\hat{T}}=I+\hat{T}+\frac{1}{2!}\hat{T}^2+\cdots\\
+    \hat{T}=\hat{T}_1+\hat{T}_2+\cancel{\hat{T}_3}\\
+    \hat{T}_1\Phi_0=\sum^{occ}_i\sum^{vir}_at^a_i\Phi^a_i\\
+    \hat{T}_2\Phi_0=\sum^{occ}_{i<j}\sum^{vir}_{a<b}t^{ab}_{ij}\Phi^{ab}_{ij}\\
+    e^{\hat{T}}=I+\hat{T}_1+\underbrace{(\hat{T}_2+\frac{1}{2}\hat{T}_1^2)}_{D}+\underbrace{(\hat{T}_3+\hat{T}_2\hat{T}_1+\frac{1}{6}\hat{T}_1^3)}_{T}+\cdots
+\end{align}
+
+In Coupled Cluster Singles and Doubles model (CCSD), we consider $T_1$, $T_2$. This is the most accurate method so far. Start from the Sch\"{o}dinger equation and substitute with the Ansatz:
+\begin{align}
+    \hat{H}\ket{\Phi}_{cc} = E\ket{\Phi_{cc}}\quad\quad He^{\hat{T}}\ket{\Phi_0}=Ee^{\hat{T}}\ket{\Phi_0}
+\end{align}
+This formulation gives two relations:
+\begin{align}
+    \bra{\Phi_0}e^{-\hat{T}}He^{\hat{T}}\ket{\Phi_0}&=E\quad\text{(CCSD(T)) Golden Standard (95\%)}\\
+    \bra{\Phi^a_i}e^{-\hat{T}}He^{\hat{T}}\ket{\Phi_0}&=0\\
+    \langle{\Phi^{ab}_{ij}}\vert e^{-\hat{T}}He^{\hat{T}}\vert{\Phi_0}\rangle&=0
+\end{align}
+
+%\subsection{Wavefunction method}
+\subsection{Quantum Monte Carlo}
+In Condensed Matter community, people tend to use quantum monte carlo method.
+
+\subsubsection{Variational Monte Carlo}
+$a$ is a parameter in the wavefunction, we then have:
+\begin{align}
+    E(A)&=\frac{\bra{\psi(a)}\bar{H}\ket{\psi(a)}}{\braket{\psi(a)}{\psi(a)}}\\
+    &=\frac{\color{blue}\int\abs{\psi(\vec{x},a)}^2\color{black}\frac{H\psi(x,a)}{\psi(x,a)}d\vec{x}}{{\color{blue}\int\abs{\psi(\vec{x},a)}^2d\vec{x}}}\color{black} \qquad \text{where $\vec{x}=(\vec{r}_1,\vec{r}_2,\dots,\vec{r}_N)$}\\
+    &=\sum_{\vec{x}}\color{blue}p(\vec{x},a)\color{black}\frac{H\psi(x,a)}{\psi(x,a)}
+\end{align}
+
+We have $\displaystyle E_{ground} = \min_a E(a)$. Normally, this method only works when there are symmetry so that the size of the system is not too big,\\
+
+
+\subsubsection{Diffusion Monte Carlo}
+This is a very popular method for strongly correlated material.
+\begin{align}
+    i\hbar \frac{d\psi}{dt} = - \frac{\hbar^2}{2m}\nabla^2\psi = H\psi\\
+    -\hbar \frac{d\psi}{d(it)}=\left(-\frac{\hbar^2}{2m}\nabla^2+V(r)\right)\psi \quad \text{where }it=\tau\\
+    \psi = e^{-\frac{E}{\hbar}\tau}\psi_0\quad E=\bra{\psi_i}H\ket{\psi_i}
+\end{align}
+By doing relaxation, we can get the current state wavefunction. This method works well for system like free electron gas. However, there are some limitation in this method. When the system is diffuse, the sign never changes. This is called the fixed-mode approximation.
+
+\newpage

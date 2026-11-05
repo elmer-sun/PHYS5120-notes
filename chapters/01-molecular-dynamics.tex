@@ -1,0 +1,117 @@
+\section{Molecular dynamics}
+\subsection{Basic statistical mechanics}
+Consider a box consider N-partciles, we would like to study the property of this system. The particles in this system has interaction. In MD, we have a force field and the field here depends on position. In this course, we mainly only consider the Coulomb's interaction:
+\begin{equation}
+    F=k\frac{q_1 q_2}{r^2}
+\end{equation}
+
+The approach in classical mechanics includes:\\
+1. Newton's equation of motion,
+
+\begin{equation}
+    \textbf{F}=m\frac{d^2 \textbf{x}}{dt^2}
+\end{equation}
+
+2: Hamiltonian mechanics.
+\begin{equation}
+    \dot{\hat{p}}=-\frac{\partial H}{\partial q}
+\end{equation}
+\begin{equation}
+    \dot{\hat{q}}=\frac{\partial H}{\partial p}
+\end{equation}
+
+3: Lagrangian mechanics
+
+If we want to describe a state, we can have a state point, where the state function $S=(q,p)=(r_1,r_2,...,r_N,p_1,p_2,...,p_N)$. The phase space of the system has $6N$ dimension.
+
+\subsubsection{NVE ensemble}
+In NVE ensemble system, the number of particle(N), volume(V), and Energy(E) is unchange in the system. The expected value of A (such as pressure) can be written as:
+\begin{equation}
+    <A>=\frac{\sum_S\delta_{\varepsilon(S),E} A(S)}{\sum_S \delta_{\varepsilon(S),E}}
+\end{equation}
+\subsubsection{Canonical ensemble/NVT}
+If the Temperature of the system is confined instead of energy, we will have the NVT ensemble.
+\begin{equation}
+    <A>=\frac{\sum_S e^{-\beta \varepsilon(S)} A(S)}{\sum_S e^{-\beta \varepsilon(S)}}
+\end{equation}
+
+Classically, we can define temperature as
+\begin{equation}
+    \sum^N_{i=1} \frac{\textbf{p}_i^2}{2m} = \frac{3Nk_BT}{2}
+\end{equation}
+\subsection{Ergodicity}
+The Ergodic hypothesis means that the ensemble average can be obtained by the time average:
+
+\begin{equation}\label{eqn:Ergodicity}
+    <\textbf{A}>=\lim_{t\rightarrow\infty}\frac{1}{t}\int_0^\infty dt' \textbf{A}(t')
+\end{equation}
+
+In MD, the hypothesis means that if the simulation, equation \eqref{eqn:Ergodicity} will give us an accurate results. This works for fluids, supercritical fluids, or gas, but does not work for solid and glass.
+
+\subsection{Molecular Dynamics (MD)}
+To perform MD, we need 1. State function $S_i$, and 2. $F_i$: There are two types of Force field $F_i$, including classical MD, and quantum mechanics MD (first-principles MD, or ab initio MD). 3. Given a time steps h, we solve the equation motion of $t\rightarrow t+h$. Step 2 and Step 3 forms a loop and repeat. Step 3 is performed by Verlet method.
+
+\subsection{Verlet method}
+Taylor expansion gives us:
+\begin{equation}\label{eqn:verlet1}
+    x(t+h) = x(t) + \dot{x}(t)h+\frac{1}{2!}\ddot{x}(t)+\frac{1}{3!}\dddot{x}(t)+O(h^4)
+\end{equation}
+\begin{equation}\label{eqn:verlet2}
+    x(t-h) = x(t) - \dot{x}(t)h+\frac{1}{2!}\ddot{x}(t)-\frac{1}{3!}\dddot{x}(t)+O(h^4)
+\end{equation}
+With some algebra, we have
+\begin{equation}\label{eqn:verlet3}
+    x(t+h)-x(t-h)=2x(t)+\ddot{x}(t)h^2+O(h^4)
+\end{equation}
+\begin{equation}\label{equation:Verlet}
+    x(t+h)=2x(t)+x(t-h)+\frac{f(t)}{m}h^2+O(h^4)
+\end{equation}
+Equation \eqref{equation:Verlet} gives us the Verlet equation.
+
+\subsubsection{Time reversal and energy conservation}
+Why can't we use the numerical method to solve the PDE? The fundamental reason is due to time reversal symmetry. By taking $t\rightarrow -t$, only $v$ has the sign being reverse, and \eqref{equation:Verlet} remains the same. Therefore, using Verlet method allows us to satisft time-reversal symmetry, and \textbf{allowing energy to be conserved}.
+
+\subsubsection{Velocity in the Verlet method}
+By subtracting equation \eqref{eqn:verlet1} by equation \eqref{eqn:verlet2}, we get:
+\begin{equation}\label{eqn:vverlet}
+    v(t)=\dot{x}(t)=\frac{x(t+h)-x(t-h)}{2h}+O(h^2)
+\end{equation}
+
+To perform Velocity Verlet method, we substitue \eqref{eqn:vverlet} to \eqref{equation:Verlet} to get:
+\begin{equation}
+    x(t+h)=x(t)+hv(t)+\frac{f(t)}{2m}h^2
+\end{equation}
+This equation allows us to update $x(t+h)$
+
+To update $v(t)$, we replace t by t+h in \eqref{equation:Verlet} to get:
+\begin{align}
+    v(t+h)&=\frac{x(t+2h)-x(t)}{2h}\\
+    &=\frac{x(t+h)+hx(t+h)+\frac{f(t+h)}{2m}h^2}{2h}\\
+    v(t+h)&=v(t)+\frac{f(t)+f(t+h)}{2m}h \label{eqn:velocityupdate}
+\end{align}
+
+It is easy to see that equation \eqref{eqn:velocityupdate} satisfy time reversal symmetry and \textbf{the proof is left as an exercise for the reader}.
+
+\subsection{Leapfrog method}
+Using Leapfrog method can get the exact same result as the Verlet. Leapfrog method is a method similar to R-K method,  but satisfy time-reversal symmetry.
+
+\subsubsection{Apply the leapfrog method in Newton’s equations of motion}
+Details are in the lecture notes.
+
+\subsubsection{Can we trust the trajectory obtained by the leapfrog/Verlet method?}
+Yes. Even though there are chaotic conditions, Verlet method forced to minimize the action.
+
+How can we compute functional derivative in computer? Consider an action:
+\begin{align}
+    S=\int^b_a \bigg[\frac{1}{2}m\bigg(\frac{dx}{dt}\bigg)^2-V(x)\bigg] dt\\
+    S=\sum^{N-1}_{i=0}\bigg[\frac{1}{2}m\bigg(\frac{x_{i+1}-x_{i}}{h}\bigg)^2-V(x_i)\bigg]h
+\end{align}
+
+For $\forall i = 0,1,2,...,N-1$, we have
+\begin{align}
+    \frac{\partial S}{\partial x_i}=0\\
+    \frac{\delta S}{\delta x(t)}=0\\
+    x_{i+1}=2x_i=x_{i-1}+f_i\frac{h^2}{m}
+\end{align}
+
+\newpage

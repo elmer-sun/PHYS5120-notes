@@ -1,0 +1,104 @@
+\section{Adiabatic approximation}
+We go from classical theory to quantum theory. Hamiltonian is an important element in the theory.\\
+
+Given $p$ be the number of nuclei and $N$ be the number of electrons, we have:
+\begin{align*}
+    \textbf{H} &= -\sum^{p}_{I=1}\frac{h^2}{2M_I}\nabla^2_I + \frac{e^2}{2}\sum^p_{I=1}\sum^p_{J\neq 1}\frac{Z_IZ_J}{\abs{\textbf{R}_I-\textbf{R}_J}}\\
+    &-\sum^{N}_{i=1}\frac{h^2}{2M_I}\nabla^2_i + \frac{e^2}{2}\sum^N_{i=1}\sum^N_{j\neq 1}\frac{1}{\abs{\textbf{r}_i-\textbf{r}_j}} - e^2\sum^p_{I=1}\sum^N_{i=1}\frac{Z_I}{\abs{\textbf{R}_I-\textbf{r}_i}}
+\end{align*}
+
+The first term is the kinetic energy of proton, the second term is the proton-proton interactions, third term is kinetic energy of electron, fourth term is electron-electron interactions, and fifth term is interaction between protons and electrons.
+
+Here we assume $k=\frac{1}{4 \pi \epsilon_0}=1$
+
+Basically, if we solve the Schodinger equation, we can get the physics of the solid:
+\begin{equation}
+    \textbf{H} \psi_n(\textbf{R}, \textbf{r}) =
+    \varepsilon_n \psi_n(\textbf{R}, \textbf{r})
+\end{equation}
+
+\subsection{Adiabatic approximation}
+The wavefunction can be written as: 
+$$\Psi(\textbf{R},\textbf{r},t)=\sum_n\theta_n(\textbf{r},t)\phi_n(\textbf{R},r)$$
+
+Here $\theta_n(\textbf{r},t)$ is state of the nuclei, and $\phi(\textbf{R}, r)$ is the state of electron, which does not depend on time because electron is much lighter than proton, and it easily catch up with the motion of nuclei.
+\begin{align}
+    &i\hbar\frac{\partial\theta_m(\textbf{R},t)}{\partial t} = \left( -\sum^p_{I=1}\frac{\hbar^2}{2M_I}\nabla^2_I+V_{nn}(\textbf{R})+E_n(\textbf{r})\right)\theta_m(\textbf{R},t)\\
+    & \hat{h}\phi_n(\textbf{R},r)=E_n(\textbf{R})\phi_n(\textbf{R},r)
+\end{align}
+The Lagrangian can be written as:
+\begin{align}
+    & \mathcal{L} = -\sum^{N}_{i=1}\frac{\hbar^2}{2m}\nabla_i^2+\frac{e^2}{2}\sum^N_{i=1}\sum^N_{h\neq i}\frac{1}{\abs{\textbf{r}_i-\textbf{r}_j}}-e^2\sum^p_{I=1}\sum^N_{i=1}\frac{Z_I}{\abs{\textbf{R}_I-\textbf{r}_i}}
+\end{align}
+
+Note that the wave equation for nuclei is time-dependent, and that of electron is time-independent.
+
+\subsection{Ehrenfest theorem}
+Going from adiabatic to non-adiabatic, we need Ehrenfest theorem.\\
+
+Starting from the Schodinger Equation:
+\begin{equation}
+    i\hbar\frac{\partial}{\partial t}\psi(x,t) = [\hat{T}(x)+V(x)]\psi(x,t)
+\end{equation}
+
+There are three pictures in Quantum Mechanics, known as Heisenberg picture, Schodinger picture, and Interaction picture.\\
+\begin{align}
+    \text{Heisenberg picture: }\frac{d}{dt}\hat{A}(t)=\frac{\partial \hat{A}(t)}{dt}+\frac{1}{i\hbar}\left[\hat{A}(t),\hat{H}\right]
+\end{align}
+
+In Heisenberg picture, wavefunction is time-independent. Only operators are time-dependent.
+
+\begin{align}
+    \frac{d}{dt}\langle\hat{x}\rangle&=\frac{1}{i\hbar}\langle[\hat{x},\hat{H}]\rangle\\
+    &=\frac{1}{i\hbar}\left\langle\left[\hat{x},\frac{\hat{p}^2}{2m}\right]\right\rangle\\
+    &=\frac{1}{i\hbar m}\langle[\hat{x},\hat{p}^2]\rangle\\
+    &=\frac{1}{i\hbar}{m}\langle[\hat{x},\hat{p}]\hat{p}+\hat{p}[\hat{x},\hat{p}]\rangle = \frac{\langle{\hat{p}}\rangle}{m}
+\end{align}
+We therefore get the relationship:
+\[
+\begin{dcases}
+\frac{d}{dt}\langle\hat{x}\rangle = \frac{\langle{\hat{p}}\rangle}{m}\\
+\frac{d}{dt}\langle\hat{p}\rangle = \frac{1}{i\hbar}\langle[\hat{p},V(x)]\rangle
+\end{dcases}
+\]
+Using $\hat{p} = -i\hbar\nabla$, we have:
+\begin{align}
+    &\frac{1}{i\hbar}\langle[\hat{p},V(x)]\rangle \\
+    =&\int\psi^*V\nabla \psi dx - \int \psi^* \nabla(V\psi) dx\\
+    =&-\int \psi^*\nabla V \psi dx\\
+    =&-\langle\nabla V(x)\rangle
+\end{align}
+
+We can get the Newton's equation of motion by taking the quantum expectation from Schodinger equation.
+
+\begin{equation}
+    m\frac{d^2}{dt^2}\langle\hat{x}\rangle = -\left\langle\frac{\partial V(x)}{\partial x}\right\rangle
+\end{equation}
+Using Ehrenfest theorem and apply it to the Hamiltonian, using $\frac{\partial}{\partial \textbf{R}}=\nabla$, we have:
+\begin{equation}
+    M \frac{d^2}{dt^2}\langle\textbf{R}\rangle = -\left\langle\frac{\partial V_{nn}(\textbf{R})}{\partial\textbf{R}}+\frac{\partial E_{n}(\textbf{R})}{\partial\textbf{R}}\right\rangle
+\end{equation}
+
+The thermal wavelength is given by: $\frac{\hbar^2k^2}{2m}=\pi k_BT$, where $\lambda = \sqrt{\frac{h^2}{2\pi mk_BT}}$. But we will then have:
+$$\text{H}_2: 0.712\text{\AA}\quad\quad\text{O}_2: 0.179\text{\AA}$$
+As the thermal wavelength is small, this means that the classical picture $\langle \textbf{R}\rangle\approx\textbf{R}$ will still work.\\
+As the trajectory of the electron follows the nucleus, the wavefunction of electron is time-independent, meaning that we can write:
+\begin{equation}
+    \textbf{H}\ket{\phi_n}=E_n\ket{\phi_n}
+\end{equation}
+Taking differentiation and average on both side, we have the Hellmann-Feynman theorem:
+\begin{align}
+    \left\langle \frac{\partial E_n(\textbf{R})}{\partial \textbf{R}} \right\rangle &= \frac{\partial}{\partial \textbf{R}}\left(\int\phi^*_n(\textbf{R},\textbf{r})\textbf{H}(\textbf{R},\textbf{r})\phi_n(\textbf{R},\textbf{r})d\textbf{r}\right)\\
+    &=E_n\frac{\partial}{\partial\textbf{R}}\left(\int\phi^*_n\phi_nd\textbf{r}\right)+\left\langle\phi_n\left\vert\frac{\partial \textbf{H}}{\partial \textbf{R}}\right\vert\phi_n\right\rangle\\
+    &=\left\langle\phi_n\left\vert\frac{\partial \textbf{H}}{\partial \textbf{R}}\right\vert\phi_n\right\rangle
+\end{align}
+
+We therefore have:
+\begin{equation}
+    M \frac{d^2}{dt^2}\textbf{R} = -\left\langle\phi_n\left\vert\frac{\partial \textbf{H}}{\partial \textbf{R}}\right\vert\phi_n\right\rangle - \frac{\partial V_{nn}(\textbf{R})}{\partial \textbf{R}} = \textbf{F}
+\end{equation}
+
+Solving $\{\phi_n\}$ gives us the electronic structure calculation.\\
+If we take $\textbf{F}=0$ and we minimize $E_{\text{total}}$, we can do geometry optimization. This can be solved through first-principles/ab initio MD/MC.
+
+\newpage

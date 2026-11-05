@@ -1,0 +1,314 @@
+\section{Hartree and Hartree--Fock theory}
+We already have basic understanding on how the wavefunction of a single particle looks like (such as hydrogen atom), and we can denote it as $\phi_i$. However, in a many-body system, we know nothing about the wavefunction of the system. Hartree approximation assume that the wavefunction of the system is the product of the wavefunction of every single particle. However, we will soon see that this approximation have serious problem.
+
+\subsection{Hartree approximation}
+Taking the separation of wavefunction:
+\begin{align}
+    \Phi &= \prod^N_{i=1}\varphi_i(\textbf{r}_i)
+\end{align}
+
+The Hamiltonian of the wavefunction consist of two parts. The first part is called \textbf{one-electron operator}. The first term is the K.E. of the electron and the second term is the potential given by the nuclei.
+\begin{align}
+    \hat{h}_1 (i) &= -\frac{\hbar^2}{2m}\nabla ^2 _{r_i}+V_{\text{ext}}(\textbf{R},\textbf{r}_i)
+\end{align}
+
+The second part is called \textbf{two-electron operator}. This is the Coulomb interaction. 
+\begin{align}
+    \textbf{U}_2(i,j)&=\frac{e^2}{\abs{\textbf{r}_i-\textbf{r}_j}} \label{eq:Jij}
+\end{align}
+
+The two terms sum over all electron to obtain the total Hamiltonian.
+\begin{align}
+    \hat{H} &= \sum^{N}_{i=1} \hat{h}_1 (i)+\frac{1}{2}\sum^N_{i=1}\sum^N_{j\neq i} \textbf{U}_2(i,j) \label{eq:Ham}
+\end{align}
+
+To find the total energy, we need to define quantity $E_{ii}$ and $J_{ij}$ :
+\begin{align}
+    E_{ii}&=\int\dots\int\varphi^*_1(r_1)\varphi^*_2(r_2)\dots\varphi^*_N(r_N)\hat{h}_1(i)\varphi_1(r_1)\varphi_2(r_2)\dots\varphi_N(r_N) d\textbf{r}_1d\textbf{r}_2\dots d\textbf{r}_N\\
+    J_{ij} &= \int\dots\int \varphi^*_1\varphi^*_2\dots\varphi^*_N\textbf{U}_2(i,j)\varphi_1\varphi_2\dots\varphi_N d\textbf{r}_1d\textbf{r}_2\dots d\textbf{r}_N\nonumber\\
+    &\text{Operator }\textbf{U}_2\text{ only operates on particle }i\text{ and }j\text{, this gives:}\nonumber\\
+    &=\int\int\varphi^*_i(\textbf{r}_i)\varphi^*_j(\textbf{r}_j)\frac{e^2}{\vert\textbf{r}_i-\textbf{r}_j\vert}\varphi_i(\textbf{r}_i)\varphi_j(\textbf{r}_j)d\textbf{r}_id\textbf{r}_j\nonumber\\
+    &=\int\int\rho_i(\textbf{r}_i)\textbf{U}_2(i,j)\rho_j(\textbf{r}_j)d\textbf{r}_id\textbf{r}_j
+\end{align}
+
+We therefore have:
+\begin{align}
+    \langle\Phi\vert\hat{H}\vert\Phi\rangle &= \sum^N_{i=1}E_{ii}+\frac{1}{2}\sum^N_{i=1}\sum^N_{j\neq i}J_{ij}
+\end{align}
+
+\subsection{Diagonization}
+To solve the Sch\"{o}dinger equation $\hat{H}\ket{\phi}=E\ket{\phi}$, one method we can use is to first construct the basis $\ket{i}$ satisfies $\displaystyle \sum_i\braket{i}{i}=1$ and $\braket{i}{j}=\delta_{ij}$, and solve the eigenvalue problem:
+\begin{align}
+    \sum_i\bra{k}H\ket{i}\braket{i}{\phi}&=\sum_i\bra{j}E\ket{i}\braket{i}{\phi}\nonumber\\
+    \sum_i\bra{k}H\ket{i}\braket{i}{\phi}&=\sum_iE \delta_{ij}\braket{i}{\phi}
+\end{align}
+
+With substitution, we have:
+\begin{align}
+    \left(-\frac{\hbar^2}{2m}\nabla ^2_{r_i}+V^{(i)}_{\text{eff}}(\textbf{R},\textbf{r}_i)\right)\varphi_i(r)=\varepsilon_i\varphi_i(r)
+\end{align}
+
+\subsection{Variational principle}
+Another method for solving the Sch\"{o}dinger equation is to minimize the total energy $\bra{\psi}H\ket{\psi}=\int\psi^* H \psi d\textbf{r}$. By minimizing this term, we can obtain the lowest eigenstate correspond to the lowest eigenenergy.\\
+
+Using the method of Lagrange multiplier, we have the constraint $\int \psi^*\psi dr = 1$. This is equivalent to set:
+\begin{equation}
+    \frac{\delta(\int \psi^*\textbf{H}\psi d\textbf{r}-\lambda(\int \psi^*\psi dr-1))}{\delta\psi^*(\textbf{R})} = 0\label{eq:Hartree_min}
+\end{equation}
+
+We have use the notation of functional derivative. Recall that
+\begin{align}
+    \delta F[f] &= F[f+\delta f] - F[f]\nonumber\\
+    &= \int^b_a \frac{\delta F}{\delta f(x)} \delta f(x) dx \label{eq:functder}\\
+    \text{If a functional } F[f] &\text{ can be written as }\nonumber\\
+    F[f] &= \int^b_af(x)g(x)dx\nonumber\\
+    \text{Then taking functional}&\text{ derivative, we have}\nonumber\\
+    \delta F[f] &= \int^b_ag(x)\delta f(x)dx\nonumber\\
+    \text{The functional derivative respect }&\text{to $f$ can therefore written as: }\nonumber\\
+    \frac{\delta F}{\delta f} &= g(x)\label{eq:fdev}
+\end{align}
+
+Using Eq. \eqref{eq:fdev}, we have Eq. \eqref{eq:Hartree_min}. This can be written as:
+\begin{align}
+    \frac{\delta(\bra{\varphi}H\ket{\varphi})-E(\braket{\varphi}{\varphi}-1))}{\delta\varphi^*}=0\nonumber\\
+    H\ket{\varphi}=E\ket{\varphi}
+\end{align}
+
+Why we can treat $\psi$ and $\psi^*$ as independent?:
+\begin{align*}
+    &z = x+iy \quad \quad \frac{\partial}{\partial z^*}=\frac{1}{2}\left(\frac{\partial}{\partial x}+i\frac{\partial}{\partial y}\right) \\
+    &\frac{\partial z^*}{\partial z^*}=1 \quad \quad \frac{\partial z}{\partial z^*}=\frac{1}{2}(1-1)=0
+\end{align*}
+Meaning that they look like independent when doing derivative.
+
+We can do the same thing (without the Lagrange multiplier) by setting:
+\begin{equation}
+    \frac{\partial\frac{\bra{\psi}H\ket{\psi}}{\braket{\psi}{\psi}}}{\partial\bra{\psi}}=0
+\end{equation}
+
+With computational method, we start with the functional derivative of the energy term. Using Eq \eqref{eq:fdev}, we have:
+\begin{align}
+    \frac{\delta\bra{\psi}H\ket{\psi}}{\delta\bra{\psi}} = H \vert \psi \rangle
+\end{align}
+
+We then do the following steps:
+\begin{align*}
+    &\text{1. } \quad \psi_i\\
+    &\text{2. } \quad \psi_{i+1} = \psi_i-\lambda H\ket{\psi_i} \quad (\lambda \text{ is the step size})\\
+    &\text{3. } \quad \text{normalize by } \frac{\ket{\psi_{i+1}}}{\sqrt{\braket{\psi_{i+1}}{\psi_{i+1}}}}
+\end{align*}
+This method is known as the steepest descent, or gradient descent in machine learning.
+
+\subsection{Combining total energy and Variational Principle}
+We implement Variational principle on each particle:
+\begin{align}
+    \frac{\delta \{\langle \Psi \vert \hat{H}\vert \Psi\rangle-\sum^N_{i=1}\varepsilon_i(\int \varphi^*_i(\textbf{r}_i)\varphi_i(\textbf{r}_i)-1)\}}{\delta\varphi^*_i(\textbf{r}_i)} = 0    \quad\forall i \label{eq:CTEVP}
+\end{align}
+Recall that from Eq \eqref{eq:Ham}: $\displaystyle \langle\Phi\vert\hat{H}\vert\Phi\rangle = \sum^N_{i=1}E_{ii}+\frac{1}{2}\sum^N_{i=1}\sum^N_{j\neq i}J_{ij}$ and Eq \eqref{eq:Jij} $\displaystyle =\int\int\rho_i(\textbf{r}_i)\textbf{U}_2(i,j)\rho_j(\textbf{r}_j)d\textbf{r}_id\textbf{r}_j$, then apply Eq \eqref{eq:fdev} on Eq \eqref{eq:CTEVP} gives:
+\begin{align}
+    \left(-\frac{\hbar^2}{2m}\nabla^2+V_{ext}\right)\varphi_i(\textbf{r}_i)+e^2\int\frac{\sum^N_{j\neq i}\rho_j(\textbf{r}_j)}{\vert\textbf{r}_i-\textbf{r}_j\vert}d\textbf{r}_j\varphi_i(\textbf{r}_i)=\epsilon_i \varphi_i(\textbf{r}_i) \label{eq:CTEVP2}
+\end{align}
+
+\subsection{Functional derivative}
+A Functional derivative $\mathcal{F}$ maps a manifold $\mathcal{M}$ to a number $\mathcal{C}$, or $\mathcal{F}: \mathcal{M}\rightarrow \mathcal{C}$
+\begin{align}
+    \delta F[\rho(\textbf{r})]&=\int_{\Omega}\frac{\delta F[\rho(\textbf{r})]}{\delta \rho}\phi(\textbf{r})d\textbf{r}\nonumber\\
+    :&= \lim_{\varepsilon \rightarrow 0} \frac{F[\rho+\varepsilon\phi]-F[\rho]}{\varepsilon} = \frac{d}{d\varepsilon}F[\rho+\varepsilon\phi]\bigg|_{\varepsilon\rightarrow 0}
+\end{align}
+
+By taking $\phi(r)=\delta\rho(r)$, we have $\displaystyle\delta F[\rho(r)]=\int_{\Omega}\frac{\delta F[\rho(r)]}{\delta\rho} \delta\rho dr$
+
+\textbf{Example}: We consider the functional $I[\rho(r)]=\int_{\Omega}f(r,\rho(r),\nabla\rho)dr$
+\begin{align}
+    \delta I[\rho] &= \frac{d}{d\varepsilon}\int_{\Omega} f(r,\rho+\varepsilon\phi,\nabla\rho+\varepsilon\nabla\phi)dr\bigg\vert_{\varepsilon\rightarrow 0}\nonumber\\
+    &= \frac{d}{d\varepsilon}\int_{\Omega}\left(\frac{\partial f}{\partial \rho} \varepsilon\phi + \frac{\partial f}{\partial \nabla \rho} \varepsilon \nabla \phi\right) dr\nonumber\\
+    &=\int_{\Omega}\left[\frac{\partial f}{\partial \rho}\phi+\nabla\cdot\left(\frac{\partial f}{\partial \nabla \rho}\phi\right)-\left(\nabla\cdot\frac{\partial f}{\partial \nabla \rho}\right)\phi\right] dr\nonumber\\
+    &= \int_{\Omega}\left(\frac{\partial f}{\partial \rho}-\nabla \cdot \frac{\partial f}{\partial \nabla \rho}\right)\phi(r)dr\nonumber\\
+    \frac{\delta I[\rho(r)]}{\delta \rho(r)} &= \frac{\partial f}{\partial \rho} - \nabla\cdot\frac{\partial f}{\partial \nabla \rho}
+\end{align}
+\textbf{Example}: We consider the functional: $I[\rho]=\int \rho^n(r)\omega(r) dr$ (We already know the answer for $n=1$)
+\begin{align}
+    \frac{\delta I[\rho]}{\delta \rho}=\omega(r)n\rho^{n-1}(r) \label{eq:Fd}
+\end{align}
+
+\subsection{Non-Linearity of Hamiltonian}
+Recall Eq \eqref{eq:CTEVP2} $\displaystyle     \left(-\frac{\hbar^2}{2m}\nabla^2+V_{ext}+e^2\int\frac{\sum^N_{j\neq i}\rho_j(\textbf{r}_j)}{\vert\textbf{r}_i-\textbf{r}_j\vert}d\textbf{r}_j\right)\varphi_i(\textbf{r}_i)=\epsilon_i \varphi_i(\textbf{r}_i) $
+
+Combining the two potential term gives:
+\begin{align*}
+    \left(-\frac{\hbar^2}{2m}\nabla ^2_{r_i}+V^{(i)}_{\text{eff}}(\textbf{R},\textbf{r}_i)\right)\varphi_i(r)=\sum^{N}_{j=1}\varepsilon_{ij}\varphi_{j}(r)
+\end{align*}
+
+Noted that in the effective potential, the term $\rho_j(\textbf{r}_j)$ actually consists of $\displaystyle \int\varphi_j^*\varphi_j$, meaning that when we update the wavefunction of Eq \eqref{eq:CTEVP2}, we also need to update the effective potential. 
+
+\subsection{Reaching Self consistence}
+We can get $\{\varphi_i\}$ to update the $V_{\text{eff}}(R,r)$. We then use  this potential to solve Hartree equation and get a new $\{\varphi_i\}$. This process is called reaching \textbf{self-consistency field (SCF)}.\\
+
+To calculate the eigenenergy and wave function, we can:
+\begin{enumerate}
+    \item Perform diagonalization
+    \item Direct minimization by gradient descent. However, this method only give us the ground state. If we want higher state, we need to find them band by band. We can do this by imposing the new constraint using Gram–Schmidt process ($\braket{\varphi^{(2)}}{\varphi^{(1)}}=0$).
+\end{enumerate}
+
+To obtain all band, we consider the Functional derivative:
+\begin{equation}
+    \frac{\delta\{\bra{\Phi}\textbf{H}\ket{\Phi}-\sum^N_{i,j=1}\varepsilon_{ij}(\braket{\varphi_i}{\varphi_j}-\delta_{ij})\}}{\delta\bra{\varphi_i}}
+\end{equation}
+
+We actually get this equation, but $\varepsilon_{ij}$ is not yet diagonized.
+\begin{align}
+    \left(-\frac{\hbar^2}{2m}\nabla ^2_{r_i}+V^{(i)}_{\text{eff}}(\textbf{R},\textbf{r}_i)\right)\varphi_i(\text{r})=\sum^{N}_{j=1}\varepsilon_{ij}\varphi_{j}(\text{r})
+\end{align}
+
+\subsection{Precaution of total energy}
+A common mistake is that $\displaystyle\sum^N_{i=1}\varepsilon_i$ is the total energy of the system. But:
+\begin{align}
+    \sum^N_{i=1}\varepsilon_i &= \sum^N_{i=1}\left\langle {\varphi_i(r)}\bigg\vert-\frac{\hbar^2}{2m}\nabla^2+\textbf{V}_\text{eff}\bigg\vert{\varphi_i(r)}\right\rangle\\
+    &= \sum^N_{i=1}E_{ii}+\sum^N_{i=1}\sum^N_{j\neq i}J_{ij}\nonumber
+\end{align}
+But the total energy is actually $\displaystyle = \sum^N_{i=1}E_{ii}+\frac{1}{2}\sum^N_{i=1}\sum^N_{j\neq i}J_{ij}$
+
+\subsection{Hartree-Fock Approximation}
+\textbf{Hartree approximation violate symmetry}: A fermion is antisymmetric, meaning: $\Phi(1,2)=-\Phi(2,1)$, which is not true when using Hartree approximation. We can therefore construct a Slater determinant of the wavefunction:
+\begin{align}
+    \Phi_{\text{HF}}(\vec{x}_1,\vec{x}_2,\vec{x}_3,\dots,\vec{x}_N)&=\frac{1}{\sqrt{N!}}
+    \begin{vmatrix}
+    \varphi_1(1) & \varphi_1(2) & \dots & \varphi_1(N) \\
+    \varphi_2(1) & \varphi_2(2) & \dots & \varphi_2(N) \\
+    \vdots & & & \vdots\\
+    \varphi_N(1) & \varphi_N(2) & \dots & \varphi_N(N) \\
+    \end{vmatrix}\\
+    \textbf{x}_i = (\textbf{r}_i, \sigma_i) \quad & \quad \braket{\varphi_i}{\varphi_j}=\delta_{ij}
+\end{align}
+Here $\sigma_i$ represent the spin of electron, and the determinant is the Slater determinant. The base index refers the electron's orbital, and the bracket index indicate which electron it is.\\
+
+In a two electron system, the antisymmetric wavefunction can be written as: $\displaystyle\Phi_{HF}(\vec{x}_1,\vec{x}_2)=\frac{1}{\sqrt{2}}[\varphi_1(1)\varphi_2(2)-\varphi_1(2)\varphi_2(1)]$.
+
+Now, we calculate the total energy by $E_{\text{Total}}=\bra{\Phi_{HF}}\textbf{H}\ket{\Phi_{HF}}$. The Hamiltonian can always be written as:
+\begin{align}
+    \hat{\textbf{H}} = \sum^{N}_{i=1}\hat{h}_1(i) + \frac{1}{2}\sum^{N}_{i \neq j} \hat{U}_2(i,j)
+\end{align}
+To find out $\bra{\Phi}\textbf{H}\ket{\Phi}$, we consider the two electron system. we first find the one-electron term $E^{(1)}$
+\begin{align}
+    E^{(1)}=&\int\int\Phi_{HF}^*[\hat{h}_1(1)+\hat{h}_1(2)]\Phi_{HF} d\vec{x}_1 d\vec{x}_2\\
+    \int\int\Phi^*_{HF}&\hat{h}_1(1)\Phi_{HF}d\vec{x}_1d\vec{x}_2\\
+    =\frac{1}{2}&\int\int d\vec{x}_1d\vec{x}_2(\varphi^*_1(1)\varphi^*_2(2)\hat{h}_1(1)\varphi_1(1)\varphi_2(2)\\
+    &-\varphi^*_1(1)\varphi^*_2(2)\hat{h}_1(1)\varphi_1(2)\varphi_2(1)\\
+    &-\varphi^*_1(2)\varphi^*_2(1)\hat{h}_1(1)\varphi_1(1)\varphi_2(2)\\
+    &+\varphi^*_1(2)\varphi^*_2(1)\hat{h}_1(1)\varphi_1(2)\varphi_2(1))\\
+    &=\frac{1}{2}(E_{11}+E_{22})\\
+    \int\int\Phi^*_{HF}&\hat{h}_1(2)\Phi_{HF}d\vec{x}_1d\vec{x}_2 = \frac{1}{2}(E_{11}+E_{22})\\
+    \implies E^{(1)} = E_{11} + E_{22}
+\end{align}
+This result is same as the Hartree approximation. This means that the difference of two methods is related to the interaction potential.\\
+
+We then consider the two-electron term $E^{(2)}$:
+\begin{align}
+    E^{(2)}=\left\langle\Phi\left\vert\frac{1}{2}(\hat{v}_2(1,2)+\hat{v}_2(2,1)))\right\vert\Phi\right\rangle\\
+    \frac{1}{2}\int\int\Phi^*\hat{v}_2(1,2)\Phi d\vec{x}_1d\vec{x}_2\\
+    =\frac{1}{4}\int\int d\vec{x}_1\vec{x}_2(\varphi_1^*(1)\varphi_2^*(2)\hat{v}_2(1,2)\varphi_1(1)\varphi_2(2)\\
+    -\varphi^*_1(1)\varphi^*_2(2)\hat{v}_2(1,2)\varphi_1(2)\varphi_2(1)\\
+    -\varphi^*_1(2)\varphi^*_2(1)\hat{v}_2(1,2)\varphi_1(1)\varphi_2(2)\\
+    +\varphi^*_1(2)\varphi^*_2(1)\hat{v}_2(1,2)\varphi_1(2)\varphi_2(1))\\
+    = \frac{1}{4}\int\int d\vec{x}_1d\vec{x}_2(\rho_1(1)\hat{v}_2(1,2)\rho_2(2)+\rho_1(2)\hat{v}_2(1,2)\rho_2(1))-\frac{1}{4}(K_{12}+K_{21})\\
+    =\frac{1}{4}(J_{12}+J_{21}-K_{12}-K_{21})=\frac{1}{2}(J_{12}-K_{12})\\
+    \left\langle\Phi\left\vert\frac{1}{2}\hat{v}_2(2,1)\right\vert\Phi\right\rangle=\frac{1}{2}(J_{21}-K_{21})
+\end{align}
+The second term and the third term are $K_{12}$ and $K_{21}$ respectively.\\
+
+We therefore have:
+\begin{align}
+    E^{(2)}=\frac{1}{2}\sum^N_{i=1}\sum^N_{j=1,j\neq i}(J_{ij}-K_{ij})\\
+    E_{HF}=\langle\Phi\vert\textbf{H}\vert\Phi\rangle=\sum^N_{i=1}E_{ii}+\frac{1}{2}\sum^N_{i=1}\sum^N_{j=1,i\neq j}(J_{ij}-K_{ij})
+\end{align}
+The second term is the exchange energy.\\
+Note that in this case, $J_{ii}=K_{ii}$, so we do not need to consider ${i = j}$
+
+\subsection{Explicit spin}
+\begin{equation}
+    \varphi_i(\vec{x}_i)=\Phi^{\sigma_i}_i(\vec{r}_i)\sigma_i(\omega)
+\end{equation}
+The expected value of an operator can be written as:
+\begin{align}
+    \langle\varphi_i\vert\hat{O}\vert\varphi_k\rangle=\int d\vec{r}\phi_i^{\sigma_i^*}(\vec{r})\hat{O}(r)\phi_j^{\sigma_j}(\vec{r})\sum_{\omega}\sigma_i(\omega)\sigma_j(\omega)\quad\text{where }\omega=\{\uparrow,\downarrow\}\\
+    \bra{\Phi}\textbf{H}\ket{\Phi}=\sum^N_{i=1}\sum^{2}_{\sigma_i=1}\int d\vec{r}_i\phi_i^{\sigma_i^*}(\vec{r}_i)\left[-\frac{\hbar^2}{2m}\nabla^2_i+V_{\text{ext}}(\vec{R},\vec{r})\right]\phi^{\sigma_i}_i(\vec{r}_i)\\
+    +\frac{e^2}{2}\sum^N_{i,j}\sum^{2}_{\sigma_i \sigma_j}\int\int d\vec{r}_id\vec{r}_j\frac{\rho_i^{\sigma_i}(r_i)\rho_j^{\sigma_j}(\vec{r}_j)}{\abs{\vec{r}_i-\vec{r}_j}}-\frac{e^2}{2}\sum_{i,j,\sigma}\int\int d\vec{r}_id\vec{r}_j\frac{{\phi^*_i}^{\sigma}(r_i){\phi^*_j}^{\sigma}(r_j)\phi^{\sigma}_j(r_i)\phi^{\sigma}_i(r_j)}{\abs{\vec{r}_i-\vec{r}_j}}
+\end{align}
+
+We apply the variation principle again:
+\begin{align}
+    \frac{\delta\bra{\Phi}\textbf{H}\ket{\Phi}}{\delta\phi_i^{\sigma_i}(\vec{r}_i)}\quad\forall i\\
+    \left[-\frac{\hbar^2}{2m}\nabla_i^2+V_{\text{ext}}(\vec{R},\vec{r})\right]\Phi_i^{\sigma_i}(\vec{r}_i)+e^2\sum_{j,\sigma_j}\int d\vec{r}_j\frac{\rho^{\sigma_j}_j(\vec{r}_j)}{\abs{\vec{r}_i-\vec{r}_j}}\phi_i^{\sigma}(\vec{r}_i)\\
+    -e^2\sum_j\int d\vec{r}
+    _j\frac{\Phi^*_j(\vec{r}_j)\Phi^{\sigma}_i(\vec{r}_j)\Phi^{\sigma}_j(\vec{r}_i)}{\vert \vec{r}_i-\vec{r}_j\vert} = \varepsilon^{\sigma}_i\phi^{\sigma}_{i}(\textbf{r}_i )\\
+    H^i_{\text{eff}}\Phi_i^{\sigma}(\vec{r})=\varepsilon_i^{\sigma}\Phi_i^{\sigma}(\vec{r})\\
+    H^i_{\text{eff}} = -\frac{\hbar^2}{2m}\nabla^2+\nu_{ext}(\vec{R},\vec{r})+\nu_{\text{Hatree}}(\vec{r})+\nu^{i\sigma}_x(\vec{r})
+\end{align}
+If we consider $\vec{r}_i\rightarrow\vec{r}$ and $\vec{r}_j\rightarrow\vec{r}'$, and consider all paired electron in shell, then we get the factor 2, and the equation becomes:
+\begin{align}
+    E_{\text{HF}}=2\sum_{i=1}^{N/2}E_{ii}+\frac{1}{2}\sum^{N/2,N/2}_{i=1,j=1}(4J_{ij}-2K_{ij})\label{eq:EHF1}\\
+    \hat{H}_{\text{eff}}(\vec{r})=\hat{h}_1(\vec{r})+\sum^{N/2}_{j=1}2\hat{J}_j(\vec{r})-\sum^{N/2}_{j=1}\hat{K}_j(\vec{r})\label{eq:EHF2}\\
+    \hat{J}_i(\vec{r})=e^2\int d\vec{r}'\frac{\rho_j(\vec{r}')^{j=1}}{\abs{\vec{r}-\vec{r}'}}\quad\hat{K}_j(\vec{r})\psi(\vec{r})=\int\varphi^*_{j}(\vec{r}')\frac{e^2}{\abs{\vec{r}-\vec{r}'}}\vec{\psi}(\vec{r}')d\vec{r}'\varphi_{j}(\vec{r})\\
+    K_j\ket{\psi}=\bra{\varphi_j}\hat{v}_2(\vec{r},\vec{r}')\ket{\psi}\ket{\psi_j}
+\end{align}
+These operators allow us to write down the Schordinger equation:
+\begin{align}
+    \hat{H}\ket{\psi_i}=\varepsilon_i\ket{\psi_i}\nonumber\\
+    \hat{H}=\hat{h}_1+\sum^{N/2}_j2\hat{J}_j-\sum^{N/2}_j\hat{K}_j\\
+    \ket{\psi_i}=\sum^M_{\mu=1}c_{i\mu}\ket{\chi_{\mu}}
+\end{align}
+
+Substitute the basis of wavefunction, we obtain the Roothaan equations:
+\begin{align}
+    \left\langle\chi_{\nu}\bigg\vert\hat{H}\sum^M_{\mu=1}c_{i\mu}\bigg\vert\chi_{\mu}\right\rangle &=     \left\langle\chi_{\nu}\bigg\vert\varepsilon_i\sum^M_{\mu=1}c_{i\mu}\bigg\vert\chi_{\mu}\right\rangle\nonumber\\
+    \sum^{M}_{\mu=1}\langle\chi_{\nu}\vert\hat{H}\vert\chi_{\mu}\rangle c_{i\mu}&=\varepsilon_i\sum^M_{\mu=1}\langle\chi_{\nu}\vert\chi_{\mu}\rangle c_{i\mu}\nonumber\\
+    FC&=SC\varepsilon
+\end{align}
+
+F is the Fock matrix. We would diagonalize $F$ to solve the Roothaan equation.\\
+
+Our first step is to input the position of each nuclei. Nuclei position defines $\rightarrow$ $V_{\text{ext}}$. We then solve the Roothaan equation, starts from: Nuclei position $\rightarrow$ guess $C$ $\rightarrow$ calculate F in $FC=SC\varepsilon$ $\rightarrow$ Diagonalization $\rightarrow$ Check if Self-Consistent (SCF)\\
+
+\subsection{Precaution of total energy in HF}
+In Sch\"{o}dinger equation $\hat{H}\ket{\varphi_i}=\varepsilon_i\ket{\varphi_i}$, we have Eq. \eqref{eq:EHF1} and Eq \eqref{eq:EHF2}:
+
+\begin{align*}
+    E_{\text{HF}}=2\sum_{i=1}^{N/2}E_{ii}+\frac{1}{2}\sum^{N/2,N/2}_{i=1,j=1}(4J_{ij}-2K_{ij})\\
+    \hat{H}_{\text{eff}}(\vec{r})=\hat{h}_1(\vec{r})+\sum^{N/2}_{j=1}2\hat{J}_j(\vec{r})-\sum^{N/2}_{j=1}\hat{K}_j(\vec{r})
+\end{align*}
+
+Using these equation, we get:
+\begin{align}
+    \sum^{N}_i \varepsilon_i &=  2\sum^{N/2}_{i=1} \bra{\varphi_i}\hat{H}\ket{\varphi_i}\nonumber\\
+    &= 2\sum^{N/2}_{i=1} E_{ii} + \sum^{N/2, N/2}_{i,j=1}(4J_{ij}-2K_{ij})\nonumber\\
+    E_{\text{HF}}&=\sum^{N}_{i=1} \varepsilon_i - \frac{1}{2}\sum^{N/2, N/2}_{i,j=1}(4J_{ij}-2K_{ij})
+\end{align}
+
+This shows that the sum of one-electron energy $\varepsilon_i$ is not the total energy.
+
+\subsection{Koopman's theorem}
+We first define two terms: Ionization energy is defined as: $I = E(N-1)-E(N)$, Electron affinity is defined as: $A = E(N)-E(N+1)$. Note that the ionization energy is negative.\\
+
+The Fundamental bandgap is defined as : $E_{\text{gap}}=I-A$\\
+\begin{align}
+    \begin{dcases}
+    E_{gap}>0\quad \text{semiconductor/insulator}\\
+    E_{gap}=0\quad \text{metal}
+    \end{dcases}
+\end{align}
+
+\textbf{Frozen orbital approximation} assumes that when we remove one electron, only orbital in one electron changes and other orbital does not change. We can consider the ionization energy using Eq. \eqref{eq:EHF2}:
+\begin{align}
+    &E(N)-E(N-1)\nonumber\\
+    =&\bra{\varphi_N}h_1(N)\ket{\varphi_N}\nonumber\\
+    +&\sum^{N/2}_{j=1} \bra{\varphi_N}2\hat{J}_j\ket{\varphi_N} \text{(Spin up and spin down)}\nonumber\\
+    -&\sum^{N/2}_{j=1}\langle \varphi_N\vert \hat{K}_j\ket{\varphi_N} \text{(Only consider this term if there are same spin)}\nonumber\\
+    =&\left\langle{\varphi_N}\bigg\vert\hat{h}_1(\vec{r})+\sum^{N/2}_{j=1}2\hat{J}_j(\vec{r})-\sum^{N/2}_{j=1}\hat{K}_j(\vec{r})\bigg\vert{\varphi_N}\right\rangle=\bra{\varphi_N}\hat{H}\ket{\varphi_N}=\varepsilon_N\nonumber\\
+    I =& -\varepsilon_N\quad\quad A=-\varepsilon_{N+1}\quad\quad E_{\text{gap}}=\varepsilon_{N+1}-\varepsilon_{N}\\
+    &\varepsilon_N: \text{HOMO}\quad\quad\varepsilon_{N+1}: \text{LUMO}
+\end{align}
+A good solar cell would have a band gap around 1.1$\sim$1.3 eV.\\
+
+To calculate $E(N+1)$, $E(N)$ and $E(N-1)$ and obtain $I$ and $A$, Frozen orbital estimation is not necessary.
+
+\newpage

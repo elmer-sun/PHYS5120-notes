@@ -1,0 +1,78 @@
+\section{Frozen phonons}
+We can use $E[\rho]$ to understand frozen phonons.\\
+
+Phonon is the vibration of atom, meaning it is described by classical mechanics. Newtonian law gives:
+\begin{equation}
+    M_I\frac{\partial^2 \vec{R}_I}{\partial t^2} = \vec{F}_2(\vec{R})=-\frac{\partial E(\vec{R})}{\partial \vec{R}_I}
+\end{equation}
+At equilibrium position (bottom of the harmonic oscillator, we have:
+\begin{align}
+    \vec{F}_I(\vec{R}=\vec{R}^0)=0\\
+    M_I\frac{\partial^2 \vec{R}_I}{\partial t^2} = \vec{F}_I(\vec{R}^0) + \frac{\partial \vec{F}_I}{\partial \vec{R}}(\vec{R}-\vec{R}_0)+\dots
+\end{align}
+
+Harmonic approximation:
+\begin{equation}
+    \vec{R}-\vec{R}_0 = \vec{U}_I (t) = \vec{U}_I e^{i\omega t}
+\end{equation}
+
+The base index $I$ and $\alpha$ indicate the $n$-th nuclei in the $\alpha$ direction. Substitute into the Newtonian equation, We have:
+\begin{align}
+    -\omega^2 M_I \vec{U}_2 e^{i\omega t}=\frac{\partial \vec{F}}{\partial \vec{R}}\vec{U}_I e^{i\omega t}
+\end{align}
+
+Let $\displaystyle \frac{\partial F_{i\alpha}}{\partial R_{j \beta}} = -C_{i\alpha, j\beta}$, we have:
+\begin{align}
+    \omega^2 M_I U_{I,\alpha} = \sum_{j, \beta} C_{I\alpha. j\beta} U_{j, \beta}\\
+    \omega^2 \sqrt{M_I} U_{I \alpha} = \sum_{j, \beta}\frac{C_{I \alpha, j\beta}}{\sqrt{M_I M_J}}\sqrt{M_J}U_{J\beta}
+\end{align}
+
+We can therefore defined that Dynamial matrix:
+\begin{align}
+    D_{I\alpha, J\beta}=\frac{C_{I \alpha, j\beta}}{\sqrt{M_I M_J}}
+\end{align}
+
+Solving the matrix equation, we can obtain $3N$ eigenfrequency.\\
+
+The three translation and three rotational mode should be closed to 0. Another six mode can be found in physical chemistry textbook.\\
+
+In real application, we write the matrix as:
+\begin{align}
+    \sqrt{M_I} U_{I \alpha} =
+    \begin{bmatrix}
+        1x\\
+        1y\\
+        1z\\
+        2x\\
+        2y\\
+        2z\\
+        3x\\
+        3y\\
+        3z
+    \end{bmatrix}\qquad
+    \begin{matrix}
+    1x\\
+    1y\\
+    1z\\
+    2x\\
+    2y\\
+    2z\\
+    3x\\
+    3y\\
+    3z
+    \end{matrix}
+    \begin{bmatrix}
+        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
+        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
+        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\  \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
+        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
+        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\  
+        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
+        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
+        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots
+    \end{bmatrix}
+\end{align}
+\begin{align}
+    C_{I\alpha, J\beta} = -\frac{\partial F_{i\alpha}}{\partial R_{j \beta}} = -\frac{F_{I\alpha}(R_{J\beta}+\Delta)-F_{I\alpha}(R_{J\beta}-\Delta)}{2\Delta}
+\end{align}
+

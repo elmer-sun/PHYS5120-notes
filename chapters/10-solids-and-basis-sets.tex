@@ -1,0 +1,276 @@
+\section{Periodic solids, basis sets and pseudopotentials}
+Bloch theorem states that:
+\begin{align}
+    \left[-\frac{\hbar^2}{2m}\nabla^2+V_{KS}\right]\varphi_i(\vec{r})=\varepsilon_i\varphi_i(\vec{r})\\
+    V_{KS}(\vec{r})=V_{KS}(\vec{r}+n_1\vec{a}_1+n_2\vec{a}_2+n_3\vec{a}_3)\qquad n_1,n_2,n_3=0,\pm 1, \pm 2
+\end{align}
+
+Born-von Karman boundary condition for $\psi$:
+\begin{align}
+    \rho(\vec{r})=\rho(\vec{r}+n_1\vec{a_1}+n_2\vec{a_2}+\rho\vec{a_3})\\
+    \psi(\vec{r})=\psi(\vec{r}+N_x\vec{a_1}+N_y\vec{a_2}+N_z\vec{a_3})
+\end{align}
+
+Notice that wavefunction being periodic does not imply density being periodic.
+
+We define the translation operator:
+\begin{align}
+    \hat{T}_1\psi(x)=\psi(x+a)
+\end{align}
+
+Born-von Karman boundary condition states that:
+\begin{align}
+    \begin{dcases}
+    \underbrace{\hat{T}_1 \hat{T}_1 \dots \hat{T}_1}_{N_x}\psi(x)=\psi(x)\\
+    \hat{T}_1 \rho(x) = \rho(x)
+    \end{dcases}
+\end{align}
+
+As $\hat{T}_1$ is unitary, $[\hat{T}_1,\hat{H}]=0$.
+\begin{align}
+    \begin{dcases}
+    \hat{T}_1 \psi(x)=t_1\psi(x)\\
+    \hat{H} \psi(x) = \varepsilon \psi(x)\\
+    \vert t_1 \psi(x)\vert^2 = 1
+    \end{dcases}\\
+    \vert t_1 \vert^2 = 1 \label{eq:unitary}
+\end{align}
+
+By \eqref{eq:unitary}, we have
+\begin{align}
+    t_1^{N_x} &= 1 \Rightarrow t_1=e^{i\theta} \Rightarrow e^{i\theta N_x} = 1\\
+    \theta &= \frac{2\pi}{N_x} n_x \qquad n_x = 0, \pm1, \pm2, \dots\\
+    t_1 &= e^{i\frac{2\pi}{N_x a}n_x a} = e^{ika} \qquad k=\frac{n_x}{N_x} \frac{2\pi}{a}\\
+    p&=\hbar k \qquad \text{crystal momentum}
+\end{align}
+
+We then define a reciprocal lattice $\vec{k}$ such that:
+\begin{align}
+    \vec{k}=\frac{n_1}{N_1}\vec{b_2}+\frac{n_2}{N_2}\vec{b_3}+\frac{n_3}{N_3}\vec{b_3}
+\end{align}
+The reciprocal primitive vectors can be writte as:
+\begin{align}
+    \vec{b_1}=2\pi\frac{\vec{a_2}\times\vec{a_3}}{\abs{\vec{a_1}\cdot(\vec{a_2}\times\vec{a_3})}}
+\end{align}
+
+As wavefunction has the propert of:
+\begin{align}
+    \hat{T_1}\psi(x)=\psi(x+a)=e^{ika}\psi(x)\\
+    \psi_k(x)=e^{ikx}u_k(x)
+\end{align}
+
+In three dimension, we have:
+\begin{align}
+    \psi_k(\vec{r})=e^{i\vec{k}\cdot\vec{r}}u_k(\vec{r})
+\end{align}
+Substitute this to K.S. equation, we have:
+\begin{align}
+    \left[-\frac{\hbar^2}{2m}(\nabla+i\vec{k})^2+V_{KS}(\vec{r})\right]u_{i,\vec{k}}(\vec{r})=\varepsilon_{i,\vec{k}}u_{i,\vec{k}}(\vec{r})
+\end{align}
+
+The density in one unit cell can be written as:
+\begin{align}
+    \rho(\vec{r})=\frac{1}{N_k}\sum_{i,k}f(\varepsilon_i,\vec{k})\vert\psi_{i,k}(\vec{r})\vert^2
+\end{align}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\linewidth]{band_structure.png}
+    \caption{Band Structure}
+    \label{fig:bandstructure}
+\end{figure}
+
+For a function $f$, the average per unit cell:
+\begin{align}
+    \bar{f}_i=\frac{1}{N_k}\sum_k f_i(k)
+\end{align}
+
+If we treat $k$ as a continuous variable, we have:
+\begin{align}
+    \bar{f}_i&=\frac{1}{\Omega_{BZ}}\int_{BZ} d\vec{k}f_i(\vec{k})\qquad \Omega_{BZ}=\int_{BZ}d\vec{k}
+   \\
+    &=\frac{\Omega_{cell}}{N}\int d\vec{k}f_i(\vec{k})=\vec{b_1}\cdot(\vec{b}_2\times\vec{b}_3)
+\end{align}
+
+\subsection{k-point sampling}
+
+Monkhorst-Pack sampling:
+
+We only consider certain values of $k$:
+
+\begin{align}
+    k_{n_1,n_2,n_3} = \sum_{i=1}^3 \frac{2n_i-N_i-1}{2N_i}\vec{b}_i \qquad n_i=1,2,3,\dots,N_i
+\end{align}
+
+
+
+\begin{table}[ht]
+\centering
+\caption{Location of k point with different N}
+\begin{tabular}[t]{ccccc}
+        $N_1 N_2 N_3$ & & $n=1$ & $n=2$ & $n=3$\\
+        \hline
+        1D & $N=2$ & -1/4 & 1/4 & -\\        
+         & $N=3$ & -1/3 & 0 & 1/3
+\end{tabular}
+
+\label{tab:mp_sampling}
+\end{table}%
+
+k-point convergence: increase number of k points until the result converges.
+
+For 2D: $N_1 \times N_2$
+
+\subsection{Symmetries and Brillouin Zone}
+To simply the calculation, we only need to consider the shaded area
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\linewidth]{Graphene_BZ.png}
+    \caption{Graphene BZ}
+    \label{fig:my_label}
+\end{figure}
+
+However, at $\Gamma$, we only need to calculate once. For point between $M$ and $K$, we need to consider 6 times (The edge is shared by 2 BZ). For $K$, we need to consider 2 times (The vertex is shared by 3 BZ).  
+
+We also need to consider \textbf{Time-reversal symmetry}:
+\begin{align}
+    i\hbar\frac{\partial}{\partial t} \psi=H\psi\xrightarrow{t\rightarrow -t}-i\hbar\frac{\partial}{\partial t}\tilde{\psi}=\tilde{H}\tilde{\psi}
+\end{align}
+
+If there is no $\vec{B}\xrightarrow{t\rightarrow -t}-\vec{B}$ (only true for topological insulators), we have $\tilde{H}=H$ and $\tilde\psi=\psi^*$
+
+The complex conjugate of the equation gives:
+\begin{align}
+    -i\hbar\frac{\partial}{\partial t}\psi^*=H^*\psi=H\psi
+\end{align}
+Recall that for KS equation, we have:
+\begin{align}
+    H_{KS}\varphi_i=\varepsilon_i\varphi_i\\
+    H_{KS}\varphi_i^*=\varepsilon_i\varphi_i^*
+\end{align}
+This means that $\psi_k$ and $\psi_{-k}$ has the same $\varepsilon_i$, meaning that the band structure is symmetric.
+
+There is a "Gamma Trick". At the point $\Gamma$, the wavefunction is real.
+
+Due to time-reversal symmetry, there will be a "Dirac cone" in the band structure at $k=0$. To open a gap, we apply B field to break the time-reversal symmetry.
+
+The following equation can be solved with parallel computing.
+
+\begin{equation}
+    \left[-\frac{\hbar^2}{2m}(\nabla+ik)^2+V_{KS}(r)\right]U_{i,k}(\vec{r}) = \varepsilon_{i,k}I_{ik}(\vec{r}) \label{eq:PBC_KS}
+\end{equation}
+
+\subsection{Basis sets}
+
+Real-space grid method:
+
+\begin{equation}
+    \bra{\vec{r}}\ket{\psi} = \psi(\vec{r})
+\end{equation}
+
+Finite difference:
+\begin{align}
+    \nabla \varphi = \frac{f(x_{i+1})-f(x_{i-1})}{2a}\\
+    \nabla^2 \varphi = \frac{f(x_{i+1})+f(x_{i-1})-2f(x_{i})}{a^2}
+\end{align}
+
+Disadvantage: 
+
+We try to avoid derivative because the mesh has to be dense, and the finite difference cannot be too small due to limitation of the computer.
+
+Another method is finite element.
+
+\subsection{Plane wave DFT}
+To avoid the numerical derivative, we starts with the periodic boundary condition:
+\begin{align}
+    u(\vec{r})=u(\vec{r}+n_1\vec{a}_1+n_2\vec{a}_2+n_3\vec{a}_3)
+\end{align}
+As the wavefunction is periodic, we can do a Fourier transform:
+\begin{align}
+    u(\vec{r})=\frac{1}{\sqrt{\Omega_{cell}}}\sum_{\vec{G}}c(\vec{G})e^{i\vec{G}\cdot\vec{r}}\qquad\vec{G}=m_1\vec{b}_1+m_2\vec{b}_2+m_3\vec{b}_3\\
+    \nabla u(\vec{R}) = \frac{1}{\sqrt{\Omega_{cell}}}\sum_{\vec{G}}c(\vec{G})(i\vec{G})e^{i\vec{G}\cdot\vec{r}}\\
+    \nabla^2 u(\vec{R}) = \frac{1}{\sqrt{\Omega_{cell}}}\sum_{\vec{G}}c(\vec{G})(-\abs{\vec{G}})e^{i\vec{G}\cdot\vec{r}}\\
+    u(\vec{R})\xrightarrow{FT}C(\vec{G})\rightarrow i\vec{G}c(\vec{G}), -\abs{\vec{G}}^2c(\vec{G})\xrightarrow{FT^{-1}}\nabla u(\vec{r}), \nabla^2 u(\vec{r})
+\end{align}
+Although it is not easy to do Fourier Transform, Fast Fourier Transform (FFT) has complexity $n \log n$ which speed up the calculation.
+
+Spectra method: discard high frequency part ($G>G_{max}$), remove noise and make the function smoother (remove rapid change).
+
+$G_{max}$ Plane wave cutoff:
+\begin{align}
+    \phi_{ik}(\vec{r})=\frac{1}{\sqrt{\Omega_{cell}}}\sum^{G_{max}}_{\vec{G}}c_{ik}(\vec{G})e^{i(\vec{k}+\vec{G})\cdot \vec{r}}\\
+    \frac{\hbar^2}{2m}\abs{\vec{k}+\vec{G}}^2 < E_{cut}\\
+    if \vec{k}=0,\quad\abs{\vec{G}}<G_{cut}=\sqrt{\frac{2mE_{cut}}{\hbar^2}}\\
+    =\sqrt{2E_{cut}}\qquad(\hbar=m=1)
+\end{align}
+
+The total energy calculated will only decrease as $E_{cut}$ increase, because we minimize the energy in a larger basis.
+
+\subsection{Density Cut-off}
+\begin{align}
+    \rho_{i,\vec{k}}=\phi^*_{i,\vec{k}}(\vec{r})=\frac{1}{\Omega_{cell}}\sum_{G,G'}c^*_{ik}(\vec{G})c_{ik}(\vec{G'})e^{i(\vec{G'}-\vec{G})\cdot\vec{r}}\\
+    \abs{\vec{G'}}<2G_{cut}=2\sqrt{2E_{cut}}=\sqrt{2\cdot4E_{cut}}
+\end{align}
+
+It means that the cutoff of electron density is $4E_{cut}$.
+
+To calculate the coefficient:
+\begin{align}
+    c_{ik}(\vec{G})\xrightarrow{FFT^{-1}}u_{ik}(\vec{r})\rightarrow \rho(\vec{r})=\sum_{i,k} u_{ik}^*(\vec{r})u_{ik}(\vec{r})\xrightarrow{FFT}\rho(\vec{G})
+\end{align}
+
+\subsection{The plane wave pseudopotential method}
+
+KS equation:
+
+\begin{align}
+    \left(-\frac{\hbar^2}{2m}\nabla^2 + \hat{V}_{ext} +\hat{V}_{H} + \hat{V}_{XC} \right) \ket{\psi_{ik}} = \varepsilon_{ik}\ket{\psi_{ik}}\\
+    \xi^k_{G}(\vec{r}) = \frac{1}{\sqrt{\Omega}}e^{i(\vec{G}+\vec{k})\cdot \vec{r}} \qquad \text{basis set}\\
+    \bra{\xi^k_G}\ket{\psi_{ik}} = c_{ik}(\vec{G})\\
+    \bra{\xi^k_G}\hat{T}\ket{\xi^k_{G'}} = \frac{\hbar^2}{2m} \vert \vec{k}+\vec{G}\vert ^2 \delta_{GG'}\\
+    V_H = e^2\int\frac{\rho(\vec{r})}{\abs{\vec{r}-\vec{r'}}}d\vec{R'}\rightarrow \nabla^2 V_H = -4\pi e^2\rho\\
+    \xrightarrow{FFT} -\abs{G}^2 V_H(\vec{G})=-4\pi e^2\rho(\vec{G})\\
+    V_H(\vec{G})=\frac{4\pi e^2}{\abs{G}^2}\rho(\vec{G})\\
+    \xrightarrow{FFT^{-1}}=V_H(\vec{r})\cdot\varphi_{ik}(\vec{r})\xrightarrow{FFT}(V_H\varphi_{ik})(\vec{G})
+\end{align}
+
+However, if $\vec{G}=0$, it is obvious that the numerator will become zero. Usually, code assume that $V_H(\vec{G}=0)=0$, but this is call the conduction boundary condition.
+
+By setting a critical radius $r_c$, we can estimate the wavefunction. The dashed wavefunction can be written as:
+\begin{align}
+    \ket{\tilde{\varphi_v}} = \ket{\varphi_v}+\sum_c \alpha_{cv}\ket{\varphi_c}\\
+    \alpha_{cv} = \braket{\varphi_c}{\tilde{\varphi_v}}\neq 0\\
+    \tilde{H}\ket{\varphi_v}=\varepsilon_v\ket{\varphi_v}\\
+    \tilde{H}(\ket{\tilde{\varphi}_v}-\sum_c\alpha_{cv}\ket{\varphi_c})=\varphi_v(\ket{\tilde{\varphi_v}}-\sum_c\alpha_{cv}\ket{\varphi_c})\\
+    \tilde{H}\ket{\tilde{\varphi}_v}-\sum_c \alpha_{cv}\ket{\varphi_c}+\sum_c\alpha_{cv} \varepsilon_v \ket{\varphi_c}=\varepsilon_v\ket{\tilde{\varphi}_v}\\
+    \tilde{H}\ket{\tilde{\varphi}_v}+\sum_c\braket{\varphi_c}{\tilde{\varphi}_v}(\varepsilon_v-\varepsilon_c)\ket{\varphi_c}=\varepsilon_v \ket{\tilde{\varphi}_v}\\
+    (\tilde{H}+\sum_c (\varepsilon_v-\varepsilon_c)\ket{\varphi_c}\bra{\varphi_c})\ket{\tilde{\varphi}_v}=\varepsilon_v\ket{\varphi_v}\\
+    \hat{V}_{ps}=-\frac{Z_c e}{r}\hat{I} + \sum_c(\varepsilon_v - \varepsilon_c)\ket{\varphi_c}\bra{\varphi_c}
+\end{align}
+
+The Norm-Conserving pps:
+\begin{align}
+    Q_c=\int^{r_c}_0 \abs{R_{nl}}^2 r^2 dr = \int^{r_c}_0\abs{\tilde{R}_{nl}}^2r^2 dr
+\end{align}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.4\textwidth]{pseudopotential.png}
+    \caption{Pseudopotential}
+\end{figure}
+
+\subsection{Effective mass}
+To find the band structure of silicon, we need the effective mass:
+\begin{align}
+    E(\vec{k})=E_0+\frac{\hbar^2k^2}{2m*}\\
+\end{align}
+
+To solve the Ks. Equation, we can use the real space and plane wave method. The difference of the two method is in calculating the derivative.\\
+
+For equation \eqref{eq:PBC_KS}, the $(\nabla+i\vec{k})^2$ operator is diagonized in reciprocal space and the potential term is diagonized in real space.\\
+
+\subsection{Localized Basis sets}
+The Slater type orbital: $ce^{-r/a}$\\
+The Gaussian type orbital: $e^{-\alpha r^2}Y_{l,m}(\theta,\varphi)$
+\newpage

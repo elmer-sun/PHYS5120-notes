@@ -1,0 +1,75 @@
+\section{Exchange-correlation functionals}
+\subsection{Local density approximation (LDA)}
+We don't know how to write the exchange correlation term $E_{XC}[\rho]$ using $\rho$, so we need to write it for the electron gas, and assume it works for all systems.
+%\begin{align}
+%    E_{XC}[\rho]=-\frac{3N}{4}\left(\frac{3\rho}{\pi}\right)^{1/3}
+%\end{align}
+
+We do not have shell structure(s,p,d) if we calculate $T^{\sigma}$ using Orbital-free DFT. The term does not consider Coulomb interaction. However, It works relatively well for "warm dense materials" where temperature is larger than $10,000K$, because the effect of orbital is less.
+
+In this approach, the local exchange energy is:
+\begin{align}
+    E_{xc}[\rho] &= \int d\vec{r} \rho (\vec{r}) \varepsilon_{xc} ([\rho] , \vec{r})\\
+    \varepsilon_{xc}([\rho],\vec{r}) &= \varepsilon_x([\rho],\vec{r})+\varepsilon_c([\rho],\vec{r})
+\end{align}
+
+The spin component can be written as:
+\begin{align}
+    E^{LDA}_{XC}[\rho^{\uparrow},\rho^{\downarrow}]=\int d\vec{r}\rho(\vec{r})\varepsilon^V_{XC}([\rho^{\uparrow},\rho^{\downarrow}],\vec{r})
+\end{align}
+
+\begin{align}
+    V_{XC} = \frac{\delta E_{XC}[\rho]}{\delta\rho} = \varepsilon_{xc}([\rho],\vec{r})+\rho(\vec{r}) \frac{\partial \varepsilon_{xc}([\rho],\vec{r})}{\partial \rho}
+\end{align}
+
+\subsection{Generalized-gradient approximation(GGA)}
+\begin{align}
+    E^{GGA}_{xc}[\rho^{\uparrow},\rho^{\downarrow}] = \int d\vec{r} \rho(\vec{r}) \varepsilon_{xc} (\rho^{\uparrow}, \rho^{\downarrow}, \vert \nabla \rho^{\uparrow}\vert , \vert \nabla \rho ^{\downarrow} \vert , r)
+\end{align}
+
+There are several variations of GGA, include PBE and BLYP.
+
+\subsection{Meta GGA}
+"SCAN", $$\tau (\vec{r}) := \sum_{i} \frac{1}{2} \vert \nabla \varphi_{i} ( \vec{r}) \vert ^2$$\\
+$$E^{meta GGA}_{XC}[\rho] = \int d\vec{r}\rho(\vec{r}) \varepsilon_{xc}(\rho,\vert \nabla \rho \vert , \tau, \vec{r})$$
+
+\subsection{Hybrid functional, orbital dependent functional}
+"self-interaction error": in hartree, cannot remove electron self-interaction from the integral
+
+\begin{enumerate}
+    \item PBEO: $E_{xc} = \frac{1}{4}E^{HF}_x + \frac{3}{4}E^{PBE}_{x} + E^{PBE}_c$
+    \item B3LYP: $E_{xc} = E^{LDA}_x+a_0(E^{HF}_x-E^{LDA}_x)+a_x(E^{Becke}_x-E^{LDA}_x)+E^{LDA}_c+a_c(E^{Becke}-E^{LDA}))$
+\end{enumerate}
+
+\subsection{self-consistent hybrid functional for condensed systems}
+PRB 89, 195112(2014)
+
+\begin{align}
+    E_{xc} &= \alpha E^{HF}_{x} + (1-\alpha) E^{GGA}_x + E^{GGA}_c\\
+    \alpha &= \frac{1}{\varepsilon_{\infty}}\\
+    \vec{D} &= \varepsilon_{\infty} \vec{E}\\
+    V(r) &= k \frac{q_1q_2}{r} \implies V(r) = k \frac{1}{\varepsilon_{\infty}} \frac{q_1 q_2}{r}
+\end{align}
+
+Physical meaning of $\varepsilon_{\infty}$: the screening effect by electrons only.
+
+Guess $\alpha \rightarrow$ DFT $\displaystyle\rightarrow \alpha = \frac{1}{\varepsilon_{\infty}} \rightarrow$ guess $\alpha$
+
+\subsection{Range-separated hybrid functionals}
+PRB93, 235106(2016)
+
+\begin{align}
+    E_{xc} = \alpha E^{HF, lr}_{x} + \beta E^{HF, sr}_{x} + (1-\alpha) E^{GGA, lr} _{x} + (1-\beta)E^{GGA, sr}_{x} + E^{GGA}_c
+\end{align}
+For a long range, we need to apply a tanh-like error function: $\text{erf}(\mu\vert\vec {r}=\vec{r'}\vert))$
+
+Notice that for PBEO: $\alpha = 0.25$, $\beta = 0$, $\mu \rightarrow \infty$; for HSE06: $\alpha = 0.25$, $\beta = 0$, $\mu = 0.11$
+
+\subsection{van der Waals functional}
+\begin{enumerate}
+    \item Grimme: DFT-(D2/D3/...) obtain the coefficient $C_6$ for the interaction $-\frac{C_6}{r^6}$ from a table
+    \item Tkatchenko-Scheffeler theoretically calculate (to a certain extent) $C_6$ (PRL102, 073005 (2009))
+    \item DRSLL: PRL 90 2464401(2004) More about random phase
+\end{enumerate}
+%wtf josun
+ 
