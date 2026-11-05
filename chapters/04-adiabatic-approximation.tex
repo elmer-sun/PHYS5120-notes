@@ -1,8 +1,24 @@
-\chapter{力的量子来源：电子与原子核的分离}
+\chapter{Born--Oppenheimer 近似}\label{bo:chapter}
 \sourcepages{手写笔记第 12--18 页}
-\section{为什么经典势能不是最初的出发点}
-经典力场把电子的影响藏在了 $U(R)$ 中。若要研究化学成键、反应或未知材料，就需要从电子与原子核的量子力学得到这张势能面。波函数 $\Psi(R,r,t)$ 给出全部粒子的联合概率振幅；$R$ 表示所有核坐标，$r$ 表示所有电子坐标，自旋暂时省略。含时 Schrödinger 方程为 $\ii\hbar\partial_t\Psi=\hat H\Psi$。
+\section{先明确两个不同的问题}
+前三章把势能函数 $U(R)$ 当作已知，研究原子怎样运动，以及怎样采样平衡构型。这种安排是先学习一个给定模型的用法，再追问模型的来源；它不表示经典力场已经解释了电子。现在我们从电子与原子核共同组成的量子体系出发，说明在什么条件下能够用一张核坐标的势能面代替显式电子运动。
 
+这里有两个必须依次回答的问题。首先，电子与核本来相互耦合，我们凭什么暂时固定核，只求电子态？这是 Born--Oppenheimer（伯恩--奥本海默，简称 BO）近似要处理的问题。其次，即使固定核，许多电子之间仍然相互排斥，电子方程依然难解；怎样把这个多电子问题变得可计算，才是下一章 Hartree 与 Hartree--Fock 近似要处理的问题。
+
+先用一个单电子的例子区分它们：氢分子离子 $\mathrm H_2^+$ 有两个质子和一个电子。它没有电子--电子排斥，因而没有用多电子平均场处理这项相互作用的需要；但电子与两个质子的运动仍然耦合，依然需要讨论 BO 近似。可见电子与核的分离，并不以 Hartree 近似为前提。
+
+\section{读懂量子方程所需的记号}
+量子态由一般为复数的波函数描述。把所有核坐标记为 $R=(\bm R_1,\ldots,\bm R_{N_N})$，所有电子坐标记为 $r=(\bm r_1,\ldots,\bm r_{N_e})$，$N_N$ 与 $N_e$ 分别为核数和电子数。联合波函数写作 $\Psi(R,r,t)$。此处暂省略自旋；$|\Psi|^2\dd R\dd r$ 是在对应体积元内找到这些粒子的概率，归一化要求它对全部坐标的积分等于一。
+
+为了简写积分，我们使用态向量记号 $|\psi\rangle$。对只含电子变量的两个函数，内积定义为
+\begin{equation}
+\langle\phi|\psi\rangle_r=\int\phi^*(r;R)\psi(r;R)\dd r.
+\end{equation}
+星号表示复共轭，下标 $r$ 提醒我们只对电子坐标积分，核坐标 $R$ 在积分中固定。归一化是 $\langle\psi|\psi\rangle_r=1$，正交是两个不同态的内积为零。算符 $\hat A$ 是作用在函数上的线性规则，例如电子动能含有二阶微分；归一化态中的平均值为 $\langle\psi|\hat A|\psi\rangle_r$。这一记号表示先让 $\hat A$ 作用在右侧函数，再与左侧函数取内积。
+
+表示能量的 Hamilton 算符具有 Hermitian 性：对其定义域内的态，$\langle a|\hat H b\rangle=\langle\hat H a|b\rangle$。这保证能量本征值为实数，并允许在内积中将算符从右侧作用移到左侧；后面的投影推导将使用这一性质。若 $\hat H\phi=E\phi$，算符作用后只把原函数乘上一个数，我们称 $\phi$ 为本征态，$E$ 为本征值；对能量本征态测量能量会得到 $E$。一般态随时间服从含时 Schrödinger 方程 $\ii\hbar\partial_t\Psi=\hat H\Psi$，其中 $\ii^2=-1$，$\hbar$ 是约化 Planck 常数。对固定的 $\hat H$，单个本征态只获得相位 $e^{-\ii Et/\hbar}$，所以概率密度不随时间改变。一般态则可由不同本征态线性叠加，彼此相对相位会随时间改变。
+
+\section{从全体系定义固定核电子问题}
 非相对论 Coulomb 模型可写成
 \begin{align}
 \hat H&=\hat T_N+\hat H_e(R),\qquad \hat T_N=-\sum_I\frac{\hbar^2}{2M_I}\nabla_I^2,\\
@@ -10,14 +26,22 @@
 -\sum_{iI}\frac{Z_I e^2}{4\pi\epsilon_0|\bm r_i-\bm R_I|}
 +\sum_{i<j}\frac{e^2}{4\pi\epsilon_0r_{ij}}+E_{NN}(R).
 \end{align}
+这里 $M_I$ 和 $Z_Ie$ 是第 $I$ 个核的质量与电荷，$m_e$ 是电子质量，电子电荷为 $-e$；$\epsilon_0$ 是真空介电常数。$\nabla_I$ 对第 $I$ 个核的位置求导，$\nabla_i$ 对第 $i$ 个电子的位置求导，$r_{ij}=|\bm r_i-\bm r_j|$。第一项是核动能，其余各项依次给出电子动能、电子--核吸引、电子--电子排斥和核--核排斥。
+
 本章将核间排斥 $E_{NN}=\sum_{I<J}Z_IZ_Je^2/(4\pi\epsilon_0R_{IJ})$ 包含在 $\hat H_e$ 中。因此其本征值已经是总势能面，求核力时不能再加一次核间排斥。
 
+核通常比电子重得多，给定相近的力和位移尺度时，核构型常比电子态变化得慢。这启发我们把 $R$ 暂当参数：先为一系列固定核构型求电子态，再研究核在这些电子态之间怎样运动。但时间尺度的直觉还不是推导；接下来保留核动能对电子态的全部作用，才能辨认真正需要忽略的项。
+
 \section{固定核电子态与精确的通道展开}
-对每一个固定 $R$，求 $\hat H_e(R)\phi_n(r;R)=E_n(R)\phi_n(r;R)$，并取电子态正交归一。$R$ 在此是参数，而非电子积分变量。用完备电子态展开
+对每一个固定 $R$，求 $\hat H_e(R)\phi_n(r;R)=E_n(R)\phi_n(r;R)$，并在每一个 $R$ 处取 $\langle\phi_m|\phi_n\rangle_r=\delta_{mn}$，其中 $\delta_{mn}$ 在 $m=n$ 时等于一，否则为零。改变 $R$ 会改变核产生的势，故电子态与能量也随之改变。$E_n(R)$ 作为核构型的函数，就是第 $n$ 张势能面。固定核求解只是定义这些函数，尚未声称真实核完全不动。
+
+若固定 $R$ 的电子态构成完备基，便可以像用向量基展开一个向量那样，写出
 \begin{equation}
 \Psi(R,r,t)=\sum_n\chi_n(R,t)\phi_n(r;R).
 \end{equation}
-这个展开本身尚未近似。真正的难点是核动能也对 $\phi_n$ 的参数 $R$ 求导。对每一项应用乘积法则：
+系数 $\chi_n(R,t)=\langle\phi_n|\Psi\rangle_r$ 是对应电子通道中的核概率振幅；在这一展开中，它仍然是核坐标的函数，而不是一条经典轨迹。为简洁起见用求和表示电子通道；若需包含连续谱，还应加入相应积分。完整展开本身尚未近似。
+
+现在把展开代入全体系的含时方程。左侧电子基没有显式时间依赖，给出 $\sum_n\ii\hbar(\partial_t\chi_n)\phi_n$；电子 Hamilton 算符给出 $\sum_n E_n\chi_n\phi_n$。真正的难点是核动能也对 $\phi_n$ 的参数 $R$ 求导。对每一项应用乘积法则：
 \begin{equation}
 \nabla_I^2(\chi_n\phi_n)=\phi_n\nabla_I^2\chi_n+2\nabla_I\chi_n\cdot\nabla_I\phi_n+\chi_n\nabla_I^2\phi_n.
 \end{equation}
@@ -28,14 +52,31 @@
 \end{equation}
 不同电子面的核波包通过导数耦合相互转换。这些项不是额外引入的作用力，而是电子基随核位置改变的结果。
 
-对非简并电子本征方程求 $R_I$ 导数，再投影到 $m\ne n$ 态上，得到
+这些耦合何时可能变大？对电子本征方程按核坐标求导，保留全部乘积项：
+\begin{equation}
+(\nabla_I\hat H_e)\phi_n+\hat H_e\nabla_I\phi_n
+=(\nabla_IE_n)\phi_n+E_n\nabla_I\phi_n.
+\end{equation}
+再左乘 $\langle\phi_m|$。当 $m\ne n$，正交性使含 $\nabla_I E_n$ 的项消失；Hermitian 性给出 $\langle\phi_m|\hat H_e=E_m\langle\phi_m|$。因此
+\begin{equation}
+(E_n-E_m)\langle\phi_m|\nabla_I\phi_n\rangle
+=\langle\phi_m|\nabla_I\hat H_e|\phi_n\rangle.
+\end{equation}
+对非简并能级，可以除以能量差，得到
 \begin{equation}
 \bm d^I_{mn}=\frac{\langle\phi_m|\nabla_I\hat H_e|\phi_n\rangle}{E_n-E_m}.
 \end{equation}
 这说明“核重所以电子总能跟上”不充分：能隙小或接近交叉时，导数耦合可能很大。
 
-\section{单一势能面近似到底丢掉了什么}
-Born--Oppenheimer 的通常最低阶做法是忽略导数耦合，选定一个电子面，得到 $\ii\hbar\partial_t\chi=(\hat T_N+E_n(R))\chi$。此时\emph{核仍是量子的}。将核进一步视为经典粒子，是另一个近似。
+\section{Born--Oppenheimer 近似到底丢掉了什么}\label{bo:approx}
+若核运动在相关时间内不会显著转移电子通道，而且导数修正对所求精度足够小，通常最低阶 BO 近似便忽略这些导数项，并选定一张电子面。此时
+\begin{equation}
+\Psi(R,r,t)\simeq\chi_n(R,t)\phi_n(r;R),\qquad
+\ii\hbar\partial_t\chi_n=[\hat T_N+E_n(R)]\chi_n.
+\end{equation}
+这个乘积不是把电子函数写成与核无关的 $\phi_n(r)$：电子态仍然随核构型调整。近似掉的是调整过程中导致通道混合和相应修正的导数作用。研究基态材料时通常选最低电子面 $n=0$，核的有效势能就是 $U(R)=E_0(R)$。
+
+例如在 $\mathrm H_2^+$ 中，每个固定的质子间距都对应一个电子本征问题；把所得电子能量加上质子间排斥，便得到核振动所用的势能曲线。然后才在这条曲线上求核的运动。因此 BO 近似并不是把核在整个计算中永久钉住，而是把“给定核位置求电子”与“利用所得能量求核运动”分层处理。此时\emph{核仍是量子的}；将核进一步视为经典粒子，是另一个近似。
 
 若只丢掉不同面之间的耦合而保留对角修正，在可局域取实且光滑的规范下，归一化给出 $\langle\phi_n|\nabla_I\phi_n\rangle=0$，再对该等式求导可得 $\langle\phi_n|\nabla_I^2\phi_n\rangle=-\langle\nabla_I\phi_n|\nabla_I\phi_n\rangle$。因此势能还有正的对角修正
 \begin{equation}
@@ -44,6 +85,7 @@ U_{\rm DBOC}=\sum_I\frac{\hbar^2}{2M_I}\langle\nabla_I\phi_n|\nabla_I\phi_n\rang
 不能在所有拓扑或简并情形下全局选择这种实规范；一般单面理论还含几何矢势。本书使用最低阶 BO 力学时默认远离这类情形。“Born--Huang 展开”通常指前节的通道展开，不应把这一名称直接定义为某一个删项方案。
 
 \section{从核波包到经典轨迹}
+量子平均值的运动与经典轨迹并不自动相同。为比较二者，定义两个算符的对易子 $[\hat A,\hat B]=\hat A\hat B-\hat B\hat A$；它衡量交换作用顺序是否改变结果。核动量在位置表示中是 $\hat{\bm P}_I=-\ii\hbar\nabla_I$。例如将位置乘法与动量微分依次作用在任意光滑函数上，用乘积求导便得 $[\hat R_\alpha,\hat P_\beta]=\ii\hbar\delta_{\alpha\beta}$。
 对量子平均值求时间导数，并使用 Schrödinger 方程，得到 Ehrenfest 恒等式 $\dd\langle\hat A\rangle/\dd t=\langle\partial_t\hat A\rangle+\langle[\hat A,\hat H]\rangle/(\ii\hbar)$。取核位置与动量，利用 $[\hat R_\alpha,\hat P_\beta]=\ii\hbar\delta_{\alpha\beta}$，便有
 \begin{equation}
 \frac{\dd\langle\bm R_I\rangle}{\dd t}=\frac{\langle\bm P_I\rangle}{M_I},\qquad
@@ -63,3 +105,8 @@ U_{\rm DBOC}=\sum_I\frac{\hbar^2}{2M_I}\langle\nabla_I\phi_n|\nabla_I\phi_n\rang
 第一与第三项之和等于 $E_n\partial_I\langle\phi_n|\phi_n\rangle=0$，于是 $\bm F_I=-\langle\phi_n|\nabla_I\hat H_e|\phi_n\rangle$。电子波函数的导数没有凭空消失，而是被本征方程与归一化抵消了。
 
 有限、随核位置移动的基组会产生额外基组导数，即 Pulay 力；自洽未收敛也会破坏驻值条件。第一性原理分子动力学因此不仅要积分核运动，还要使每一步电子能量和力在所需精度内一致。
+
+\section{下一步：在每个固定核构型上求多电子态}\label{bo:to-hartree}
+现在已经建立了有效核势能的定义，但还没有给出计算电子基态的实用方法。电子之间的 $r_{ij}^{-1}$ 项仍同时依赖两个电子的位置，电子波函数一般不能分成彼此独立的单粒子函数。BO 近似没有删除这项作用，也没有把多电子波函数自动变为轨道乘积。
+
+因此下一章回到给定 $R$ 的电子本征问题，先证明能量变分原理，再限制试探波函数的形式：Hartree 使用单粒子函数的乘积，Hartree--Fock 再满足电子交换时的反对称性。这里有两种不同来源的误差：即使用精确多电子方法求每张势能面，忽略非绝热耦合仍可能有误差；即使 BO 分离适用，使用不够准确的电子近似也会把势能面算错。以后比较方法时，应先辨认是哪一层近似发生了变化。

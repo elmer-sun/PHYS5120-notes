@@ -25,8 +25,8 @@
 |1|[统计与分子动力学](chapters/01-molecular-dynamics.tex)|如何由轨迹得到平均，如何稳定推进轨迹？|
 |2|[力场与输运](chapters/02-force-fields-and-transport.tex)|有限模拟盒怎样代表材料，输出如何转为性质？|
 |3|[Monte Carlo](chapters/03-monte-carlo.tex)|只求平衡时怎样设计采样？|
-|4|[绝热近似](chapters/04-adiabatic-approximation.tex)|电子怎样产生核的势能面？|
-|5|[Hartree–Fock](chapters/05-hartree-fock.tex)|如何构造可解的多电子近似？|
+|4|[Born–Oppenheimer：电子与核分离](chapters/04-adiabatic-approximation.tex)|电子怎样产生核的势能面？|
+|5|[固定核多电子问题：Hartree 与 Hartree–Fock](chapters/05-hartree-fock.tex)|如何构造可解的多电子近似？|
 |6|[电子关联](chapters/06-electronic-correlation.tex)|单行列式遗漏什么，怎样补回？|
 |7|[密度泛函基础](chapters/07-density-functional-theory.tex)|为什么可以用密度，怎样得到 KS 方程？|
 |8|[交换关联近似](chapters/08-exchange-correlation-functionals.tex)|未知泛函如何变为具体模型？|
@@ -35,11 +35,15 @@
 |11|[晶格振动](chapters/11-frozen-phonons.tex)|能量曲率如何决定稳定性和声子？|
 |12|[Car–Parrinello](chapters/12-car-parrinello.tex)|怎样连接电子求解与核动力学？|
 
+当前优先优化朋友笔记覆盖的第 1–9 章，补齐其中理解主线所必需的基础与推导。第 10–12 章已有稿保留，暂不扩写；笔记未记录的新专题也暂不铺开。先保证现有内容能循序读通，再扩大范围。
+
+电子结构的依赖顺序是：**电子与核的完整问题 → Born–Oppenheimer 分离 → 固定核多电子 Hamilton 算符 → 变分原理 → Hartree → 反对称性与 Hartree–Fock → 超越 HF 的关联 → DFT**。BO 处理电子与核运动的耦合，Hartree/HF 处理给定核构型下的电子问题；两层近似必须分开说明。量子内积、本征态及相关记号在第 4 章首次使用前引入。
+
 ## 来源、核对程度与边界
 
 朋友的 `../Computational Physics.pdf` 共 50 页，2026-11-05 已逐页转成 PNG 并逐页目视阅读，未用文字提取冒充图像阅读。逐页内容、对应正文和纠错依据见 [来源核对](source-review.md)。封面为第 1 页，第 50 页空白。第 10–12 章超出该 PDF 的范围，来自原英文稿的独立中文重写，不能宣称朋友笔记为这些章节提供了验证。
 
-当前是覆盖原有 12 章主线的中文教材初稿，已经补写重要推导并修正识别出的公式与概念错误，但还不能称为完成同行评审的研究生教材。若继续深化，应在现有章节原位扩展：线性响应与热流的完整微观推导、均匀气交换积分、非局域相关与 RPA、赝势构造与可转移性实例、完整算例与习题。现有内容明确说明这些边界，不以术语出现代替掌握。原讲义 Lec9 的可复现性专题目前仍在旧 Markdown 笔记中，本次没有冒称已经收入中文 LaTeX 全书。
+当前是覆盖原有 12 章主线的中文教材初稿，已经补写重要推导并修正识别出的公式与概念错误，但还不能称为完成同行评审的研究生教材。后续可能需要深入的内容包括（并非当前已授权扩大范围的任务）：线性响应与热流的完整微观推导、均匀气交换积分、非局域相关与 RPA、赝势构造与可转移性实例、完整算例与习题。现有内容明确说明这些边界，不以术语出现代替掌握。原讲义 Lec9 的可复现性专题目前仍在旧 Markdown 笔记中，本次没有冒称已经收入中文 LaTeX 全书。
 
 原英文稿保存在 Git 历史 `0765a746fb5a58fdc82760d74b6f8dff85752fb6`，原始图像保留在 `figures/`，未删除。原 PDF 与讲义保持不变。不要为每次修改另造教材副本。
 

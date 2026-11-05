@@ -1,9 +1,20 @@
-\chapter{从变分原理到 Hartree--Fock}
+\chapter{Hartree 与 Hartree--Fock 近似}
 \sourcepages{手写笔记第 18--30 页}
-\section{求基态为什么可以变成最小化}
-从本章起，电子公式默认使用 Hartree 原子单位：$\hbar=m_e=e=4\pi\epsilon_0=1$。长度单位为 $a_0=4\pi\epsilon_0\hbar^2/(m_e e^2)$，能量单位为 $E_h=\hbar^2/(m_ea_0^2)$。固定核时，先求不含核间常数的电子能量，最后另加 $E_{NN}$。
+第\ref{bo:chapter}章先用 Born--Oppenheimer 近似建立了固定核电子态与核势能面的联系。本章保持核构型 $R$ 给定，研究怎样近似求出这张势能面上的一个点。我们不会重新近似核的运动，而要处理电子之间相互作用造成的困难。
 
-量子态可看成复向量，内积 $\langle\phi|\psi\rangle=\int\phi^*\psi$；位置连续时矩阵变成作用于函数的算符。归一化代表总概率为一。若 $\hat H|n\rangle=E_n|n\rangle$ 且 $E_0$ 最低，将试探态写为 $|\Psi\rangle=\sum_nc_n|n\rangle$，则
+\section{固定核以后还剩下什么问题}
+从本章起，电子公式默认使用 Hartree 原子单位：$\hbar=m_e=e=4\pi\epsilon_0=1$。长度单位为 $a_0=4\pi\epsilon_0\hbar^2/(m_e e^2)$，能量单位为 $E_h=\hbar^2/(m_ea_0^2)$。为与上一章明确衔接，将包含核排斥的算符分成
+\begin{equation}
+\hat H_e(R)=\hat H_{\rm el}(R)+E_{NN}(R),\qquad
+\hat H_{\rm el}(R)=\sum_i\left[-\frac12\nabla_i^2-\sum_I\frac{Z_I}{|\bm r_i-\bm R_I|}\right]+\sum_{i<j}\frac1{r_{ij}}.
+\end{equation}
+$E_{NN}(R)$ 对给定核构型是常数，不改变电子本征函数。若 $\hat H_{\rm el}\phi_n=\mathcal E_n\phi_n$，上一章的势能面就是 $E_n(R)=\mathcal E_n(R)+E_{NN}(R)$。下文为缩短记号令 $\hat H=\hat H_{\rm el}(R)$，$E_H$ 与 $E_{\rm HF}$ 都只表示相应近似下的电子能量；用于核力、结构优化或与上一章比较时，要加回核排斥。
+
+即使 $R$ 已经固定，最后的电子--电子项仍将所有电子坐标耦合起来。若没有这一项，各电子可分别求解一体问题，再按粒子统计构造多体态；有了它，某个电子感受到的作用会随其他电子的位置改变。我们需要一个在受限试探态中寻找最佳近似的原则，这才引出能量变分。
+
+\section{求基态为什么可以变成最小化}
+
+沿用上一章的量子态和内积记号。对给定核构型的电子 Hamilton 算符，若 $\hat H|n\rangle=E_n|n\rangle$ 且 $E_0$ 最低，将试探态写为 $|\Psi\rangle=\sum_nc_n|n\rangle$，归一化要求 $\sum_n|c_n|^2=1$。利用本征态的正交性，先有 $\langle\Psi|\hat H|\Psi\rangle=\sum_n|c_n|^2E_n$，再减去 $E_0\sum_n|c_n|^2$，得到
 \begin{equation}
 \langle\Psi|\hat H|\Psi\rangle-E_0=\sum_n|c_n|^2(E_n-E_0)\ge0.
 \end{equation}
@@ -14,7 +25,7 @@
 数值上可沿残差 $(\hat H-\varepsilon)\phi$ 的负方向移动，再归一化。归一化必须除以 $\sqrt{\langle\phi|\phi\rangle}$。求多个态时还要保持正交，否则所有向量都可能落向同一个最低态。非线性多轨道能量还可能存在多个驻点，自洽不等于已找到全局最低点。
 
 \section{Hartree 乘积如何产生平均场}
-多电子 Hamilton 算符为 $\hat H=\sum_i\hat h(i)+\sum_{i<j}r_{ij}^{-1}$，其中 $\hat h=-\nabla^2/2+v_{\rm ext}$。最简单的试探态是归一化单粒子函数的乘积 $\Psi_H=\prod_i\phi_i(x_i)$。$x=(\bm r,s)$ 包括位置与自旋，$\int\dd x$ 代表空间积分和自旋求和。
+将本章已经定义的固定核电子 Hamilton 算符简写为 $\hat H=\sum_i\hat h(i)+\sum_{i<j}r_{ij}^{-1}$，其中 $\hat h=-\nabla^2/2+v_{\rm ext}$，$v_{\rm ext}(\bm r;R)=-\sum_I Z_I/|\bm r-\bm R_I|$ 是固定原子核产生的外势。最简单的试探态是归一化单粒子函数的乘积 $\Psi_H=\prod_i\phi_i(x_i)$。$x=(\bm r,s)$ 包括位置与自旋，$\int\dd x$ 代表空间积分和自旋求和。
 
 其他坐标的归一化积分等于一，因此一体项化为 $h_{ii}=\langle\phi_i|\hat h|\phi_i\rangle$；两体项为
 \begin{equation}
