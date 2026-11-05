@@ -1,117 +1,97 @@
-\section{Molecular dynamics}
-\subsection{Basic statistical mechanics}
-Consider a box consider N-partciles, we would like to study the property of this system. The particles in this system has interaction. In MD, we have a force field and the field here depends on position. In this course, we mainly only consider the Coulomb's interaction:
+\chapter{从微观运动到统计平均}
+\sourcepages{手写笔记第 2--5 页}
+\section{为什么一条轨迹还不是一个宏观答案}
+设想一盒液体。我们想知道温度、压强和扩散速度，却不可能在实验中逐一指定所有原子的位置。计算机能够追踪有限个原子，但它输出的位置序列本身也不是温度。因此，分子动力学需要两座桥：从力学模型得到轨迹，从轨迹得到统计平均。
+
+先取最简单的模型：$N$ 个经典点粒子，质量 $m_i$，位置 $\bm r_i$，动量 $\bm p_i=m_i\dot{\bm r}_i$，体积为 $V$。记全部位置为 $R$、全部动量为 $P$。一个微观状态 $\Gamma=(R,P)$ 是 $6N$ 维相空间中的一点。对于不显含时间、没有速度依赖相互作用的体系，
 \begin{equation}
-    F=k\frac{q_1 q_2}{r^2}
+H(R,P)=K(P)+U(R),\qquad K=\sum_i\frac{\bm p_i^2}{2m_i},\qquad
+\bm F_i=-\nabla_i U.
 \end{equation}
+$H$ 是能量函数，$U$ 是势能。Hamilton 方程 $\dot{\bm r}_i=\partial H/\partial\bm p_i$、$\dot{\bm p}_i=-\partial H/\partial\bm r_i$ 正好给出 Newton 方程。这里的相空间坐标是普通变量，不是量子算符。
 
-The approach in classical mechanics includes:\\
-1. Newton's equation of motion,
-
+宏观可观测量用相空间函数 $A(\Gamma)$ 表示。若平衡状态的概率密度是 $\rho(\Gamma)$，则
 \begin{equation}
-    \textbf{F}=m\frac{d^2 \textbf{x}}{dt^2}
+\langle A\rangle=\int\dd\Gamma\,\rho(\Gamma)A(\Gamma),\qquad
+\int\dd\Gamma\,\rho(\Gamma)=1.
 \end{equation}
+概率不是在否认力学的确定性，而是在描述我们没有指定的微观信息。
 
-2: Hamiltonian mechanics.
+\section{能量固定与温度固定意味着不同的分布}
+孤立系统的粒子数、体积和能量固定，称为微正则或 NVE 系综。能量为 $E$ 的状态只在能量面上出现，于是
 \begin{equation}
-    \dot{\hat{p}}=-\frac{\partial H}{\partial q}
+\langle A\rangle_E=\frac{\int\dd\Gamma\,\delta(H(\Gamma)-E)A(\Gamma)}{\int\dd\Gamma\,\delta(H(\Gamma)-E)}.
 \end{equation}
+Dirac $\delta$ 函数在积分中选取能量面；连续相空间不能直接用离散态的 Kronecker 符号代替。
+
+如果系统可以与一个大热库交换能量，系统能量便会涨落。设总能量为 $E_{\rm tot}$，系统处于能量 $H$ 的状态时，热库可用的状态数是 $\Omega_b(E_{\rm tot}-H)$。定义热库熵 $S_b=\kb\ln\Omega_b$，用 $\partial S_b/\partial E_b=1/T$ 展开：
 \begin{equation}
-    \dot{\hat{q}}=\frac{\partial H}{\partial p}
+S_b(E_{\rm tot}-H)\simeq S_b(E_{\rm tot})-H/T.
 \end{equation}
-
-3: Lagrangian mechanics
-
-If we want to describe a state, we can have a state point, where the state function $S=(q,p)=(r_1,r_2,...,r_N,p_1,p_2,...,p_N)$. The phase space of the system has $6N$ dimension.
-
-\subsubsection{NVE ensemble}
-In NVE ensemble system, the number of particle(N), volume(V), and Energy(E) is unchange in the system. The expected value of A (such as pressure) can be written as:
+热库足够大时，高阶项可忽略，因而系统状态的权重正比于 $e^{-\beta H}$，其中 $\beta=1/(\kb T)$。归一化得到正则或 NVT 系综：
 \begin{equation}
-    <A>=\frac{\sum_S\delta_{\varepsilon(S),E} A(S)}{\sum_S \delta_{\varepsilon(S),E}}
+\rho=Z^{-1}e^{-\beta H},\qquad Z=\int\dd\Gamma\,e^{-\beta H}.
 \end{equation}
-\subsubsection{Canonical ensemble/NVT}
-If the Temperature of the system is confined instead of energy, we will have the NVT ensemble.
+这里讨论归一化平均，经典配分函数中用于量纲和不可分辨性的公共常数已约去。计算绝对自由能时必须恢复这些常数。
+
+动量与位置在 $H=K+U$ 中可分离。一个速度分量的分布因此为
 \begin{equation}
-    <A>=\frac{\sum_S e^{-\beta \varepsilon(S)} A(S)}{\sum_S e^{-\beta \varepsilon(S)}}
+f(v_x)=\sqrt{\frac{m}{2\pi\kb T}}\exp[-mv_x^2/(2\kb T)],\qquad
+\langle mv_x^2/2\rangle=\kb T/2.
 \end{equation}
+这说明温度与\emph{平均}动能联系，而非每一瞬间的动能都相同。若独立二次动量自由度为 $f$，则 $\langle K\rangle=f\kb T/2$。去掉质心平动后，三维无其他约束的体系常有 $f=3N-3$；刚性键等约束还会改变 $f$。
 
-Classically, we can define temperature as
+\section{时间平均怎样代替系综平均}
+轨迹给出的估计是
 \begin{equation}
-    \sum^N_{i=1} \frac{\textbf{p}_i^2}{2m} = \frac{3Nk_BT}{2}
+\overline A_{\mathcal T}=\frac1{\mathcal T}\int_0^{\mathcal T}A(\Gamma(t))\dd t.
 \end{equation}
-\subsection{Ergodicity}
-The Ergodic hypothesis means that the ensemble average can be obtained by the time average:
+只有当动力学在相关不变分布上具有适当遍历性，并且模拟足够长时，才可以用它估计系综平均。普通孤立 Newton 轨迹保持能量，不会自动采样 NVT。给速度按正则分布初始化，也不等于此后每一步都受热库控制。
 
-\begin{equation}\label{eqn:Ergodicity}
-    <\textbf{A}>=\lim_{t\rightarrow\infty}\frac{1}{t}\int_0^\infty dt' \textbf{A}(t')
-\end{equation}
+高势垒会使轨迹在一个亚稳盆地停留很久；有限时间看不到跨越，并不能证明数学意义上的不遍历。固体也不是一概不能进行统计平均：晶格振动可以在局部平衡下被良好采样，而缺陷迁移可能远慢于模拟时间。判断必须针对可观测量和时间尺度。
 
-In MD, the hypothesis means that if the simulation, equation \eqref{eqn:Ergodicity} will give us an accurate results. This works for fluids, supercritical fluids, or gas, but does not work for solid and glass.
-
-\subsection{Molecular Dynamics (MD)}
-To perform MD, we need 1. State function $S_i$, and 2. $F_i$: There are two types of Force field $F_i$, including classical MD, and quantum mechanics MD (first-principles MD, or ab initio MD). 3. Given a time steps h, we solve the equation motion of $t\rightarrow t+h$. Step 2 and Step 3 forms a loop and repeat. Step 3 is performed by Verlet method.
-
-\subsection{Verlet method}
-Taylor expansion gives us:
-\begin{equation}\label{eqn:verlet1}
-    x(t+h) = x(t) + \dot{x}(t)h+\frac{1}{2!}\ddot{x}(t)+\frac{1}{3!}\dddot{x}(t)+O(h^4)
-\end{equation}
-\begin{equation}\label{eqn:verlet2}
-    x(t-h) = x(t) - \dot{x}(t)h+\frac{1}{2!}\ddot{x}(t)-\frac{1}{3!}\dddot{x}(t)+O(h^4)
-\end{equation}
-With some algebra, we have
-\begin{equation}\label{eqn:verlet3}
-    x(t+h)-x(t-h)=2x(t)+\ddot{x}(t)h^2+O(h^4)
-\end{equation}
-\begin{equation}\label{equation:Verlet}
-    x(t+h)=2x(t)+x(t-h)+\frac{f(t)}{m}h^2+O(h^4)
-\end{equation}
-Equation \eqref{equation:Verlet} gives us the Verlet equation.
-
-\subsubsection{Time reversal and energy conservation}
-Why can't we use the numerical method to solve the PDE? The fundamental reason is due to time reversal symmetry. By taking $t\rightarrow -t$, only $v$ has the sign being reverse, and \eqref{equation:Verlet} remains the same. Therefore, using Verlet method allows us to satisft time-reversal symmetry, and \textbf{allowing energy to be conserved}.
-
-\subsubsection{Velocity in the Verlet method}
-By subtracting equation \eqref{eqn:verlet1} by equation \eqref{eqn:verlet2}, we get:
-\begin{equation}\label{eqn:vverlet}
-    v(t)=\dot{x}(t)=\frac{x(t+h)-x(t-h)}{2h}+O(h^2)
-\end{equation}
-
-To perform Velocity Verlet method, we substitue \eqref{eqn:vverlet} to \eqref{equation:Verlet} to get:
-\begin{equation}
-    x(t+h)=x(t)+hv(t)+\frac{f(t)}{2m}h^2
-\end{equation}
-This equation allows us to update $x(t+h)$
-
-To update $v(t)$, we replace t by t+h in \eqref{equation:Verlet} to get:
+\section{从 Taylor 展开构造 Verlet 算法}
+为看清算法，先写一维 $m\ddot x=F(x)$，步长为 $h$。假设轨迹足够光滑，
 \begin{align}
-    v(t+h)&=\frac{x(t+2h)-x(t)}{2h}\\
-    &=\frac{x(t+h)+hx(t+h)+\frac{f(t+h)}{2m}h^2}{2h}\\
-    v(t+h)&=v(t)+\frac{f(t)+f(t+h)}{2m}h \label{eqn:velocityupdate}
+x(t+h)&=x+h\dot x+\tfrac12h^2\ddot x+\tfrac16h^3x^{(3)}+O(h^4),\\
+x(t-h)&=x-h\dot x+\tfrac12h^2\ddot x-\tfrac16h^3x^{(3)}+O(h^4).
 \end{align}
+两式相加，奇次项消去；把 $x(t-h)$ 移项便得到
+\begin{equation}\label{md:verlet}
+x_{n+1}=2x_n-x_{n-1}+h^2F(x_n)/m.
+\end{equation}
+精确轨迹代入该递推式的残差是 $O(h^4)$，而稳定、光滑条件下在固定物理时间内累积的位置误差是 $O(h^2)$。不能因残差含四次幂就称它为四阶积分器。
 
-It is easy to see that equation \eqref{eqn:velocityupdate} satisfy time reversal symmetry and \textbf{the proof is left as an exercise for the reader}.
-
-\subsection{Leapfrog method}
-Using Leapfrog method can get the exact same result as the Verlet. Leapfrog method is a method similar to R-K method,  but satisfy time-reversal symmetry.
-
-\subsubsection{Apply the leapfrog method in Newton’s equations of motion}
-Details are in the lecture notes.
-
-\subsubsection{Can we trust the trajectory obtained by the leapfrog/Verlet method?}
-Yes. Even though there are chaotic conditions, Verlet method forced to minimize the action.
-
-How can we compute functional derivative in computer? Consider an action:
+位置递推要知道前两帧。若已知 $x_0,v_0$，可用 $x_1=x_0+hv_0+h^2F(x_0)/(2m)$ 起步。更方便的形式是速度 Verlet：
 \begin{align}
-    S=\int^b_a \bigg[\frac{1}{2}m\bigg(\frac{dx}{dt}\bigg)^2-V(x)\bigg] dt\\
-    S=\sum^{N-1}_{i=0}\bigg[\frac{1}{2}m\bigg(\frac{x_{i+1}-x_{i}}{h}\bigg)^2-V(x_i)\bigg]h
+v_{n+1/2}&=v_n+\frac h{2m}F(x_n),\\
+x_{n+1}&=x_n+h v_{n+1/2},\\
+v_{n+1}&=v_{n+1/2}+\frac h{2m}F(x_{n+1}).
 \end{align}
+这三个步骤分别是半步速度更新、整步位置更新、半步速度更新。合并后得到 $v_{n+1}=v_n+h(F_n+F_{n+1})/(2m)$。力只依赖位置时，每一步在已有 $F_n$ 的基础上只需再计算一次新力。
 
-For $\forall i = 0,1,2,...,N-1$, we have
-\begin{align}
-    \frac{\partial S}{\partial x_i}=0\\
-    \frac{\delta S}{\delta x(t)}=0\\
-    x_{i+1}=2x_i=x_{i-1}+f_i\frac{h^2}{m}
-\end{align}
+相邻的两个半步速度满足 $v_{n+1/2}=v_{n-1/2}+hF_n/m$，这就是 leapfrog 的交错存储。消去半步速度即回到式 \eqref{md:verlet}。二者等价需要一致的初始化；整步与半步速度不能直接混用来计算动能。
 
-\newpage
+\section{可逆性、稳定性与能量误差}
+把速度 Verlet 的三个步骤逆序，并令 $h\to-h$，每一步都撤销原来的更新，所以它具有时间可逆性。但时间反演是离散对称性，不能据此推出数值能量严格守恒。连续体系的能量守恒来自时间平移不变性。
+
+取 $U=m\omega^2x^2/2$ 检查稳定性。位置递推变为 $x_{n+1}-(2-h^2\omega^2)x_n+x_{n-1}=0$。试探 $x_n=z^n$，得到
+\begin{equation}
+z+z^{-1}=2-h^2\omega^2.
+\end{equation}
+若 $z=e^{\ii\theta}$，则 $\cos\theta=1-h^2\omega^2/2$。只有 $0<h\omega<2$ 时两个根一般都在单位圆上且不重合；在边界 $h\omega=2$ 会有不稳定的线性增长解。即使在稳定范围，$\theta/h$ 也不等于 $\omega$，因此相位会产生误差。时间步要比最短振动周期小得多，不能只满足稳定条件。
+
+Verlet 对可分离 Hamilton 系统还是辛方法，即保持相空间的辛结构。光滑、稳定且步长足够小时，它通常表现出长期有界的能量振荡，而非逐步精确守恒。混沌轨迹仍可与精确轨迹指数分离。可信性要靠步长收敛、守恒量检查和统计量收敛共同判断，不能靠轨迹看起来平滑。
+
+\section{离散作用量提供另一条理解路径}
+作用量是一个把整条路径映成数的泛函：$S[x]=\int(\tfrac12m\dot x^2-U(x))\dd t$。固定两端位置，改变中间路径；分部积分给出
+\begin{equation}
+\delta S=\int[-m\ddot x-U'(x)]\delta x\,\dd t.
+\end{equation}
+端点变分为零，边界项消失。任意内部 $\delta x$ 都使一阶变分为零，便要求 Newton 方程。这里是\emph{驻值}条件，不保证极小值。
+
+离散后取 $S_d=\sum_{n=0}^{M-1}[m(x_{n+1}-x_n)^2/(2h)-hU(x_n)]$。内部 $x_n$ 同时出现在相邻两段，故
+\begin{equation}
+\frac{\partial S_d}{\partial x_n}=\frac m h(x_n-x_{n-1})-\frac m h(x_{n+1}-x_n)-hU'(x_n)=0.
+\end{equation}
+整理又得到 Verlet 递推。它解释了算法与力学变分结构的联系，却不意味着任何离散轨迹都“最小化作用量”，更不保证任意长时间的逐点准确性。

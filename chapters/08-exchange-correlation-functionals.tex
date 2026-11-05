@@ -1,75 +1,40 @@
-\section{Exchange-correlation functionals}
-\subsection{Local density approximation (LDA)}
-We don't know how to write the exchange correlation term $E_{XC}[\rho]$ using $\rho$, so we need to write it for the electron gas, and assume it works for all systems.
-%\begin{align}
-%    E_{XC}[\rho]=-\frac{3N}{4}\left(\frac{3\rho}{\pi}\right)^{1/3}
-%\end{align}
+\chapter{交换关联近似：把未知泛函变成计算}
+\sourcepages{手写笔记第 41--43 页}
+\section{局域近似为什么有物理起点}
+KS 方程把未知多体信息集中到 $E_{xc}$，但集中不等于解决。最简单的物理参照是均匀电子气：若密度在相关长度上变化缓慢，每个小区域可以近似为同密度均匀气，得到局域密度近似
+\begin{equation}
+E_{xc}^{\rm LDA}[n]=\int n(\bm r)\epsilon_{xc}^{\rm unif}(n(\bm r))\dd\bm r.
+\end{equation}
+$\epsilon_{xc}$ 是每电子能量，$n\epsilon_{xc}$ 才是每体积能量。普通链式求导给出 $v_{xc}=\epsilon_{xc}+n\dd\epsilon_{xc}/\dd n$。非自旋极化均匀气的交换能为 $E_x=-C_x\int n^{4/3}$，$C_x=\tfrac34(3/\pi)^{1/3}$，所以 $v_x=-\tfrac43C_xn^{1/3}$。这也检查了每电子与每体积定义的差别。
 
-We do not have shell structure(s,p,d) if we calculate $T^{\sigma}$ using Orbital-free DFT. The term does not consider Coulomb interaction. However, It works relatively well for "warm dense materials" where temperature is larger than $10,000K$, because the effect of orbital is less.
+均匀极限提供受控参照，但真实成键区并不均匀。LDA 在某些体系的成功还涉及积分平均和误差抵消，不能反过来证明“局域密度近似对任意体系严格成立”。磁性体系还需把总密度分成 $n_\uparrow,n_\downarrow$，使用自旋密度泛函。
 
-In this approach, the local exchange energy is:
-\begin{align}
-    E_{xc}[\rho] &= \int d\vec{r} \rho (\vec{r}) \varepsilon_{xc} ([\rho] , \vec{r})\\
-    \varepsilon_{xc}([\rho],\vec{r}) &= \varepsilon_x([\rho],\vec{r})+\varepsilon_c([\rho],\vec{r})
-\end{align}
+\section{梯度信息如何进入势}
+GGA 取 $E_{xc}=\int f(n,\nabla n)\dd\bm r$。对密度变分：
+\begin{equation}
+\delta E_{xc}=\int\left[\frac{\partial f}{\partial n}\delta n+
+\frac{\partial f}{\partial(\nabla n)}\cdot\nabla\delta n\right]\dd\bm r.
+\end{equation}
+在周期边界或边界变分消失时，对第二项分部积分，得到
+\begin{equation}
+v_{xc}=\frac{\partial f}{\partial n}-\nabla\cdot\frac{\partial f}{\partial(\nabla n)}.
+\end{equation}
+遗漏散度项会得到错误的力和自洽势。PBE、BLYP 等名字代表不同的具体函数与约束，并非仅仅代表“用了梯度”。meta-GGA 再引入轨道动能密度 $\tau=\tfrac12\sum_i f_i|\nabla\phi_i|^2$ 等信息；由于它依赖轨道，变分结构一般比局域乘法势复杂。
 
-The spin component can be written as:
-\begin{align}
-    E^{LDA}_{XC}[\rho^{\uparrow},\rho^{\downarrow}]=\int d\vec{r}\rho(\vec{r})\varepsilon^V_{XC}([\rho^{\uparrow},\rho^{\downarrow}],\vec{r})
-\end{align}
+\section{为什么混入精确交换}
+对单电子，真实 $W$ 为零，因此精确泛函必须满足 $E_{xc}=-E_H$，同时 $T_s=T$。许多半局域泛函不能准确做到这种自相互作用抵消。混合泛函将一部分行列式交换积分引入，例如
+\begin{equation}
+E_{xc}^{\rm PBE0}=\tfrac14E_x^{\rm exact}+\tfrac34E_x^{\rm PBE}+E_c^{\rm PBE}.
+\end{equation}
+这里的精确交换指在当前轨道上计算的 Fock 型交换，并不意味着整个多体计算精确。其变分产生非局域算符，通常属于广义 KS 理论。
 
-\begin{align}
-    V_{XC} = \frac{\delta E_{XC}[\rho]}{\delta\rho} = \varepsilon_{xc}([\rho],\vec{r})+\rho(\vec{r}) \frac{\partial \varepsilon_{xc}([\rho],\vec{r})}{\partial \rho}
-\end{align}
+远距离交换在固体中受到电子屏蔽。范围分离用恒等式
+\begin{equation}
+\frac1r=\frac{\operatorname{erfc}(\omega r)}r+\frac{\operatorname{erf}(\omega r)}r
+\end{equation}
+分开短程与长程，再分配不同交换比例。$\omega$ 具有长度倒数的量纲；改变它就是改变模型。介电依赖混合泛函中 $\alpha\sim1/\epsilon_\infty$ 是受屏蔽启发的方案，不是对全部材料成立的恒等式。金属、小能隙体系和非均匀界面尤其不能简单套用一个常数比例。
 
-\subsection{Generalized-gradient approximation(GGA)}
-\begin{align}
-    E^{GGA}_{xc}[\rho^{\uparrow},\rho^{\downarrow}] = \int d\vec{r} \rho(\vec{r}) \varepsilon_{xc} (\rho^{\uparrow}, \rho^{\downarrow}, \vert \nabla \rho^{\uparrow}\vert , \vert \nabla \rho ^{\downarrow} \vert , r)
-\end{align}
+\section{色散为何需要非局域信息}
+设两个中性片段相距很远，密度几乎不重叠。局域或半局域积分接近两个片段的能量之和，却无法感知相距很远的偶极涨落相关，因此一般缺失正确的长程色散吸引。成对修正的基本形式是 $E_{\rm disp}=-\sum_{A<B}f_{\rm damp}(R_{AB})C_{6,AB}/R_{AB}^6+\cdots$，阻尼避免把短程作用重复计入。非局域相关泛函则直接耦合不同位置的密度。多体屏蔽可能使简单成对模型不足。
 
-There are several variations of GGA, include PBE and BLYP.
-
-\subsection{Meta GGA}
-"SCAN", $$\tau (\vec{r}) := \sum_{i} \frac{1}{2} \vert \nabla \varphi_{i} ( \vec{r}) \vert ^2$$\\
-$$E^{meta GGA}_{XC}[\rho] = \int d\vec{r}\rho(\vec{r}) \varepsilon_{xc}(\rho,\vert \nabla \rho \vert , \tau, \vec{r})$$
-
-\subsection{Hybrid functional, orbital dependent functional}
-"self-interaction error": in hartree, cannot remove electron self-interaction from the integral
-
-\begin{enumerate}
-    \item PBEO: $E_{xc} = \frac{1}{4}E^{HF}_x + \frac{3}{4}E^{PBE}_{x} + E^{PBE}_c$
-    \item B3LYP: $E_{xc} = E^{LDA}_x+a_0(E^{HF}_x-E^{LDA}_x)+a_x(E^{Becke}_x-E^{LDA}_x)+E^{LDA}_c+a_c(E^{Becke}-E^{LDA}))$
-\end{enumerate}
-
-\subsection{self-consistent hybrid functional for condensed systems}
-PRB 89, 195112(2014)
-
-\begin{align}
-    E_{xc} &= \alpha E^{HF}_{x} + (1-\alpha) E^{GGA}_x + E^{GGA}_c\\
-    \alpha &= \frac{1}{\varepsilon_{\infty}}\\
-    \vec{D} &= \varepsilon_{\infty} \vec{E}\\
-    V(r) &= k \frac{q_1q_2}{r} \implies V(r) = k \frac{1}{\varepsilon_{\infty}} \frac{q_1 q_2}{r}
-\end{align}
-
-Physical meaning of $\varepsilon_{\infty}$: the screening effect by electrons only.
-
-Guess $\alpha \rightarrow$ DFT $\displaystyle\rightarrow \alpha = \frac{1}{\varepsilon_{\infty}} \rightarrow$ guess $\alpha$
-
-\subsection{Range-separated hybrid functionals}
-PRB93, 235106(2016)
-
-\begin{align}
-    E_{xc} = \alpha E^{HF, lr}_{x} + \beta E^{HF, sr}_{x} + (1-\alpha) E^{GGA, lr} _{x} + (1-\beta)E^{GGA, sr}_{x} + E^{GGA}_c
-\end{align}
-For a long range, we need to apply a tanh-like error function: $\text{erf}(\mu\vert\vec {r}=\vec{r'}\vert))$
-
-Notice that for PBEO: $\alpha = 0.25$, $\beta = 0$, $\mu \rightarrow \infty$; for HSE06: $\alpha = 0.25$, $\beta = 0$, $\mu = 0.11$
-
-\subsection{van der Waals functional}
-\begin{enumerate}
-    \item Grimme: DFT-(D2/D3/...) obtain the coefficient $C_6$ for the interaction $-\frac{C_6}{r^6}$ from a table
-    \item Tkatchenko-Scheffeler theoretically calculate (to a certain extent) $C_6$ (PRL102, 073005 (2009))
-    \item DRSLL: PRL 90 2464401(2004) More about random phase
-\end{enumerate}
-%wtf josun
- 
+更高层方法还可用密度响应描述相关，如 RPA；它需要空态或等效响应信息，计算与收敛要求不同。引入更多变量不保证每一种性质都更准。实际比较必须保持几何、基组、赝势和采样标准一致，并针对目标量判断近似，而不是只根据泛函在“阶梯”上的位置排序。

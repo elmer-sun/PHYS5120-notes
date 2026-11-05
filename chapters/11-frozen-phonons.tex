@@ -1,78 +1,43 @@
-\section{Frozen phonons}
-We can use $E[\rho]$ to understand frozen phonons.\\
-
-Phonon is the vibration of atom, meaning it is described by classical mechanics. Newtonian law gives:
+\chapter{从势能曲率到晶格振动}
+\sourcepages{原英文稿第 11 章；朋友的 50 页笔记未覆盖本章}
+\section{平衡结构附近的第一个非平凡近似}
+电子结构给出核构型的能量 $E(R)$，但一个极小值只告诉我们原子平均停在哪里。温度与零点运动使原子在附近振动，振动频率由势能曲率决定。设平衡位置为 $R^0$，位移为 $u_{I\alpha}=R_{I\alpha}-R^0_{I\alpha}$。平衡要求一阶导数为零，故
 \begin{equation}
-    M_I\frac{\partial^2 \vec{R}_I}{\partial t^2} = \vec{F}_2(\vec{R})=-\frac{\partial E(\vec{R})}{\partial \vec{R}_I}
+E=E_0+\frac12\sum_{I\alpha,J\beta}C_{I\alpha,J\beta}u_{I\alpha}u_{J\beta}+O(u^3),\quad
+C_{I\alpha,J\beta}=\frac{\partial^2E}{\partial R_{I\alpha}\partial R_{J\beta}}.
 \end{equation}
-At equilibrium position (bottom of the harmonic oscillator, we have:
-\begin{align}
-    \vec{F}_I(\vec{R}=\vec{R}^0)=0\\
-    M_I\frac{\partial^2 \vec{R}_I}{\partial t^2} = \vec{F}_I(\vec{R}^0) + \frac{\partial \vec{F}_I}{\partial \vec{R}}(\vec{R}-\vec{R}_0)+\dots
-\end{align}
+$C$ 是力常数矩阵，$C=-\partial F/\partial R$。光滑能量的混合导数相等，使它对称。Newton 方程变成 $M_I\ddot u_{I\alpha}=-\sum_{J\beta}C_{I\alpha,J\beta}u_{J\beta}$。
 
-Harmonic approximation:
+试取所有原子以同一频率振动，$u_{I\alpha}(t)=U_{I\alpha}e^{-\ii\omega t}$，得 $\omega^2M_IU_{I\alpha}=\sum C_{I\alpha,J\beta}U_{J\beta}$。令 $e_{I\alpha}=\sqrt{M_I}U_{I\alpha}$，便得到普通对称本征问题
 \begin{equation}
-    \vec{R}-\vec{R}_0 = \vec{U}_I (t) = \vec{U}_I e^{i\omega t}
+\sum_{J\beta}D_{I\alpha,J\beta}e_{J\beta}=\omega^2e_{I\alpha},\qquad
+D_{I\alpha,J\beta}=\frac{C_{I\alpha,J\beta}}{\sqrt{M_IM_J}}.
 \end{equation}
+质量加权使相同的势能曲率对重原子产生较低的频率。例如双原子一维弹簧 $E=k(u_1-u_2)^2/2$ 有平移零模和 $\omega^2=k(1/M_1+1/M_2)=k/\mu_{\rm red}$ 的相对振动。
 
-The base index $I$ and $\alpha$ indicate the $n$-th nuclei in the $\alpha$ direction. Substitute into the Newtonian equation, We have:
-\begin{align}
-    -\omega^2 M_I \vec{U}_2 e^{i\omega t}=\frac{\partial \vec{F}}{\partial \vec{R}}\vec{U}_I e^{i\omega t}
-\end{align}
+\section{冻结位移如何测出曲率}
+所谓冻结声子或有限位移方法，是暂时把一个坐标移开 $\pm\Delta$，分别计算所有原子的力：
+\begin{equation}
+C_{I\alpha,J\beta}\simeq-\frac{F_{I\alpha}(R^0+\Delta\bm e_{J\beta})-F_{I\alpha}(R^0-\Delta\bm e_{J\beta})}{2\Delta}.
+\end{equation}
+中心差分截断误差通常为 $O(\Delta^2)$。但若力有误差 $\delta F$，差分误差还含 $O(\delta F/\Delta)$；所以位移越小并非总越好。应收紧电子收敛，比较数个振幅，并先把平衡结构优化到足够小的残余力。
 
-Let $\displaystyle \frac{\partial F_{i\alpha}}{\partial R_{j \beta}} = -C_{i\alpha, j\beta}$, we have:
-\begin{align}
-    \omega^2 M_I U_{I,\alpha} = \sum_{j, \beta} C_{I\alpha. j\beta} U_{j, \beta}\\
-    \omega^2 \sqrt{M_I} U_{I \alpha} = \sum_{j, \beta}\frac{C_{I \alpha, j\beta}}{\sqrt{M_I M_J}}\sqrt{M_J}U_{J\beta}
-\end{align}
+若某本征值 $\omega^2<0$，线性化运动含指数增长而不是振荡，说明该构型在相应方向可能不稳定。很小的负值也可能来自数值误差或不充分收敛，不能只看绘图软件画出的“负频率”就断定新相。
 
-We can therefore defined that Dynamial matrix:
-\begin{align}
-    D_{I\alpha, J\beta}=\frac{C_{I \alpha, j\beta}}{\sqrt{M_I M_J}}
-\end{align}
+\section{零模数量取决于系统}
+孤立非线性分子的整体平移和转动不改变能量，通常有三个平移及三个转动零模，剩 $3N-6$ 个振动模；线性分子只有两个独立转动方向，剩 $3N-5$ 个振动模。固定周期晶胞不能任意刚体转动而保持边界不变，晶体在 $\bm q=0$ 有三个声学平移零模，不能照搬分子的六零模计数。
 
-Solving the matrix equation, we can obtain $3N$ eigenfrequency.\\
+整体平移使所有原子同向移动，力仍为零，故 $\sum_JC_{I\alpha,J\beta}=0$，称声学和规则。它既是物理约束，也是数值检验；强制修正不能替代检查原始力的收敛。
 
-The three translation and three rotational mode should be closed to 0. Another six mode can be found in physical chemistry textbook.\\
+\section{从超胞力常数到声子}
+晶体中以胞标号 $l$ 和胞内原子 $\kappa$ 区分原子。取振动形式 $u_{l\kappa\alpha}=M_\kappa^{-1/2}e_{\kappa\alpha}(\bm q)e^{\ii(\bm q\cdot\bm R_l-\omega t)}$，代入运动方程，得到
+\begin{equation}
+D_{\kappa\alpha,\kappa'\beta}(\bm q)=\frac1{\sqrt{M_\kappa M_{\kappa'}}}\sum_l C_{0\kappa\alpha,l\kappa'\beta}e^{\ii\bm q\cdot\bm R_l}.
+\end{equation}
+超胞决定可可靠恢复的作用距离；极性材料的长程偶极作用还需处理非解析修正。本式采用只在胞向量上带相位的约定，其他加入胞内坐标的约定给出等价频率。
 
-In real application, we write the matrix as:
-\begin{align}
-    \sqrt{M_I} U_{I \alpha} =
-    \begin{bmatrix}
-        1x\\
-        1y\\
-        1z\\
-        2x\\
-        2y\\
-        2z\\
-        3x\\
-        3y\\
-        3z
-    \end{bmatrix}\qquad
-    \begin{matrix}
-    1x\\
-    1y\\
-    1z\\
-    2x\\
-    2y\\
-    2z\\
-    3x\\
-    3y\\
-    3z
-    \end{matrix}
-    \begin{bmatrix}
-        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
-        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
-        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\  \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
-        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
-        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\  
-        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
-        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\\
-        \dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots
-    \end{bmatrix}
-\end{align}
-\begin{align}
-    C_{I\alpha, J\beta} = -\frac{\partial F_{i\alpha}}{\partial R_{j \beta}} = -\frac{F_{I\alpha}(R_{J\beta}+\Delta)-F_{I\alpha}(R_{J\beta}-\Delta)}{2\Delta}
-\end{align}
-
+上述正则模可以用经典力学求频率，但声子是它们量子化后的激发。每个独立模的能级为 $\hbar\omega(n+1/2)$，因此即使零温也有零点能。有限温谐振动自由能为
+\begin{equation}
+F_{\rm vib}=\sum_{\bm q\nu}\left[\frac{\hbar\omega_{\bm q\nu}}2+\kb T\ln(1-e^{-\beta\hbar\omega_{\bm q\nu}})\right],
+\end{equation}
+其中求和按所需总量或每胞量归一化，刚体零模需另行处理。高温才恢复每模平均能量约 $\kb T$ 的经典极限。因此“频率由经典方程求出”不等于“声子没有量子性”。

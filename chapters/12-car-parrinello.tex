@@ -1,50 +1,50 @@
-\section{Car--Parrinello molecular dynamics}
-DFT $\rightarrow$ $\rho,\{\phi_i\}\text{(Kohn-sham orbital)}$ $\rightarrow$ F $\rightarrow$ verlet $\rightarrow$ DFT
+\chapter{让电子变量与原子核一起推进}
+\sourcepages{原英文稿第 12 章；朋友的 50 页笔记未覆盖本章}
+\section{Born--Oppenheimer 动力学的计算负担}
+第四章给出在电子基态势能面上推进原子核的方法：每到一个新构型，先充分求解电子基态，再由能量梯度求力，最后进行核的时间积分。电子自洽循环嵌套在核动力学循环内部。Car--Parrinello 方法的动机，是让电子轨道沿着随核移动的最低能附近连续演化，减少逐步从头最小化的工作。
 
-There are two loops: DFT gives the first loop(self consistence), the second loop is the ion step loop (using verlet)
-unit
+这里的轨道运动是辅助数值动力学，不是实际电子的含时 Schrödinger 演化。下面为清楚起见采用固定单占据的正交自旋轨道；闭壳层双占据形式须一致地处理占据系数。
 
-Can we do the two minimization at the same time?
-\begin{align}
-    L_{cp} &= K-V \\
-    &= \frac{1}{2}\sum^p_{I=1}M_IR_I^2 - \sum^N_{i=1} \frac{1}{2}(2\mu)\int d\vec{r} \abs{\dot{\varphi}_i(\vec{r})}^2\\
-    &- E_{KS}[\{\varphi_i\},\{R_I\}]\\
-    &+ \sum_{ij}\Lambda_{ij}\left[\int d\vec{r}\varphi^*_i\varphi_j - \delta_{ij}\right]
-\end{align}
+\section{扩展 Lagrange 函数与约束}
+给轨道引入正的虚拟惯性参数 $\mu$，采用约定
+\begin{equation}
+L=\frac12\sum_I M_I|\dot{\bm R}_I|^2+
+\mu\sum_i\langle\dot\phi_i|\dot\phi_i\rangle-E[\{\phi\},R]
++\sum_{ij}\Lambda_{ij}(\langle\phi_i|\phi_j\rangle-\delta_{ij}).
+\end{equation}
+两个动能项都带正号，核动能含速度平方。$\mu$ 的量纲使 $\mu\langle\dot\phi|\dot\phi\rangle$ 为能量；它不是电子的真实质量。本章取复轨道约定，不在该项前再放 $1/2$。
 
-\begin{align}
-    &E_{KS}[\{\varphi_i\},\{R_I\}]\\
-    &=\sum^N_{i=1}\int\varphi^*_i(r)\left(-\frac{\hbar^2}{2m}\nabla^2\right)\varphi_i(r)d\vec{r}+\int d\vec{r} V_{ext}(\vec{r})\rho(\vec{r})\\
-    &+\frac{1}{2}\int\int d\vec{r} d\vec{r}' \frac{\rho(\vec{r})\rho(\vec{r}')}{\abs{\vec{r}-\vec{r}'}} d\vec{r}\vec{r}' + E_{XC}[\rho]+E_{nn}[\{R_I\}]\\
-    \frac{d}{dt}\left(\frac{\partial L_{cp}}{\partial \dot{R}_I}\right)=\frac{\partial L_{cp}}{\partial R_I}\\
-    M_I \dot{R}_I = -\frac{\partial E_{KS}[\{\phi_i\}\{R_i\}]}{\partial R_I}   
-\end{align}
+对核坐标应用 Euler--Lagrange 方程，并假设基组不随核移动，得到
+\begin{equation}
+M_I\ddot{\bm R}_I=-\frac{\partial E}{\partial\bm R_I}.
+\end{equation}
+对 $\phi_i^*$ 作独立变分，$\delta L/\delta\dot\phi_i^*=\mu\dot\phi_i$，所以
+\begin{equation}
+\mu\ddot\phi_i=-\frac{\delta E}{\delta\phi_i^*}+\sum_j\Lambda_{ij}\phi_j
+=-\hat H_{\rm KS}\phi_i+\sum_j\Lambda_{ij}\phi_j.
+\end{equation}
+这里将乘子矩阵的转置重命名，保持 Hermitian 约束力。乘子使轨道保持正交，而不是让所有轨道落到同一个最低态。静止轨道的驻值方程可经占据子空间酉变换化为 KS 本征方程，但一般传播中的轨道并非瞬时基态。
 
-From the calculation, we have:
-\begin{align}
-    \frac{d}{dt}\left(\frac{\delta L_{cp}}{\delta \dot{\varphi}_i^*(\vec{r})}\right)=\frac{\delta L_{cp}}{\delta \varphi_i^*(\vec{r})}\\
-    \mu\ddot{\varphi}_i(\vec{r}) = -\frac{\delta E_{KS}}{\delta \varphi^*_i(\vec{r})}+\sum_j\Lambda_{ij}\varphi_j(\vec{r})\\
-    \mu\ddot{\varphi}_i(\vec{r}) = -H_{KS}\varphi_i(\vec{r})+\sum_j\Lambda_{ij}\varphi_j(\vec{r})
-\end{align}
+时间不显含的扩展体系在连续精确动力学下守恒
+\begin{equation}
+E_{\rm ext}=\frac12\sum_I M_I|\dot{\bm R}_I|^2+
+\mu\sum_i\langle\dot\phi_i|\dot\phi_i\rangle+E[\{\phi\},R].
+\end{equation}
+这不等于物理核动能加 BO 基态能量：虚拟电子动能也包含其中。数值积分还会带误差。仅见 $E_{\rm ext}$ 近似守恒，不能证明核始终在正确的基态面上运动。
 
-If $\ddot{\varphi}_i(\vec{r})=0$, then the Newton's equation will become Schodinger equation $H_{KS}\varphi_i(\vec{r}) = \sum^{N}_{j}\Lambda_{ij}\varphi_j(\vec{r})$.\\
-Verlet:
-\begin{align}
-    \varphi^{(n+1)_i(\vec{r})} = 2\varphi^{(n)_i(\vec{r})}- \varphi^{(n-1)_i(\vec{r})} -\frac{(\Delta t)^2)}{\mu}\left[\hat{H}_{KS}\varphi_i^{(n)}-\sum^N_{j=1}\Lambda_{ij}\varphi_j(\vec{r})\right]
-\end{align}
+\section{两能级模型解释频率分离}
+固定核，令 $H|1\rangle=\varepsilon_1|1\rangle$、$H|2\rangle=\varepsilon_2|2\rangle$，$\Delta=\varepsilon_2-\varepsilon_1>0$。以归一化试探态 $|\phi\rangle=\cos(\theta/2)|1\rangle+\sin(\theta/2)|2\rangle$ 描述偏离基态的程度。直接计算可得
+\begin{equation}
+\langle\dot\phi|\dot\phi\rangle=\dot\theta^2/4,\qquad
+\langle\phi|H|\phi\rangle=\varepsilon_1+\Delta\sin^2(\theta/2).
+\end{equation}
+因此 $L=\mu\dot\theta^2/4-\varepsilon_1-\Delta\sin^2(\theta/2)$。Euler--Lagrange 方程为 $(\mu/2)\ddot\theta=-(\Delta/2)\sin\theta$。小振幅下
+\begin{equation}
+\ddot\theta+(\Delta/\mu)\theta=0,\qquad \omega_e=\sqrt{\Delta/\mu}.
+\end{equation}
+若电子辅助振动远快于核振动且初始激发很小，轨道有可能保持在移动最低点附近。降低 $\mu$ 增大频率分离，却也要求更小时间步。能隙小的金属使这一分离困难，不能把该方法视为对任意体系都自动成立的加速器。
 
-Let's use one electron in a two state system as an example, We follow PRA44, 6334(1991):\\
--------- $\phi_1$\\
--------- $\phi_2$\\
+\section{实际可信性要检验什么}
+电子与核方程都可用类似 Verlet 的方法推进，但每一步必须同时求满足轨道正交的约束力。随意在无约束传播后归一化单条轨道，既不能确保轨道间正交，也可能破坏原有可逆结构。
 
-We have: $\displaystyle \cos\frac{\theta}{2}\ket{\phi_1}+\sin\frac{\theta}{2}\ket{\phi_2}\qquad\braket{\phi_1}{\phi_2}=0$\\
-$\displaystyle H\ket{\phi_1}=\varepsilon_1\ket{\phi_1}\qquad H\ket{\phi_2}=\varepsilon_2\ket{\phi_2}$\\
-$\displaystyle L=\frac{1}{2}\left(\frac{\mu}{2}\right)\dot{\theta}^2-\bra{\phi}H\ket{\phi}=\frac{1}{4}\mu\dot{\theta}^2-\cos^2{\frac{\theta}{2}}\varepsilon_1+\sin^2\frac{\theta}{2}\varepsilon_2=\frac{1}{4}\mu\dot{\theta}^2-(\varepsilon_2-\varepsilon_1)\cos^2\frac{\theta}{2}-\varepsilon_2$\\
-
-\begin{align}
-    \frac{d}{dt}\left(\frac{\partial L}{\partial \theta}\right)=\frac{1}{2}\mu\dot{\theta}^2\\
-    \frac{\partial L}{\partial \theta}=-(\varepsilon_2-\varepsilon_1)\frac{\sin\theta}{2}\\
-    \text{Take two sides equal, we have: }\nonumber\\
-    \mu\ddot{\theta}=-(\varepsilon_2-\varepsilon_1)\sin\theta
-\end{align}
-
+实际检查包括轨道正交残差、扩展能量漂移、虚拟电子动能是否持续升高，以及目标结构和动力学量对 $\mu$、步长的收敛。可以抽取若干核构型，重新充分最小化电子，比较 CP 电子能量与 BO 基态能量的差；若差距随时间增大，说明电子已被加热或偏离基态面。最终应与充分收敛的 BO 力或轨迹统计量对照，确认辅助动力学没有显著改变所研究的核运动。

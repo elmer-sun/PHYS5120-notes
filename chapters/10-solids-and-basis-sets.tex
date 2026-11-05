@@ -1,276 +1,47 @@
-\section{Periodic solids, basis sets and pseudopotentials}
-Bloch theorem states that:
-\begin{align}
-    \left[-\frac{\hbar^2}{2m}\nabla^2+V_{KS}\right]\varphi_i(\vec{r})=\varepsilon_i\varphi_i(\vec{r})\\
-    V_{KS}(\vec{r})=V_{KS}(\vec{r}+n_1\vec{a}_1+n_2\vec{a}_2+n_3\vec{a}_3)\qquad n_1,n_2,n_3=0,\pm 1, \pm 2
-\end{align}
+\chapter{周期固体、基组与赝势}
+\sourcepages{原英文稿第 10 章；朋友的 50 页笔记未覆盖本章}
+\section{平移对称性如何减少未知量}
+晶体有无限多个原胞，逐原子求解不可行。设原胞平移向量为 $\bm a_1,\bm a_2,\bm a_3$，晶格向量为 $\bm R=\sum_i n_i\bm a_i$，有效势满足 $v(\bm r+\bm R)=v(\bm r)$。定义平移算符 $T_R\psi(\bm r)=\psi(\bm r+\bm R)$。势的周期性以及动能的平移不变性给出 $[H,T_R]=0$。对易来自 Hamilton 算符的对称性，不能仅由 $T_R$ 是酉算符推出。
 
-Born-von Karman boundary condition for $\psi$:
-\begin{align}
-    \rho(\vec{r})=\rho(\vec{r}+n_1\vec{a_1}+n_2\vec{a_2}+\rho\vec{a_3})\\
-    \psi(\vec{r})=\psi(\vec{r}+N_x\vec{a_1}+N_y\vec{a_2}+N_z\vec{a_3})
-\end{align}
-
-Notice that wavefunction being periodic does not imply density being periodic.
-
-We define the translation operator:
-\begin{align}
-    \hat{T}_1\psi(x)=\psi(x+a)
-\end{align}
-
-Born-von Karman boundary condition states that:
-\begin{align}
-    \begin{dcases}
-    \underbrace{\hat{T}_1 \hat{T}_1 \dots \hat{T}_1}_{N_x}\psi(x)=\psi(x)\\
-    \hat{T}_1 \rho(x) = \rho(x)
-    \end{dcases}
-\end{align}
-
-As $\hat{T}_1$ is unitary, $[\hat{T}_1,\hat{H}]=0$.
-\begin{align}
-    \begin{dcases}
-    \hat{T}_1 \psi(x)=t_1\psi(x)\\
-    \hat{H} \psi(x) = \varepsilon \psi(x)\\
-    \vert t_1 \psi(x)\vert^2 = 1
-    \end{dcases}\\
-    \vert t_1 \vert^2 = 1 \label{eq:unitary}
-\end{align}
-
-By \eqref{eq:unitary}, we have
-\begin{align}
-    t_1^{N_x} &= 1 \Rightarrow t_1=e^{i\theta} \Rightarrow e^{i\theta N_x} = 1\\
-    \theta &= \frac{2\pi}{N_x} n_x \qquad n_x = 0, \pm1, \pm2, \dots\\
-    t_1 &= e^{i\frac{2\pi}{N_x a}n_x a} = e^{ika} \qquad k=\frac{n_x}{N_x} \frac{2\pi}{a}\\
-    p&=\hbar k \qquad \text{crystal momentum}
-\end{align}
-
-We then define a reciprocal lattice $\vec{k}$ such that:
-\begin{align}
-    \vec{k}=\frac{n_1}{N_1}\vec{b_2}+\frac{n_2}{N_2}\vec{b_3}+\frac{n_3}{N_3}\vec{b_3}
-\end{align}
-The reciprocal primitive vectors can be writte as:
-\begin{align}
-    \vec{b_1}=2\pi\frac{\vec{a_2}\times\vec{a_3}}{\abs{\vec{a_1}\cdot(\vec{a_2}\times\vec{a_3})}}
-\end{align}
-
-As wavefunction has the propert of:
-\begin{align}
-    \hat{T_1}\psi(x)=\psi(x+a)=e^{ika}\psi(x)\\
-    \psi_k(x)=e^{ikx}u_k(x)
-\end{align}
-
-In three dimension, we have:
-\begin{align}
-    \psi_k(\vec{r})=e^{i\vec{k}\cdot\vec{r}}u_k(\vec{r})
-\end{align}
-Substitute this to K.S. equation, we have:
-\begin{align}
-    \left[-\frac{\hbar^2}{2m}(\nabla+i\vec{k})^2+V_{KS}(\vec{r})\right]u_{i,\vec{k}}(\vec{r})=\varepsilon_{i,\vec{k}}u_{i,\vec{k}}(\vec{r})
-\end{align}
-
-The density in one unit cell can be written as:
-\begin{align}
-    \rho(\vec{r})=\frac{1}{N_k}\sum_{i,k}f(\varepsilon_i,\vec{k})\vert\psi_{i,k}(\vec{r})\vert^2
-\end{align}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.4\linewidth]{band_structure.png}
-    \caption{Band Structure}
-    \label{fig:bandstructure}
-\end{figure}
-
-For a function $f$, the average per unit cell:
-\begin{align}
-    \bar{f}_i=\frac{1}{N_k}\sum_k f_i(k)
-\end{align}
-
-If we treat $k$ as a continuous variable, we have:
-\begin{align}
-    \bar{f}_i&=\frac{1}{\Omega_{BZ}}\int_{BZ} d\vec{k}f_i(\vec{k})\qquad \Omega_{BZ}=\int_{BZ}d\vec{k}
-   \\
-    &=\frac{\Omega_{cell}}{N}\int d\vec{k}f_i(\vec{k})=\vec{b_1}\cdot(\vec{b}_2\times\vec{b}_3)
-\end{align}
-
-\subsection{k-point sampling}
-
-Monkhorst-Pack sampling:
-
-We only consider certain values of $k$:
-
-\begin{align}
-    k_{n_1,n_2,n_3} = \sum_{i=1}^3 \frac{2n_i-N_i-1}{2N_i}\vec{b}_i \qquad n_i=1,2,3,\dots,N_i
-\end{align}
-
-
-
-\begin{table}[ht]
-\centering
-\caption{Location of k point with different N}
-\begin{tabular}[t]{ccccc}
-        $N_1 N_2 N_3$ & & $n=1$ & $n=2$ & $n=3$\\
-        \hline
-        1D & $N=2$ & -1/4 & 1/4 & -\\        
-         & $N=3$ & -1/3 & 0 & 1/3
-\end{tabular}
-
-\label{tab:mp_sampling}
-\end{table}%
-
-k-point convergence: increase number of k points until the result converges.
-
-For 2D: $N_1 \times N_2$
-
-\subsection{Symmetries and Brillouin Zone}
-To simply the calculation, we only need to consider the shaded area
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.4\linewidth]{Graphene_BZ.png}
-    \caption{Graphene BZ}
-    \label{fig:my_label}
-\end{figure}
-
-However, at $\Gamma$, we only need to calculate once. For point between $M$ and $K$, we need to consider 6 times (The edge is shared by 2 BZ). For $K$, we need to consider 2 times (The vertex is shared by 3 BZ).  
-
-We also need to consider \textbf{Time-reversal symmetry}:
-\begin{align}
-    i\hbar\frac{\partial}{\partial t} \psi=H\psi\xrightarrow{t\rightarrow -t}-i\hbar\frac{\partial}{\partial t}\tilde{\psi}=\tilde{H}\tilde{\psi}
-\end{align}
-
-If there is no $\vec{B}\xrightarrow{t\rightarrow -t}-\vec{B}$ (only true for topological insulators), we have $\tilde{H}=H$ and $\tilde\psi=\psi^*$
-
-The complex conjugate of the equation gives:
-\begin{align}
-    -i\hbar\frac{\partial}{\partial t}\psi^*=H^*\psi=H\psi
-\end{align}
-Recall that for KS equation, we have:
-\begin{align}
-    H_{KS}\varphi_i=\varepsilon_i\varphi_i\\
-    H_{KS}\varphi_i^*=\varepsilon_i\varphi_i^*
-\end{align}
-This means that $\psi_k$ and $\psi_{-k}$ has the same $\varepsilon_i$, meaning that the band structure is symmetric.
-
-There is a "Gamma Trick". At the point $\Gamma$, the wavefunction is real.
-
-Due to time-reversal symmetry, there will be a "Dirac cone" in the band structure at $k=0$. To open a gap, we apply B field to break the time-reversal symmetry.
-
-The following equation can be solved with parallel computing.
-
+在共同本征态上写 $T_R\psi=t_R\psi$。酉性保证 $|t_R|=1$，群乘法 $T_RT_{R'}=T_{R+R'}$ 要求本征值满足相同乘法关系，故可写 $t_R=e^{\ii\bm k\cdot\bm R}$。定义 $u_{n\bm k}=e^{-\ii\bm k\cdot\bm r}\psi_{n\bm k}$，立即得到
 \begin{equation}
-    \left[-\frac{\hbar^2}{2m}(\nabla+ik)^2+V_{KS}(r)\right]U_{i,k}(\vec{r}) = \varepsilon_{i,k}I_{ik}(\vec{r}) \label{eq:PBC_KS}
+\psi_{n\bm k}(\bm r)=e^{\ii\bm k\cdot\bm r}u_{n\bm k}(\bm r),\qquad u_{n\bm k}(\bm r+\bm R)=u_{n\bm k}(\bm r).
 \end{equation}
+这就是 Bloch 形式，$n$ 标记能带。同一个 Bloch 态的模平方在原胞间相同，但波函数本身一般只差相位，而非严格原胞周期。
 
-\subsection{Basis sets}
-
-Real-space grid method:
-
+倒格矢满足 $\bm a_i\cdot\bm b_j=2\pi\delta_{ij}$。令波函数在 $N_i\bm a_i$ 形成的大超胞上周期，则允许 $\bm k=\sum_i(m_i/N_i)\bm b_i$。相差倒格矢的 $\bm k$ 描述等价平移本征值，故只需第一 Brillouin 区。将 Bloch 形式代入 KS 方程，得到原胞内方程
 \begin{equation}
-    \bra{\vec{r}}\ket{\psi} = \psi(\vec{r})
+\left[-\tfrac12(\nabla+\ii\bm k)^2+v_s(\bm r)\right]u_{n\bm k}=\varepsilon_{n\bm k}u_{n\bm k}.
 \end{equation}
+无限晶体问题转化为不同 $\bm k$ 参数下的有限原胞问题。
 
-Finite difference:
-\begin{align}
-    \nabla \varphi = \frac{f(x_{i+1})-f(x_{i-1})}{2a}\\
-    \nabla^2 \varphi = \frac{f(x_{i+1})+f(x_{i-1})-2f(x_{i})}{a^2}
-\end{align}
+\section{积分采样与能带路径不是同一件事}
+每原胞的 Brillouin 区平均为 $\Omega_{BZ}^{-1}\int_{BZ}A(\bm k)\dd^3k$，其中 $\Omega_{BZ}=(2\pi)^3/\Omega_{\rm cell}$。数值上用 $\sum_k w_kA(\bm k)$，权重和为一。若 $u$ 在原胞归一化，电子密度为 $n(\bm r)=\sum_{nk}w_k f_{nk}|u_{nk}(\bm r)|^2$，自旋简并是否计入 $f$ 必须前后一致。
 
-Disadvantage: 
+Monkhorst--Pack 网格的一种写法是 $\bm k=\sum_i(2m_i-N_i-1)\bm b_i/(2N_i)$，$m_i=1,\ldots,N_i$。晶体对称性可把等价点合并，但合并权重必须来自整个离散网格。画能带的高对称路径只是一条线，不能代替三维积分网格。金属的占据在 Fermi 面附近变化快，通常比绝缘体需要更细的采样与展宽收敛检查。
 
-We try to avoid derivative because the mesh has to be dense, and the finite difference cannot be too small due to limitation of the computer.
+无磁、无自旋轨道耦合且势为实标量时，复共轭把 $\bm k$ 态映为同能量的 $-\bm k$ 态。在合适基中 $\Gamma$ 点可选实轨道。这不意味着所有具有时间反演对称性的系统都有 Dirac 锥；能带交叉还依赖其他对称性和能带结构。含自旋时，时间反演也不能简单等同于复共轭。
 
-Another method is finite element.
+\section{平面波为什么方便}
+周期函数可展开为 $u_{n\bm k}=\Omega_{\rm cell}^{-1/2}\sum_Gc_{n\bm k}(G)e^{\ii\bm G\cdot\bm r}$。由于 $\nabla e^{\ii G r}=\ii\bm G e^{\ii G r}$、$\nabla^2e^{\ii G r}=-G^2e^{\ii G r}$，动能在倒空间对角。保留 $|\bm k+\bm G|^2/2\le E_{\rm cut}$ 的项，把无限基变成有限基。增大截断在固定几何、嵌套基和充分求解下扩大变分空间，但实际计算还要控制积分网格等误差。
 
-\subsection{Plane wave DFT}
-To avoid the numerical derivative, we starts with the periodic boundary condition:
-\begin{align}
-    u(\vec{r})=u(\vec{r}+n_1\vec{a}_1+n_2\vec{a}_2+n_3\vec{a}_3)
-\end{align}
-As the wavefunction is periodic, we can do a Fourier transform:
-\begin{align}
-    u(\vec{r})=\frac{1}{\sqrt{\Omega_{cell}}}\sum_{\vec{G}}c(\vec{G})e^{i\vec{G}\cdot\vec{r}}\qquad\vec{G}=m_1\vec{b}_1+m_2\vec{b}_2+m_3\vec{b}_3\\
-    \nabla u(\vec{R}) = \frac{1}{\sqrt{\Omega_{cell}}}\sum_{\vec{G}}c(\vec{G})(i\vec{G})e^{i\vec{G}\cdot\vec{r}}\\
-    \nabla^2 u(\vec{R}) = \frac{1}{\sqrt{\Omega_{cell}}}\sum_{\vec{G}}c(\vec{G})(-\abs{\vec{G}})e^{i\vec{G}\cdot\vec{r}}\\
-    u(\vec{R})\xrightarrow{FT}C(\vec{G})\rightarrow i\vec{G}c(\vec{G}), -\abs{\vec{G}}^2c(\vec{G})\xrightarrow{FT^{-1}}\nabla u(\vec{r}), \nabla^2 u(\vec{r})
-\end{align}
-Although it is not easy to do Fourier Transform, Fast Fourier Transform (FFT) has complexity $n \log n$ which speed up the calculation.
+势能乘法在实空间方便，故常以 FFT 在两种表示之间切换。密度包含 $c^*(G)c(G')e^{\ii(G'-G)r}$；若轨道波矢最大为 $G_{\max}$，密度包含至 $2G_{\max}$ 的成分，对应四倍动能截断。这是平面波乘积的几何结论；超软赝势或 PAW 增广密度可能需要更高密度截断，不能机械设成四倍。
 
-Spectra method: discard high frequency part ($G>G_{max}$), remove noise and make the function smoother (remove rapid change).
+Poisson 方程 $\nabla^2v_H=-4\pi n$ 给出 $v_H(G)=4\pi n(G)/G^2$，仅对 $G\ne0$ 成立。电子密度的 $n(0)$ 是平均电子数密度，\emph{不为零}。周期静电的零模需要结合离子电荷、中性条件和势零点约定处理。带电超胞还涉及补偿背景，不能把零模发散解释成分子也变为零。
 
-$G_{max}$ Plane wave cutoff:
-\begin{align}
-    \phi_{ik}(\vec{r})=\frac{1}{\sqrt{\Omega_{cell}}}\sum^{G_{max}}_{\vec{G}}c_{ik}(\vec{G})e^{i(\vec{k}+\vec{G})\cdot \vec{r}}\\
-    \frac{\hbar^2}{2m}\abs{\vec{k}+\vec{G}}^2 < E_{cut}\\
-    if \vec{k}=0,\quad\abs{\vec{G}}<G_{cut}=\sqrt{\frac{2mE_{cut}}{\hbar^2}}\\
-    =\sqrt{2E_{cut}}\qquad(\hbar=m=1)
-\end{align}
+\section{赝势为何与基组选择相连}
+核附近全电子轨道快速变化，并与芯态正交；直接用平面波表示需很高截断。赝势在芯区内用平滑价态与有效作用替代显式芯电子，同时希望保持芯区外的散射性质。对某个角动量通道，模守恒构造要求参考能量和芯区外径向函数匹配，并满足
+\begin{equation}
+\int_0^{r_c}|R_l(r)|^2r^2\dd r=\int_0^{r_c}|\widetilde R_l(r)|^2r^2\dd r.
+\end{equation}
+这是约束之一，不是“任意平滑后就等价”的保证。不同角动量需要不同作用，因而赝势一般包含非局域投影项。可转移性必须在不同价态、成键和压强环境中检验。
 
-The total energy calculated will only decrease as $E_{cut}$ increase, because we minimize the energy in a larger basis.
+局域原子轨道基则以较少函数描述成键，但需要控制基组完备性与近线性相关。Slater 型径向函数有 $e^{-\zeta r}$ 的衰减，Gaussian 型用多项式乘 $e^{-\alpha r^2}$，便于积分运算。移动原子会移动局域基，所以力中要考虑第四章的 Pulay 项。实空间有限差分是另一种选择，例如 $\partial_x^2\psi\simeq[\psi(x+a)-2\psi(x)+\psi(x-a)]/a^2$；其网格误差需单独收敛，通常不具有相同的严格变分单调性。
 
-\subsection{Density Cut-off}
-\begin{align}
-    \rho_{i,\vec{k}}=\phi^*_{i,\vec{k}}(\vec{r})=\frac{1}{\Omega_{cell}}\sum_{G,G'}c^*_{ik}(\vec{G})c_{ik}(\vec{G'})e^{i(\vec{G'}-\vec{G})\cdot\vec{r}}\\
-    \abs{\vec{G'}}<2G_{cut}=2\sqrt{2E_{cut}}=\sqrt{2\cdot4E_{cut}}
-\end{align}
-
-It means that the cutoff of electron density is $4E_{cut}$.
-
-To calculate the coefficient:
-\begin{align}
-    c_{ik}(\vec{G})\xrightarrow{FFT^{-1}}u_{ik}(\vec{r})\rightarrow \rho(\vec{r})=\sum_{i,k} u_{ik}^*(\vec{r})u_{ik}(\vec{r})\xrightarrow{FFT}\rho(\vec{G})
-\end{align}
-
-\subsection{The plane wave pseudopotential method}
-
-KS equation:
-
-\begin{align}
-    \left(-\frac{\hbar^2}{2m}\nabla^2 + \hat{V}_{ext} +\hat{V}_{H} + \hat{V}_{XC} \right) \ket{\psi_{ik}} = \varepsilon_{ik}\ket{\psi_{ik}}\\
-    \xi^k_{G}(\vec{r}) = \frac{1}{\sqrt{\Omega}}e^{i(\vec{G}+\vec{k})\cdot \vec{r}} \qquad \text{basis set}\\
-    \bra{\xi^k_G}\ket{\psi_{ik}} = c_{ik}(\vec{G})\\
-    \bra{\xi^k_G}\hat{T}\ket{\xi^k_{G'}} = \frac{\hbar^2}{2m} \vert \vec{k}+\vec{G}\vert ^2 \delta_{GG'}\\
-    V_H = e^2\int\frac{\rho(\vec{r})}{\abs{\vec{r}-\vec{r'}}}d\vec{R'}\rightarrow \nabla^2 V_H = -4\pi e^2\rho\\
-    \xrightarrow{FFT} -\abs{G}^2 V_H(\vec{G})=-4\pi e^2\rho(\vec{G})\\
-    V_H(\vec{G})=\frac{4\pi e^2}{\abs{G}^2}\rho(\vec{G})\\
-    \xrightarrow{FFT^{-1}}=V_H(\vec{r})\cdot\varphi_{ik}(\vec{r})\xrightarrow{FFT}(V_H\varphi_{ik})(\vec{G})
-\end{align}
-
-However, if $\vec{G}=0$, it is obvious that the numerator will become zero. Usually, code assume that $V_H(\vec{G}=0)=0$, but this is call the conduction boundary condition.
-
-By setting a critical radius $r_c$, we can estimate the wavefunction. The dashed wavefunction can be written as:
-\begin{align}
-    \ket{\tilde{\varphi_v}} = \ket{\varphi_v}+\sum_c \alpha_{cv}\ket{\varphi_c}\\
-    \alpha_{cv} = \braket{\varphi_c}{\tilde{\varphi_v}}\neq 0\\
-    \tilde{H}\ket{\varphi_v}=\varepsilon_v\ket{\varphi_v}\\
-    \tilde{H}(\ket{\tilde{\varphi}_v}-\sum_c\alpha_{cv}\ket{\varphi_c})=\varphi_v(\ket{\tilde{\varphi_v}}-\sum_c\alpha_{cv}\ket{\varphi_c})\\
-    \tilde{H}\ket{\tilde{\varphi}_v}-\sum_c \alpha_{cv}\ket{\varphi_c}+\sum_c\alpha_{cv} \varepsilon_v \ket{\varphi_c}=\varepsilon_v\ket{\tilde{\varphi}_v}\\
-    \tilde{H}\ket{\tilde{\varphi}_v}+\sum_c\braket{\varphi_c}{\tilde{\varphi}_v}(\varepsilon_v-\varepsilon_c)\ket{\varphi_c}=\varepsilon_v \ket{\tilde{\varphi}_v}\\
-    (\tilde{H}+\sum_c (\varepsilon_v-\varepsilon_c)\ket{\varphi_c}\bra{\varphi_c})\ket{\tilde{\varphi}_v}=\varepsilon_v\ket{\varphi_v}\\
-    \hat{V}_{ps}=-\frac{Z_c e}{r}\hat{I} + \sum_c(\varepsilon_v - \varepsilon_c)\ket{\varphi_c}\bra{\varphi_c}
-\end{align}
-
-The Norm-Conserving pps:
-\begin{align}
-    Q_c=\int^{r_c}_0 \abs{R_{nl}}^2 r^2 dr = \int^{r_c}_0\abs{\tilde{R}_{nl}}^2r^2 dr
-\end{align}
-
-\begin{figure}
-    \centering
-    \includegraphics[width = 0.4\textwidth]{pseudopotential.png}
-    \caption{Pseudopotential}
-\end{figure}
-
-\subsection{Effective mass}
-To find the band structure of silicon, we need the effective mass:
-\begin{align}
-    E(\vec{k})=E_0+\frac{\hbar^2k^2}{2m*}\\
-\end{align}
-
-To solve the Ks. Equation, we can use the real space and plane wave method. The difference of the two method is in calculating the derivative.\\
-
-For equation \eqref{eq:PBC_KS}, the $(\nabla+i\vec{k})^2$ operator is diagonized in reciprocal space and the potential term is diagonized in real space.\\
-
-\subsection{Localized Basis sets}
-The Slater type orbital: $ce^{-r/a}$\\
-The Gaussian type orbital: $e^{-\alpha r^2}Y_{l,m}(\theta,\varphi)$
-\newpage
+\section{从能带曲率理解有效质量}
+在波包半经典近似下，群速度为 $v_\alpha=\hbar^{-1}\partial\varepsilon/\partial k_\alpha$，外力满足 $\hbar\dot k_\beta=F_\beta$。对速度再求时间导数，得到
+\begin{equation}
+\dot v_\alpha=\sum_\beta\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}F_\beta,
+\qquad (m^{*-1})_{\alpha\beta}=\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}.
+\end{equation}
+有效质量是带边曲率张量，不是先验输入来决定能带。仅在各向同性抛物线附近，才可简化成一个标量 $m^*$。

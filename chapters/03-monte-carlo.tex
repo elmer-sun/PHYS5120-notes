@@ -1,32 +1,40 @@
-\section{Monte Carlo simulation}
-\begin{align}
-    p(E_i)=\frac{e^{-\beta E_i}}{Z} & Z=\sum_i e^{-\beta E_i}
-\end{align}
+\chapter{只为平衡平均设计运动：Monte Carlo}
+\sourcepages{手写笔记第 11--12 页}
+\section{为什么可以放弃真实时间}
+如果目标只是平均势能或结构，并不需要每一次原子运动都是真实的。正则平均中 $H=K(P)+U(R)$；对于只依赖位置的 $A(R)$，分子分母的动量积分完全约去，因此
 \begin{equation}
-    \langle X \rangle = \sum_i x_i p(E_i)
+\langle A\rangle=\frac{\int A(R)e^{-\beta U(R)}\dd R}{\int e^{-\beta U(R)}\dd R}.
 \end{equation}
+我们只须产生分布为 $\pi(R)\propto e^{-\beta U(R)}$ 的构型。均匀随机抽取高维空间通常会反复落在粒子重叠的高能区；重要性采样则把工作集中在有统计权重的区域。
 
-\subsection{Markov chain and the metropolis method (MC-MC)}
-By directing expressing the variable as state function, we have
+\section{从概率流推导接受率}
+考虑离散状态以简化记号。每一步从当前状态 $x$ 按提议概率 $q(y|x)$ 生成 $y$，再以 $a(x,y)$ 接受。拒绝时保留 $x$。若正反概率流满足
 \begin{equation}
-    \langle A \rangle = \frac{\int\dots\int d\textbf{p}^N d\textbf{r}^N \mathcal{A}(\textbf{p}, \textbf{r}) \exp[-\beta \mathcal{H}(\textbf{p}, \textbf{r})]}{\int\dots\int d\textbf{p}^N d\textbf{r}^N \exp[-\beta \mathcal{H}(\textbf{p}, \textbf{r})]}
+\pi(x)q(y|x)a(x,y)=\pi(y)q(x|y)a(y,x),
 \end{equation}
-where $\mathcal{H}=\sum^N_i p^2_i/{2m_i} + V$ is the Hamiltonian.
+则对 $x$ 求和，连同留在原状态的概率，得到 $\sum_x\pi(x)P(y|x)=\pi(y)$。这称为细致平衡，是平稳分布成立的充分条件。
 
-If $\mathcal{A}$ does not depend on $\textbf{p}^N$, we can write
+令 $r=\pi(y)q(x|y)/[\pi(x)q(y|x)]$，取 $a(x,y)=\min(1,r)$：若 $r<1$，正向接受率为 $r$、反向为一，概率流相等；若 $r>1$，两边互换，仍然成立。因此
 \begin{equation}
-    \langle A \rangle = \frac{\int\dots\int d\textbf{r}^N \mathcal{A}(\textbf{r}) \exp[-\beta V( \textbf{r})]}{\int\dots\int d\textbf{r}^N \exp[-\beta V(\textbf{r})]}
+a(x,y)=\min\{1,e^{-\beta[U(y)-U(x)]}q(x|y)/q(y|x)\}.
 \end{equation}
+对称随机位移使提议概率比为一，得到 Metropolis 接受率。未知配分函数在比值中消失，是算法能够实际运行的关键。
 
-Procedures of MC-MC are as following:
-\begin{enumerate}
-    \item We start with random starting state.
-    \item $x_i\rightarrow x_i + \Delta(\text{Rand}-0.5)$\\
-    $y_i\rightarrow y_i + \Delta(\text{Rand}-0.5)$\\
-    $z_i\rightarrow z_i + \Delta(\text{Rand}-0.5)$\\
-    where $\text{Rand} \in (0,1]$
-    \item $\text{acceptance rate}(0\rightarrow n) = \min \left( 1, e^{-\beta(E_n - E_0)}\right)$
-    \item Record the new values and go back to step 2.
-\end{enumerate}
+平稳性还不够：链必须能到达目标分布的各个相关部分，并避免周期性的封闭循环。跨不过高势垒时，局部细致平衡正确也不能保证有限时间的充分采样。步幅极小虽然接受率高，相邻样本却几乎一样；步幅过大则多数被拒绝。不存在适用于所有问题的固定最优接受率。
 
-\newpage
+\section{拒绝步也是样本}
+若低能状态需要等待许多步才能离开，这段停留时间正是它较大统计权重的体现。只记录接受的构型会删掉停留时间，改变分布。每次尝试后都应记录当前状态，包括未改变的状态。
+
+设平衡后的样本为 $A_1,\ldots,A_M$，归一化自相关为 $c(k)$。直接展开平均值的方差得
+\begin{equation}
+\operatorname{Var}(\overline A)=\frac{\operatorname{Var}(A)}M
+\left[1+2\sum_{k=1}^{M-1}(1-k/M)c(k)\right].
+\end{equation}
+因为相距 $k$ 的样本对有 $M-k$ 个，相关项不能像独立样本那样忽略。长链中若相关和收敛，可定义 $\tau_{\rm int}=1/2+\sum_{k\ge1}c(k)$，有效样本数约为 $M/(2\tau_{\rm int})$。分块平均应使用比相关时间长的块。
+
+\section{Hamiltonian Monte Carlo 如何借用力学}
+局部随机移动探索高维空间缓慢，可以引入辅助动量 $P$，把目标分布扩为 $e^{-\beta[K(P)+U(R)]}$。先从相应 Maxwell 分布独立抽取动量，再用可逆、保体积的 leapfrog 积分若干步，最后以 $\min(1,e^{-\beta\Delta H})$ 接受整个提议。
+
+为什么这里用总能量差？因为当前采样空间已经包含动量，其目标密度由 $H$ 决定。令积分映射为 $\Phi$、动量反转为 $\mathcal R(R,P)=(R,-P)$，可逆性给出 $\mathcal R\Phi\mathcal R=\Phi^{-1}$，所以提议 $\mathcal R\Phi$ 是自逆的；保体积则使 Jacobian 为一。两者使上述简单接受率合法，并校正有限步长造成的能量误差。
+
+辅助质量控制探索效率，辅助时间并非材料真实时间。HMC 能得到平衡构型，却不能把接受后的序列直接用于测量真实扩散系数。这正是“正确采样分布”与“正确动力学”之间的区别。

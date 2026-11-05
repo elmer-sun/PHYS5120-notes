@@ -1,104 +1,65 @@
-\section{Adiabatic approximation}
-We go from classical theory to quantum theory. Hamiltonian is an important element in the theory.\\
+\chapter{力的量子来源：电子与原子核的分离}
+\sourcepages{手写笔记第 12--18 页}
+\section{为什么经典势能不是最初的出发点}
+经典力场把电子的影响藏在了 $U(R)$ 中。若要研究化学成键、反应或未知材料，就需要从电子与原子核的量子力学得到这张势能面。波函数 $\Psi(R,r,t)$ 给出全部粒子的联合概率振幅；$R$ 表示所有核坐标，$r$ 表示所有电子坐标，自旋暂时省略。含时 Schrödinger 方程为 $\ii\hbar\partial_t\Psi=\hat H\Psi$。
 
-Given $p$ be the number of nuclei and $N$ be the number of electrons, we have:
-\begin{align*}
-    \textbf{H} &= -\sum^{p}_{I=1}\frac{h^2}{2M_I}\nabla^2_I + \frac{e^2}{2}\sum^p_{I=1}\sum^p_{J\neq 1}\frac{Z_IZ_J}{\abs{\textbf{R}_I-\textbf{R}_J}}\\
-    &-\sum^{N}_{i=1}\frac{h^2}{2M_I}\nabla^2_i + \frac{e^2}{2}\sum^N_{i=1}\sum^N_{j\neq 1}\frac{1}{\abs{\textbf{r}_i-\textbf{r}_j}} - e^2\sum^p_{I=1}\sum^N_{i=1}\frac{Z_I}{\abs{\textbf{R}_I-\textbf{r}_i}}
-\end{align*}
-
-The first term is the kinetic energy of proton, the second term is the proton-proton interactions, third term is kinetic energy of electron, fourth term is electron-electron interactions, and fifth term is interaction between protons and electrons.
-
-Here we assume $k=\frac{1}{4 \pi \epsilon_0}=1$
-
-Basically, if we solve the Schodinger equation, we can get the physics of the solid:
-\begin{equation}
-    \textbf{H} \psi_n(\textbf{R}, \textbf{r}) =
-    \varepsilon_n \psi_n(\textbf{R}, \textbf{r})
-\end{equation}
-
-\subsection{Adiabatic approximation}
-The wavefunction can be written as: 
-$$\Psi(\textbf{R},\textbf{r},t)=\sum_n\theta_n(\textbf{r},t)\phi_n(\textbf{R},r)$$
-
-Here $\theta_n(\textbf{r},t)$ is state of the nuclei, and $\phi(\textbf{R}, r)$ is the state of electron, which does not depend on time because electron is much lighter than proton, and it easily catch up with the motion of nuclei.
+非相对论 Coulomb 模型可写成
 \begin{align}
-    &i\hbar\frac{\partial\theta_m(\textbf{R},t)}{\partial t} = \left( -\sum^p_{I=1}\frac{\hbar^2}{2M_I}\nabla^2_I+V_{nn}(\textbf{R})+E_n(\textbf{r})\right)\theta_m(\textbf{R},t)\\
-    & \hat{h}\phi_n(\textbf{R},r)=E_n(\textbf{R})\phi_n(\textbf{R},r)
+\hat H&=\hat T_N+\hat H_e(R),\qquad \hat T_N=-\sum_I\frac{\hbar^2}{2M_I}\nabla_I^2,\\
+\hat H_e(R)&=-\sum_i\frac{\hbar^2}{2m_e}\nabla_i^2
+-\sum_{iI}\frac{Z_I e^2}{4\pi\epsilon_0|\bm r_i-\bm R_I|}
++\sum_{i<j}\frac{e^2}{4\pi\epsilon_0r_{ij}}+E_{NN}(R).
 \end{align}
-The Lagrangian can be written as:
-\begin{align}
-    & \mathcal{L} = -\sum^{N}_{i=1}\frac{\hbar^2}{2m}\nabla_i^2+\frac{e^2}{2}\sum^N_{i=1}\sum^N_{h\neq i}\frac{1}{\abs{\textbf{r}_i-\textbf{r}_j}}-e^2\sum^p_{I=1}\sum^N_{i=1}\frac{Z_I}{\abs{\textbf{R}_I-\textbf{r}_i}}
-\end{align}
+本章将核间排斥 $E_{NN}=\sum_{I<J}Z_IZ_Je^2/(4\pi\epsilon_0R_{IJ})$ 包含在 $\hat H_e$ 中。因此其本征值已经是总势能面，求核力时不能再加一次核间排斥。
 
-Note that the wave equation for nuclei is time-dependent, and that of electron is time-independent.
-
-\subsection{Ehrenfest theorem}
-Going from adiabatic to non-adiabatic, we need Ehrenfest theorem.\\
-
-Starting from the Schodinger Equation:
+\section{固定核电子态与精确的通道展开}
+对每一个固定 $R$，求 $\hat H_e(R)\phi_n(r;R)=E_n(R)\phi_n(r;R)$，并取电子态正交归一。$R$ 在此是参数，而非电子积分变量。用完备电子态展开
 \begin{equation}
-    i\hbar\frac{\partial}{\partial t}\psi(x,t) = [\hat{T}(x)+V(x)]\psi(x,t)
+\Psi(R,r,t)=\sum_n\chi_n(R,t)\phi_n(r;R).
 \end{equation}
-
-There are three pictures in Quantum Mechanics, known as Heisenberg picture, Schodinger picture, and Interaction picture.\\
-\begin{align}
-    \text{Heisenberg picture: }\frac{d}{dt}\hat{A}(t)=\frac{\partial \hat{A}(t)}{dt}+\frac{1}{i\hbar}\left[\hat{A}(t),\hat{H}\right]
-\end{align}
-
-In Heisenberg picture, wavefunction is time-independent. Only operators are time-dependent.
-
-\begin{align}
-    \frac{d}{dt}\langle\hat{x}\rangle&=\frac{1}{i\hbar}\langle[\hat{x},\hat{H}]\rangle\\
-    &=\frac{1}{i\hbar}\left\langle\left[\hat{x},\frac{\hat{p}^2}{2m}\right]\right\rangle\\
-    &=\frac{1}{i\hbar m}\langle[\hat{x},\hat{p}^2]\rangle\\
-    &=\frac{1}{i\hbar}{m}\langle[\hat{x},\hat{p}]\hat{p}+\hat{p}[\hat{x},\hat{p}]\rangle = \frac{\langle{\hat{p}}\rangle}{m}
-\end{align}
-We therefore get the relationship:
-\[
-\begin{dcases}
-\frac{d}{dt}\langle\hat{x}\rangle = \frac{\langle{\hat{p}}\rangle}{m}\\
-\frac{d}{dt}\langle\hat{p}\rangle = \frac{1}{i\hbar}\langle[\hat{p},V(x)]\rangle
-\end{dcases}
-\]
-Using $\hat{p} = -i\hbar\nabla$, we have:
-\begin{align}
-    &\frac{1}{i\hbar}\langle[\hat{p},V(x)]\rangle \\
-    =&\int\psi^*V\nabla \psi dx - \int \psi^* \nabla(V\psi) dx\\
-    =&-\int \psi^*\nabla V \psi dx\\
-    =&-\langle\nabla V(x)\rangle
-\end{align}
-
-We can get the Newton's equation of motion by taking the quantum expectation from Schodinger equation.
-
+这个展开本身尚未近似。真正的难点是核动能也对 $\phi_n$ 的参数 $R$ 求导。对每一项应用乘积法则：
 \begin{equation}
-    m\frac{d^2}{dt^2}\langle\hat{x}\rangle = -\left\langle\frac{\partial V(x)}{\partial x}\right\rangle
+\nabla_I^2(\chi_n\phi_n)=\phi_n\nabla_I^2\chi_n+2\nabla_I\chi_n\cdot\nabla_I\phi_n+\chi_n\nabla_I^2\phi_n.
 \end{equation}
-Using Ehrenfest theorem and apply it to the Hamiltonian, using $\frac{\partial}{\partial \textbf{R}}=\nabla$, we have:
+左乘 $\phi_m^*$ 并对电子积分，定义 $\bm d^I_{mn}=\langle\phi_m|\nabla_I\phi_n\rangle_r$、$\tau^I_{mn}=\langle\phi_m|\nabla_I^2\phi_n\rangle_r$，得
 \begin{equation}
-    M \frac{d^2}{dt^2}\langle\textbf{R}\rangle = -\left\langle\frac{\partial V_{nn}(\textbf{R})}{\partial\textbf{R}}+\frac{\partial E_{n}(\textbf{R})}{\partial\textbf{R}}\right\rangle
+\ii\hbar\partial_t\chi_m=(\hat T_N+E_m)\chi_m
+-\sum_{In}\frac{\hbar^2}{2M_I}(2\bm d^I_{mn}\cdot\nabla_I+\tau^I_{mn})\chi_n.
 \end{equation}
+不同电子面的核波包通过导数耦合相互转换。这些项不是额外引入的作用力，而是电子基随核位置改变的结果。
 
-The thermal wavelength is given by: $\frac{\hbar^2k^2}{2m}=\pi k_BT$, where $\lambda = \sqrt{\frac{h^2}{2\pi mk_BT}}$. But we will then have:
-$$\text{H}_2: 0.712\text{\AA}\quad\quad\text{O}_2: 0.179\text{\AA}$$
-As the thermal wavelength is small, this means that the classical picture $\langle \textbf{R}\rangle\approx\textbf{R}$ will still work.\\
-As the trajectory of the electron follows the nucleus, the wavefunction of electron is time-independent, meaning that we can write:
+对非简并电子本征方程求 $R_I$ 导数，再投影到 $m\ne n$ 态上，得到
 \begin{equation}
-    \textbf{H}\ket{\phi_n}=E_n\ket{\phi_n}
+\bm d^I_{mn}=\frac{\langle\phi_m|\nabla_I\hat H_e|\phi_n\rangle}{E_n-E_m}.
 \end{equation}
-Taking differentiation and average on both side, we have the Hellmann-Feynman theorem:
-\begin{align}
-    \left\langle \frac{\partial E_n(\textbf{R})}{\partial \textbf{R}} \right\rangle &= \frac{\partial}{\partial \textbf{R}}\left(\int\phi^*_n(\textbf{R},\textbf{r})\textbf{H}(\textbf{R},\textbf{r})\phi_n(\textbf{R},\textbf{r})d\textbf{r}\right)\\
-    &=E_n\frac{\partial}{\partial\textbf{R}}\left(\int\phi^*_n\phi_nd\textbf{r}\right)+\left\langle\phi_n\left\vert\frac{\partial \textbf{H}}{\partial \textbf{R}}\right\vert\phi_n\right\rangle\\
-    &=\left\langle\phi_n\left\vert\frac{\partial \textbf{H}}{\partial \textbf{R}}\right\vert\phi_n\right\rangle
-\end{align}
+这说明“核重所以电子总能跟上”不充分：能隙小或接近交叉时，导数耦合可能很大。
 
-We therefore have:
+\section{单一势能面近似到底丢掉了什么}
+Born--Oppenheimer 的通常最低阶做法是忽略导数耦合，选定一个电子面，得到 $\ii\hbar\partial_t\chi=(\hat T_N+E_n(R))\chi$。此时\emph{核仍是量子的}。将核进一步视为经典粒子，是另一个近似。
+
+若只丢掉不同面之间的耦合而保留对角修正，在可局域取实且光滑的规范下，归一化给出 $\langle\phi_n|\nabla_I\phi_n\rangle=0$，再对该等式求导可得 $\langle\phi_n|\nabla_I^2\phi_n\rangle=-\langle\nabla_I\phi_n|\nabla_I\phi_n\rangle$。因此势能还有正的对角修正
 \begin{equation}
-    M \frac{d^2}{dt^2}\textbf{R} = -\left\langle\phi_n\left\vert\frac{\partial \textbf{H}}{\partial \textbf{R}}\right\vert\phi_n\right\rangle - \frac{\partial V_{nn}(\textbf{R})}{\partial \textbf{R}} = \textbf{F}
+U_{\rm DBOC}=\sum_I\frac{\hbar^2}{2M_I}\langle\nabla_I\phi_n|\nabla_I\phi_n\rangle.
 \end{equation}
+不能在所有拓扑或简并情形下全局选择这种实规范；一般单面理论还含几何矢势。本书使用最低阶 BO 力学时默认远离这类情形。“Born--Huang 展开”通常指前节的通道展开，不应把这一名称直接定义为某一个删项方案。
 
-Solving $\{\phi_n\}$ gives us the electronic structure calculation.\\
-If we take $\textbf{F}=0$ and we minimize $E_{\text{total}}$, we can do geometry optimization. This can be solved through first-principles/ab initio MD/MC.
+\section{从核波包到经典轨迹}
+对量子平均值求时间导数，并使用 Schrödinger 方程，得到 Ehrenfest 恒等式 $\dd\langle\hat A\rangle/\dd t=\langle\partial_t\hat A\rangle+\langle[\hat A,\hat H]\rangle/(\ii\hbar)$。取核位置与动量，利用 $[\hat R_\alpha,\hat P_\beta]=\ii\hbar\delta_{\alpha\beta}$，便有
+\begin{equation}
+\frac{\dd\langle\bm R_I\rangle}{\dd t}=\frac{\langle\bm P_I\rangle}{M_I},\qquad
+\frac{\dd\langle\bm P_I\rangle}{\dd t}=-\langle\nabla_I E_n(R)\rangle.
+\end{equation}
+要把右侧换成 $-\nabla_I E_n(\langle R\rangle)$，还需波包在势能变化尺度上足够窄。对力在平均位置附近展开，线性涨落项平均为零，下一项与位置协方差及力的二阶导数相乘；只有这一修正小，经典封闭方程才合理。
 
-\newpage
+热 de Broglie 波长的常用约定是 $\lambda_{\rm th}=h_{\rm P}/\sqrt{2\pi M\kb T}$，其中 $h_{\rm P}=2\pi\hbar$。大质量和高温有利于经典极限，但轻核的零点运动和隧穿仍可能重要。对一个振动频率 $\omega$，$\hbar\omega\ll\kb T$ 是忽略该模量子占据效应的有用判断。
+
+\section{Hellmann--Feynman 力为什么成立}
+设归一化电子态是精确本征态。对 $E_n=\langle\phi_n|\hat H_e|\phi_n\rangle$ 求导，得到三项：
+\begin{equation}
+\partial_I E_n=\langle\partial_I\phi_n|\hat H_e|\phi_n\rangle+
+\langle\phi_n|\partial_I\hat H_e|\phi_n\rangle+
+\langle\phi_n|\hat H_e|\partial_I\phi_n\rangle.
+\end{equation}
+第一与第三项之和等于 $E_n\partial_I\langle\phi_n|\phi_n\rangle=0$，于是 $\bm F_I=-\langle\phi_n|\nabla_I\hat H_e|\phi_n\rangle$。电子波函数的导数没有凭空消失，而是被本征方程与归一化抵消了。
+
+有限、随核位置移动的基组会产生额外基组导数，即 Pulay 力；自洽未收敛也会破坏驻值条件。第一性原理分子动力学因此不仅要积分核运动，还要使每一步电子能量和力在所需精度内一致。

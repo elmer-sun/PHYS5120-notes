@@ -1,170 +1,73 @@
-\section{Force fields and transport}
-A potential can be written as:
+\chapter{力场、边界与可观测量}
+\sourcepages{手写笔记第 5--10 页}
+\section{势能模型怎样决定计算的问题}
+上一章假定已知 $U(R)$。现在必须说明它包含什么物理。分子中常把键伸缩和键角变化近似成平衡附近的谐振动，例如 $U_b=k_b(r-r_0)^2/2$。它来自势能在极小值附近的 Taylor 展开，一阶导数为零，二阶导数 $k_b$ 给出刚度。这种展开适合小振幅，不能可靠描述断键。
+
+非键作用常包含 Coulomb 项与短程排斥、色散项。以中性稀有气体的简单模型为例，Lennard--Jones 对势为
 \begin{equation}
-    V_{total} = V_{bonded}+V_{non-bonded}
+u(r)=4\epsilon[(\sigma/r)^{12}-(\sigma/r)^6],\qquad U=\sum_{i<j}u(r_{ij}).
 \end{equation}
-For covalent bond, we can write:
-\begin{align}
-    V_{bonded}&=V_{streching}+V_{bonding}+\ldots\\
-    &=\sum^{bonds}_{i}k_{ri}(r-r_{eq})^2+\sum^{bonds}_i k_{\theta_i}(\theta-\theta_{eq})^2+\ldots
-\end{align}
-For electrostatic interaction and Van der Waal's force, we have:
-\begin{align}
-    V_{non-bonded}&=V_{electrostatics}+V{vdw}\\
-    &=\sum^{atoms}_{i}\sum_{j}k \frac{q_i q_j}{r_{ij}}+\sum^{molecules}_i \sum_{j} 4\varepsilon\bigg[\bigg(\frac{\sigma}{r}\bigg)^{12}-\bigg(\frac{\sigma}{r}\bigg)^6\bigg]
-\end{align}
-\subsection{Machine Learning Force Field}
-Origin: BPNN, PRL98, 146407(2007)
-In a MLFF, the output is $V$ and the input is $\{r_{ij}, \theta_{ijk}\}$\\
-Given the translation, rotation symmetry, and permutation symmetry.
+$\epsilon$ 是势阱深度，$\sigma$ 是势能过零的距离，$r_{ij}=|\bm r_i-\bm r_j|$。远距离 $r^{-6}$ 吸引反映瞬时偶极涨落之间的量子相关；诱导偶极的能量标度也提示这一幂律，但不能把它当成 London 色散的完整推导。$r^{-12}$ 是方便的经验排斥形式，不是普适定律。
 
-DPMD: PRL120, 143001(2018): Using Local coordinate
-
-\subsection{Lennard-Jones fluids}
-The Lennard-Jones potential is given by
+令 $\bm r_{ij}=\bm r_i-\bm r_j$。利用 $\nabla_i r_{ij}=\bm r_{ij}/r_{ij}$ 求导得
 \begin{equation}
-    V = \sum_{i}\sum_{j>i}4\varepsilon\bigg[\bigg(\frac{\sigma}{r}\bigg)^{12}-\bigg(\frac{\sigma}{r}\bigg)^6\bigg]
+\bm F_{ij}=24\epsilon[2\sigma^{12}/r_{ij}^{14}-\sigma^6/r_{ij}^8]\bm r_{ij}.
 \end{equation}
+当 $r<2^{1/6}\sigma$ 时力指向远离另一粒子的方向；在 $r=2^{1/6}\sigma$ 处势能取最小值 $-\epsilon$。这是检查力的符号的简单办法。
 
-We should choose a reduced unit for our computations. The reduced unit is chosen as:
-\begin{align}
-    &\varepsilon = \sigma = m_i = k_b = 1\\
-    &V^*_{vdw} = 4\bigg[\bigg(\frac{1}{r^*}\bigg)^{12}-\bigg(\frac{1}{r^*}\bigg)^6\bigg]
-\end{align}
-We then have the unit as:
-\begin{align}
-    \textrm{length}&: r = r^*\sigma\\
-    \textrm{energy}&: E = E^*\varepsilon\\
-    \textrm{time}&: \sigma\sqrt{\frac{m}{\varepsilon}}\\
-    \textrm{temperature}&: \frac{\varepsilon}{k_B}
-\end{align}
+势能应在整体平移、整体转动以及相同粒子置换下不变。若机器学习模型拟合势能，再以负梯度给力，这些对称性与能量一致性仍是模型的一部分。训练误差小只说明在训练分布附近拟合好，不能代替对新构型的检验。
 
-How do we calculate the force?
-\begin{align}
-    F &= -\nabla V(r)\\
-    &= -4 \bigg[\nabla\bigg(\frac{1}{r^{12}}\bigg)-\nabla\bigg(\frac{1}{r^6}\bigg)\bigg]\\
-    &= 48\frac{\textbf{r}}{r^{14}}-24\frac{\textbf{r}}{r^{8}}
-\end{align}
+\section{约化单位、截断与周期边界}
+Lennard--Jones 模型有自然单位 $\sigma,\epsilon,m$。令 $r^*=r/\sigma$、$T^*=\kb T/\epsilon$、$t^*=t/\tau$，其中 $\tau=\sigma\sqrt{m/\epsilon}$。代入 $m\ddot r=F$，质量和能量标度消去，得到只含无量纲变量的方程。“令 $m=\epsilon=\sigma=1$”是在选择单位，不是把实际粒子性质改成一。
 
-Simple truncation:
-
-\[ V^{\textrm{trunc}}(r) =
-  \begin{cases}
-    V^{i-j}       & \quad r < r_c\\
-    0  & \quad , \text{otherwise}
-  \end{cases}
-\]
-
-\subsection{Periodic boundary conditions}
-This technique is useful for material. How do we simulate periodic boundary conditions?
-
-1. Minimum image convention\\
-Check if the separation larger than half size.\\
-2. Radial distribution function
+直接在 $r_c$ 之外把势能设零会产生能量跳跃。平移截断 $u_s(r)=u(r)-u(r_c)$（$r<r_c$）使势连续，却仍使力跳变。若需要力也连续，可用
 \begin{equation}
-    g(r+\frac{1}{2}dr) = \frac{n(r)}{\frac{4}{3}\pi\bigg[(r+dr)^3-r^3\bigg]\rho}
+u_{sf}(r)=u(r)-u(r_c)-(r-r_c)u'(r_c),\quad r<r_c,
 \end{equation}
+外部为零。这会在截断内部也改变力，因而是模型修改。比较结果时必须报告截断方式，而不只报告截断距离。
+
+有限盒子的表面比例过大，周期边界通过无限复制盒子模拟体相环境。立方盒边长 $L$ 时，将相对坐标逐分量变为 $\Delta x\mapsto\Delta x-L\operatorname{round}(\Delta x/L)$，得到最小镜像。短程球形截断通常要求 $r_c<L/2$，否则一个粒子的多个镜像可能进入作用范围。长程 Coulomb 相互作用不能由这一短程近似可靠处理。
+
+计算扩散时另有一个关键区别：用于求力的坐标可以折回盒内，但位移必须用记录跨边界次数的展开坐标。如果把每次跨边界都看成跳回盒子的另一端，算出的运动距离将完全错误。
+
+\section{怎样从快照得到结构}
+平均数密度为 $\rho=N/V$。在均匀各向同性体系中，给定一个粒子后，在半径 $r$、厚度 $\dd r$ 的球壳中找到其他粒子的平均数定义为
 \begin{equation}
-    n(r)=\frac{h(r)}{N_{\text{atom}}N_{\text{frame}}}
+\dd N(r)=4\pi r^2\rho g(r)\dd r.
 \end{equation}
+$g(r)$ 因而是相对于无关联分布的局部概率增强。计算时对每帧每个中心计数，再除以中心数、帧数、球壳体积和 $\rho$。如果只统计无序对，每个对要贡献两次。有限 $N$ 且排除中心自身时，理想气体按此归一化为 $(N-1)/N$；用 $(N-1)/V$ 可消除这一有限粒子数偏差。
 
-\subsection{Dynamics: diffusion constant}
-We need $ ^{235}U$ to make atomic bond but most uranium has mass $^{238}U$, by making use of diffusion, we can make an atomic bomb. So let's learn some physics about diffusion.\\
+第一峰表示优选近邻距离；峰后第一个谷值以内的配位数为 $4\pi\rho\int_0^{r_{\min}}r^2g(r)\dd r$。立方盒中一般只分析 $r<L/2$ 的完整球壳，避免几何截断。
 
-Einstein relation state:
-\begin{equation}\label{eq:f1}
-    \textbf{j}=-\mathcal{D}\nabla C
-\end{equation}
-\begin{equation}\label{eq:f2}
-    \frac{\partial C(r,t)}{\partial t}
-+\nabla \cdot \textbf{j}(r,t)=0
-\end{equation}
-Substitute eq \eqref{eq:f2} to eq \eqref{eq:f1}, we have Fick's Second Law:
-\begin{equation} \label{eq:fick2}
-    \frac{\partial C}{\partial t}=\mathcal{D}\nabla^2 C(r,t)
-\end{equation}
-
-To satisfy the boundary condition, we use:
-\begin{equation}\label{eq:cboundary}
-  \begin{cases}
-    c(r,0) = \delta(r)\\
-    \lim_{r\rightarrow\pm\infty}  c(r,t) = 0
-  \end{cases} 
-\end{equation}
-By substitue the boundary condition eq \eqref{eq:cboundary} to eq \eqref{eq:fick2}, we get the fundamental solution / heat kernal as:
+\section{扩散为何与均方位移相连}
+宏观上，浓度 $c$ 的梯度引起粒子流密度 $\bm j=-D\nabla c$。结合粒子数守恒 $\partial_t c+\nabla\cdot\bm j=0$，若 $D$ 为常数，得到扩散方程 $\partial_t c=D\nabla^2 c$。对起点在原点、总概率为一的传播分布 $c$，在无穷远边界项消失的条件下分部积分两次：
 \begin{equation}
-    c(x,t) = \frac{1}{\sqrt{4\pi \mathcal{D}t}}\exp\left(-\frac{x^2}{4\mathcal{D}t}\right)
+\frac{\dd}{\dd t}\int r^2c\,\dd^dr=D\int c\nabla^2r^2\,\dd^dr=2dD.
 \end{equation}
+于是三维中 $\langle|\Delta\bm r(t)|^2\rangle=6Dt$。微观轨迹的短时位移是 $\bm v(0)t$，均方位移正比于 $t^2$；只有速度记忆丧失后的扩散区才能用线性斜率估计 $D$。局域振动形成的平台也不是扩散区。
 
-Compare this equation with standard normal distribution:
+平衡体系中定义 $C_v(t)=\langle\bm v(t)\cdot\bm v(0)\rangle$。将 $\Delta\bm r=\int_0^t\bm v(s)\dd s$ 代入均方位移，并用平稳性把双重积分化成时间差积分：
 \begin{equation}
-    f(x|\mu,\sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+\langle|\Delta\bm r(t)|^2\rangle=2\int_0^t(t-s)C_v(s)\dd s.
 \end{equation}
-We then have:
-\begin{align}
-    2\mathcal{D}t = \langle x^2(t) \rangle\\
-    \frac{d \langle x^2(t) \rangle}{dt} = 2\mathcal{D}
-\end{align}
-In 3 dimension, this can be written as:
-\begin{align}
-    \lim_{t\rightarrow+\infty}\frac{d \langle r^2(t) \rangle}{dt} = 6\mathcal{D}
-\end{align}
-
-We can plot the mean squared distribution with time to find the diffusion constant.
-
-\subsection{Green-Kubo relation}
-We have the equation:
-\begin{align}
-  \langle x^2(t) \rangle &= \langle \left( \int^t_0 dt' v_x(t') \right) ^2 \rangle \\
-  &= 2\int^t_0 dt' \int^{t'}_0 dt'' \langle v_x(t')v_x(t'')\rangle
-\end{align}
-We also have
-\begin{align}
-  \langle v_x(t')v_x(t'')\rangle &= \langle v_x(t'-t'')v_x(0)\rangle
-\end{align}
-By differentiation, we have:
-\begin{align}
-    \frac{d \langle x^2(t) \rangle}{dt} &=
-     2\int^{t'}_0 dt'' \langle v_x(t')v_x(t'')\rangle \\
-     & = 2\int^t_0 dt'' \langle v_x(t-t'')v_x(0) \rangle
-\end{align}
-But Einstein's relation in N dimension gives:
+求导并取长时间极限，即得 Green--Kubo 形式
 \begin{equation}
-    2N\mathcal{D} = \frac{d \langle x^2(t) \rangle}{dt}
+D=\frac13\int_0^\infty C_v(s)\dd s.
 \end{equation}
-In N dimension, we can write the velocity autocorrelation function as:
-\begin{align}
-    \mathcal{D} = \frac{1}{N} \int^{\infty}_{0} d\tau \langle\textbf{v}(\tau)\cdot\textbf{v}(0)\rangle
-\end{align}
+前提是相关函数可积且存在正常扩散极限。多粒子自扩散取各粒子自身相关的平均，不能随意加入不同粒子间的交叉项。速度相关的 Fourier 谱能显示振动频率；只有在适当谐性、质量加权和归一化条件下，才能把它直接解释为振动态密度。
 
-By plotting a graph of MSD against t and finding its slope, we get $6\mathcal{D}$ as the slope.
-
-Green-Kubo relation gives:
+\section{电输运为何不能只看单粒子扩散}
+令展开坐标形成的电偶极矩为 $\bm M=\sum_iq_i\bm r_i$，总电流为 $\bm J=\dot{\bm M}$。各向同性平衡系统的线性响应给出
 \begin{equation}
-    \mathcal{D} = \frac{1}{2N_{\text{atom}}}\int^{\infty}_{0} \sum^{N_{\text{atom}}}_i d\tau \langle\textbf{v}(\tau)\cdot\textbf{v}(0)\rangle
+\sigma=\frac1{3V\kb T}\int_0^\infty\langle\bm J(t)\cdot\bm J(0)\rangle\dd t
+=\lim_{t\to\infty}\frac{\dd\langle|\bm M(t)-\bm M(0)|^2\rangle/\dd t}{6V\kb T}.
 \end{equation}
+第二个等式由与上节相同的双重积分恒等式得到；第一个等式还依赖线性响应理论，不能仅由位移恒等式证明。展开平方会出现 $q_iq_j\langle\Delta\bm r_i\cdot\Delta\bm r_j\rangle$。忽略 $i\ne j$ 的离子协同运动，才得到 $\sigma_{\rm NE}=\sum_s\rho_s q_s^2D_s/(\kb T)$ 的 Nernst--Einstein 近似。
 
-At $\tau =0$, $\langle\textbf{v}(0)\cdot\textbf{v}(0)\rangle$ is related to temperature. When $\tau \rightarrow 0$, the autocorrelation function approaches 0.
-
-\subsection{Ionic conductivity}
-Magnetic moment can be written as:
+热导率也能由平衡涨落计算。若 $\bm J_Q$ 定义为总热流，而非单位体积流密度，则各向同性体系有
 \begin{equation}
-    \textbf{M}=\sum_i{q_i r_i}
+\kappa=\frac1{3V\kb T^2}\int_0^\infty\langle\bm J_Q(t)\cdot\bm J_Q(0)\rangle\dd t.
 \end{equation}
+具体热流必须从所用势能的能量连续性方程推导，并处理平流贡献。周期边界与多体势下，不能不加修正地把 $\sum_i e_i\bm r_i$ 的时间导数当成完整热流。
 
-Diffusion constant is an analog of ionic conductivity:
-\begin{align}
-    \sigma &= \lim_{t \rightarrow \infty}\frac{1}{6tk_BTV}\langle\textbf{M}(t)-\textbf{B}(0)\rangle \\
-    &= \frac{1}{3k_BTV}\int_0^{infty}\langle\textbf{M}(\tau)\cdot\textbf{B}(0)\rangle
-\end{align}
-
-\subsection{Thermal conductivity}
-Similarly, we can write the thermal conductivity along Z as:
-\begin{align}
-    \kappa &= \lim_{t\rightarrow\infty}\frac{1}{2tk_BT^2V}\langle [\textbf{R}_z(t)-\textbf{R}_z(0)]  ^2\rangle \\
-    R_z &= \sum_i^{N_{\textbf{atom}}} \varepsilon_i Z_i \label{eq:rz} \quad
-    \sum_i \varepsilon_i = E\\
-    \kappa &= \frac{1}{k_BT^2V}\int^{\infty}_0 d\tau \langle \textbf{J}_z(t)\cdot\textbf{J}_z(0)\rangle
-\end{align}
-
-\newpage
+输运系数的困难往往在统计而不在公式。应改变积分上限检查平台，比较多个独立时间段，并检查盒子大小与总采样时间。相关函数的长时噪声会使积分漂移，延长积分区间并不自动提高准确度。

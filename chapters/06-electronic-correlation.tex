@@ -1,172 +1,57 @@
-\section{Electronic correlation beyond Hartree--Fock}
-\subsection{General Correlation energy}
-\begin{align}
-    \text{We now know that }
-    \Phi_{\text{HF}}&=\frac{1}{\sqrt{N!}}
-    \begin{vmatrix}
-    \varphi_1(1) & \varphi_1(2) & \dots & \varphi_1(N) \\
-    \varphi_2(1) & \varphi_2(2) & \dots & \varphi_2(N) \\
-    \vdots & & & \vdots\\
-    \varphi_N(1) & \varphi_N(2) & \dots & \varphi_N(N) \\
-    \end{vmatrix}
-\end{align}
+\chapter{超越单个行列式：电子关联}
+\sourcepages{手写笔记第 31--35 页}
+\section{平均场遗漏了什么}
+HF 已考虑交换，但某个电子的位置涨落如何即时影响另一个电子，单行列式通常无法完整描述。在同一 Hamilton 算符和同一单粒子基空间内，定义关联能 $E_c=E_{\rm exact}-E_{\rm HF}\le0$。有限基 full CI 的“精确”只指该基空间内；离连续空间仍有基组误差。
 
-Here all $\varphi$ are occupied orbitals.
+拉长氢分子说明了另一种困难：远距离极限应各有一个电子留在不同原子，受限闭壳层的双占据成键轨道却含有不合理的离子型组分。此时多个行列式具有同等重要性，不能把缺失部分都当作小修正。与弱涨落对应的动态关联相比，这种近简并所需的多构型描述常称为静态关联。
 
-We now denoted $\Phi^a_i$ as the $i$ orbital replaced by the $a$ orbital. We then have:
-\begin{align}
-    \text{We then have }
-    \Phi^a_i&=\frac{1}{\sqrt{N!}}
-    \begin{vmatrix}
-    \varphi_1(1) & \varphi_1(2) & \dots & \varphi_1(N) \\
-    \varphi_2(1) & \varphi_2(2) & \dots & \varphi_2(N) \\
-    \vdots & & & \vdots\\
-    \varphi_a(1) & \varphi_a(2) & \dots & \varphi_a(N) \\
-    \vdots & & & \vdots\\
-    \varphi_N(1) & \varphi_N(2) & \dots & \varphi_N(N) \\
-    \end{vmatrix}
-\end{align}
-Here $\varphi_i$ is occupied orbital, and $\varphi_a$ is unoccupied orbital. Repeating for all other orbitals, we have the complete basis which is normalized and orthogonal to each other:
-$\{\Phi_{HF},\Phi^a_i,\Phi^{ab}_{ij},\Phi^{abc}_{ijk},\dots\}$
+\section{CI：扩大变分空间}
+从 HF 参考行列式 $\Phi_0$ 出发，把占据轨道 $i$ 换成未占据轨道 $a$ 得 $\Phi_i^a$，替换两个得 $\Phi_{ij}^{ab}$。这些不是粒子沿真实时间跃迁的历史，而是多体 Hilbert 空间的基向量。展开
+\begin{equation}
+\Psi=c_0\Phi_0+\sum_{ia}c_i^a\Phi_i^a+\sum_{i<j,a<b}c_{ij}^{ab}\Phi_{ij}^{ab}+\cdots.
+\end{equation}
+用正交轨道组成的不同占据行列式互相正交。将展开代入 Schrödinger 方程，左乘 $\langle\Phi_I|$，得到 $\sum_JH_{IJ}c_J=Ec_I$。这是普通多体矩阵本征问题。
 
-Check that they are orthogonal: $\langle \Phi_{HF} \vert \Phi^a_i \rangle = 0$
+包含所有 $\binom MN$ 个行列式就是 full CI；组合数增长使其很快不可承受。截断至单、双激发得到 CISD，并保留变分上界，却一般不具尺寸一致性。若两个不相互作用片段各需要双激发，乘积波函数含有“片段 A 双激发乘片段 B 双激发”的总四激发；整体 CISD 把它丢掉，所以不能保证 $E(A+B)=E(A)+E(B)$。
 
-Single excitation wavefunction: (Replace one unoccupied electron by one occupied electron)
-\begin{align}
-    \Phi^{(1)}=\sum^{\text{occupy}}_i\sum^{\text{virtual}}_ac^a_i\Phi^a_i
-\end{align}
-Double excitation wavefunction
-\begin{align}
-    \Phi^{(2)} = \sum^{occ}_{i<j}\sum^{virt}_{a<b}c^{ab}_{ij}\Phi^{ab}_{ij}
-\end{align}
-Triple excitation wavefunction:
-\begin{align}
-    \Phi^{(3)}=\sum^{\text{occupy}}_{i<j<k}\sum^{\text{virtual}}_{a<b<c}c^{abc}_{ijk}\Phi^{abc}_{ijk}
-\end{align}
-Strongly Correlated Materials means that we cannot use one Slater determinant, but more Slater determinant. Weakly Correlated Materials means that $\Phi_0$ already has the main contribution.
+\section{MP2：把剩余作用当作微扰}
+取 $\hat H_0=\sum_i\hat f(i)$，$\hat V=\hat H-\hat H_0$，并暂引参数 $\lambda$。把 $E=E^{(0)}+\lambda E^{(1)}+\lambda^2E^{(2)}+\cdots$、$|\Psi\rangle=|0\rangle+\lambda|\Psi^{(1)}\rangle+\cdots$ 代入本征方程。采用 $\langle0|\Psi^{(1)}\rangle=0$，一阶方程投影到 $|0\rangle$ 给出 $E^{(1)}=\langle0|V|0\rangle$；投影到 $|K\rangle$ 给出
+\begin{equation}
+\langle K|\Psi^{(1)}\rangle=\frac{\langle K|V|0\rangle}{E^{(0)}_0-E^{(0)}_K}.
+\end{equation}
+二阶方程再投影到 $|0\rangle$，便得
+\begin{equation}
+E^{(2)}=\sum_{K\ne0}\frac{|\langle K|V|0\rangle|^2}{E^{(0)}_0-E^{(0)}_K}.
+\end{equation}
+这里分子必须连接不同态；若误写成每一项都是 $\langle0|V|0\rangle$，就丢掉了激发通道的信息。
 
-\subsection{Configuration interaction (CI)}
-Every wavefunction can be written as:
-\begin{align}
-    \Phi_{CI}=c_0\Phi_{HF}+\Phi^{(1)}+\Phi^{(2)}+\Phi^{(3)}+\cdots
-\end{align}
-This form includes every possible configuration of the system. We solve for Sch\"{o}dinger equation to obtain the CI version for Roothaan equaion:
-\begin{align}
-    \textbf{H}\ket{\Psi_{CI}}=E_{CI}\ket{\Psi_{CI}}\\
-    \textbf{H}\sum_{i=0} c_i\Phi^{(i)}=E_{CI}\sum_{i=0} c_i\Phi^{(i)}\\
-    \sum_i \bra{\Phi^{(i)}}\textbf{H}\ket{\Phi^{(i)}} c_i = \sum_i\braket{\Phi^{(i)}}{\Phi^{(i)}}c_iE_{CI}\\
-    \textbf{H}C=SCE_{CI}
-\end{align}
+对正则 HF 参考，轨道驻值条件使单激发矩阵元为零；一体与二体算符无法连接相差三个及以上轨道的行列式，因为至少留下一个正交轨道重叠。故只剩双激发：
+\begin{equation}
+E^{(2)}_{\rm MP2}=\sum_{i<j,a<b}
+\frac{|\langle\Phi_{ij}^{ab}|\hat V|\Phi_0\rangle|^2}{\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b},\qquad E_{\rm MP2}=E_{\rm HF}+E^{(2)}_{\rm MP2}.
+\end{equation}
+分母是未扰动能量差，不是 HF 总能量与“激发行列式”相减。通常占据态低于虚态，修正为负；但能隙很小时修正可能失控。MP2 不是能量最小化，所以它可以低于 full CI 能量，并无“必在 HF 与精确解之间”的保证，也没有普适的关联能恢复百分比。
 
-\subsection{Møller-Plesset Perturbation (MP2)}
-To tackle the the Configuration interaction, one popular method is Møller-Plesset Perturbation. However, this method is only a good approximation for weakly-correlated material.\\
+\section{耦合簇为什么使用指数}
+为自动包含独立片段上同时发生的激发，写 $|\Psi\rangle=e^{\hat T}|\Phi_0\rangle$，其中 $\hat T=\hat T_1+\hat T_2+\cdots$，$\hat T_k$ 产生 $k$ 重激发。即便截断 $T=T_1+T_2$，展开指数仍包含 $T_2^2/2$ 等四激发。这正补上了截断 CI 缺少的独立乘积结构。
 
-For the Zeroth-Order term, we consider the Hamiltonian which has two parts. The first part is easy to solve and the second part is difficult to solve:
-\begin{align*}
-\hat{H}_0\ket{n^{(0)}}=E_n^{(0)}\ket{n^{(0)}}\\
-\hat{H}=\hat{H}_0+\lambda\hat{H}'
-\end{align*}
+若不相互作用片段满足 $T=T_A+T_B$ 且两算符可交换，就有 $e^T=e^{T_A}e^{T_B}$。对于适当可分离的参考态，波函数因此因子化，能量可相加。将指数代入本征方程并左乘 $e^{-T}$，得到
+\begin{equation}
+E=\langle\Phi_0|e^{-T}He^T|\Phi_0\rangle,\qquad
+0=\langle\Phi_\mu|e^{-T}He^T|\Phi_0\rangle.
+\end{equation}
+CCSD 保留单、双激发投影方程；CCSD(T) 再对三激发作特定微扰修正。通常投影耦合簇不是变分上界法，近简并时单参考假设也可能失效。方法的声誉不能代替参考态适用性的检查。
 
-The eigenenergy and the wavefunction can be writte as:
-\begin{align*}
-E_n=E_n^{(0)}+\lambda E_n^{(1)}+\lambda^2E_n^{(2)}\\
-\ket{n}=\ket{n^{(0)}}+\lambda\ket{n^{(1)}}+\lambda^2\ket{n^{(2)}}+\cdots
-\end{align*}
+\section{量子 Monte Carlo：对多体波函数采样}
+对可求值的试探波函数 $\Psi_\theta(X)$，$X$ 表示全部电子坐标，能量可改写成
+\begin{equation}
+E(\theta)=\int p_\theta(X)E_L(X)\dd X,\quad
+p_\theta=\frac{|\Psi_\theta|^2}{\int|\Psi_\theta|^2},\quad E_L=\frac{\hat H\Psi_\theta}{\Psi_\theta}.
+\end{equation}
+于是可以用第三章的采样思想计算积分，再优化参数 $\theta$。称为变分 Monte Carlo。真实本征态满足 $E_L=E$，局部能量方差为零；这是有价值的诊断。但有限试探族的最小能量通常仍高于精确值，统计估计还带误差。
 
-Pertubation theory states that the eigenenergy of the first and second order correction is given by:
-\begin{align*}
-E^{(1)}_n=\bra{n^{(0)}}\hat{H}'\ket{n^{(0)}}\\
-E^{(2)}_n=\sum_{k\neq n}\frac{\abs{\bra{n^{(0)}}\hat{H}'\ket{n^{(0)}}}^2}{E^{(0)}_n-E^{(0)}_k}
-\end{align*}
-
-Recall that the Hamiltonian can be written as:
-\begin{align*}
-\hat{H}=\sum_i \left(-\frac{\hbar^2}{2m} \nabla_i^2+V_{ext}(R,r_i)\right)+\frac{1}{2}\sum_{i\neq j}\frac{e^2}{\abs{r_i-r_j}}
-\end{align*}
-
-As we already know the solution for Hartree-Fock, we define the Fock operator and treat it as the zeroth-order Hamiltonian.
-\begin{align}
-\text{Fock operator: }\hat{f}(i)=\hat{h}_1(i)+\sum^{N/2}_{j=1}(2\hat{j}_j(i)-\hat{k}_j(i))\\
-\hat{f}(i)\ket{\varphi_i}=\varepsilon_i\ket{\varphi_i}\label{eq:f_eigen}\\
-\hat{F}=\sum^N_{i=1}\hat{f}(i)=\hat{H}_0
-\end{align}
-
-The pertubation Hamiltonian can be defined as:
-\begin{align}
-\hat{H}'=\hat{H}-\hat{F}\qquad \lambda=1
-\end{align}
-
-Using Eq. \eqref{eq:f_eigen}, we can obtain the Zero Order Energy:
-\begin{align}
-\text{Zero Order: }E_{MP0} = \bra{\Phi_0}\hat{F}\ket{\Phi_0}=\sum_i\varepsilon_i
-\end{align}
-
-The First Order Correction and Second Order Correction is given by:
-\begin{align}
-\text{First Order: }E_{MP1} = \bra{\Phi_0}\hat{H}-\hat{F}\ket{\Phi_0} = E_{HF} - \sum_i\varepsilon_i\\
-\text{Second Order: }E_{MP2} = \sum_{\Phi_{other}=\{\Phi^a_i \Phi^{ab}_{ij} \Phi^{abc}_{ijk} \dots\}}\frac{\abs{\bra{\Phi_0}\hat{H}'\ket{\Phi_{other}}}^2}{E_{MP0}-E_{other}}\label{eq:MP2_2}
-\end{align}
-
-$E_{CI}$ will be lower than $E_{HF}$ as the degree of freedom increase. $E_{Mp2}$ lies between $E_{HF}$ and $E_{CI}$.
-
-Note that both $\hat{H}$ and $\hat{J}$ are only involving two body interaction, meaning that involving only $i$ and $j$. This means that there would be an extra orbital mismatch:
-\begin{align}
-    \left \langle\Phi_0 \left|\hat{H}-\hat{F}\right| \Phi^{abc}_{ijk}\right\rangle=0
-\end{align}
-
-For single excitation, we have:
-\begin{align}
-    \bra{\Phi_0}\hat{H}-\hat{F}\ket{\Phi^a_i}&=\bra{\Phi_0}\hat{H}\ket{\Phi^a_i}-\bra{\Phi_0}\hat{F}\ket{\Phi_i^a}\\
-    &=\underbrace{\bra{i}\hat{f}\ket{a}}_0-\underbrace{\sum_n \varepsilon_n \braket{\Phi_0}{\Phi^a_i}}_0=0 \text{(First term comes from Brillouin's theorem)}
-\end{align}
-The Second Order term therefore comes from double excitation. Eq. \eqref{eq:MP2_2} can therefore simplified to
-\begin{align}
-    E_{MP2}&=\sum^{occ}_{i<j}\sum^{vir}_{a<b} \frac{\vert{\langle{\Phi_0}\vert\hat{H}-\hat{F}\vert{\Phi^{ab}_{ij}}}\rangle\vert^2}{E_{MP0}-\Phi^{ab}_{ij}}\quad\quad(\text{80\% of the correlation energy.) }
-\end{align}
-
-\subsection{Coupled Cluster Theory}
-The coupled cluster theory is originated from neutron physics, but it is then later notice to be useful in condensed matter physics. We consider the Ansatz: $\Psi_{CC}=e^{\hat{T}}\Phi_{HF}$:
-\begin{align}
-    e^{\hat{T}}=I+\hat{T}+\frac{1}{2!}\hat{T}^2+\cdots\\
-    \hat{T}=\hat{T}_1+\hat{T}_2+\cancel{\hat{T}_3}\\
-    \hat{T}_1\Phi_0=\sum^{occ}_i\sum^{vir}_at^a_i\Phi^a_i\\
-    \hat{T}_2\Phi_0=\sum^{occ}_{i<j}\sum^{vir}_{a<b}t^{ab}_{ij}\Phi^{ab}_{ij}\\
-    e^{\hat{T}}=I+\hat{T}_1+\underbrace{(\hat{T}_2+\frac{1}{2}\hat{T}_1^2)}_{D}+\underbrace{(\hat{T}_3+\hat{T}_2\hat{T}_1+\frac{1}{6}\hat{T}_1^3)}_{T}+\cdots
-\end{align}
-
-In Coupled Cluster Singles and Doubles model (CCSD), we consider $T_1$, $T_2$. This is the most accurate method so far. Start from the Sch\"{o}dinger equation and substitute with the Ansatz:
-\begin{align}
-    \hat{H}\ket{\Phi}_{cc} = E\ket{\Phi_{cc}}\quad\quad He^{\hat{T}}\ket{\Phi_0}=Ee^{\hat{T}}\ket{\Phi_0}
-\end{align}
-This formulation gives two relations:
-\begin{align}
-    \bra{\Phi_0}e^{-\hat{T}}He^{\hat{T}}\ket{\Phi_0}&=E\quad\text{(CCSD(T)) Golden Standard (95\%)}\\
-    \bra{\Phi^a_i}e^{-\hat{T}}He^{\hat{T}}\ket{\Phi_0}&=0\\
-    \langle{\Phi^{ab}_{ij}}\vert e^{-\hat{T}}He^{\hat{T}}\vert{\Phi_0}\rangle&=0
-\end{align}
-
-%\subsection{Wavefunction method}
-\subsection{Quantum Monte Carlo}
-In Condensed Matter community, people tend to use quantum monte carlo method.
-
-\subsubsection{Variational Monte Carlo}
-$a$ is a parameter in the wavefunction, we then have:
-\begin{align}
-    E(A)&=\frac{\bra{\psi(a)}\bar{H}\ket{\psi(a)}}{\braket{\psi(a)}{\psi(a)}}\\
-    &=\frac{\color{blue}\int\abs{\psi(\vec{x},a)}^2\color{black}\frac{H\psi(x,a)}{\psi(x,a)}d\vec{x}}{{\color{blue}\int\abs{\psi(\vec{x},a)}^2d\vec{x}}}\color{black} \qquad \text{where $\vec{x}=(\vec{r}_1,\vec{r}_2,\dots,\vec{r}_N)$}\\
-    &=\sum_{\vec{x}}\color{blue}p(\vec{x},a)\color{black}\frac{H\psi(x,a)}{\psi(x,a)}
-\end{align}
-
-We have $\displaystyle E_{ground} = \min_a E(a)$. Normally, this method only works when there are symmetry so that the size of the system is not too big,\\
-
-
-\subsubsection{Diffusion Monte Carlo}
-This is a very popular method for strongly correlated material.
-\begin{align}
-    i\hbar \frac{d\psi}{dt} = - \frac{\hbar^2}{2m}\nabla^2\psi = H\psi\\
-    -\hbar \frac{d\psi}{d(it)}=\left(-\frac{\hbar^2}{2m}\nabla^2+V(r)\right)\psi \quad \text{where }it=\tau\\
-    \psi = e^{-\frac{E}{\hbar}\tau}\psi_0\quad E=\bra{\psi_i}H\ket{\psi_i}
-\end{align}
-By doing relaxation, we can get the current state wavefunction. This method works well for system like free electron gas. However, there are some limitation in this method. When the system is diffuse, the sign never changes. This is called the fixed-mode approximation.
-
-\newpage
+另一条路是虚时演化，定义 $\tau=\ii t$ 后有 $-\partial_\tau\Psi=(H-E_T)\Psi$（原子单位）。本征态展开给出
+\begin{equation}
+\Psi(\tau)=\sum_n c_n e^{-(E_n-E_T)\tau}\Phi_n.
+\end{equation}
+只要初态与目标最低态重叠非零，归一化后高能成分相对衰减。动能在这一方程中像扩散项，势能像产生或消灭权重的项，形成扩散 Monte Carlo 的基础。费米波函数有正负号，不能直接作为概率密度。固定节点近似限制节点面为试探态的节点；对于局域 Hamilton 算符和理想投影，它给出固定节点能量上界，但节点误差不会靠增加样本自动消失。时间步、有限 walker 数以及非局域赝势处理还需独立控制。

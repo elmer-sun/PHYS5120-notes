@@ -1,248 +1,75 @@
-\section{Density functional theory}
-Consider a box with 10 grids in each side. We need 1000 float to stores the wavefunction of one electron. Assume we have $N$ electrons, then we need $10^{3N}$ floats (exponential wall). FYI there are $10^{70}$ atoms in the universe. We therefore need Density functional theory.
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.5\linewidth]{DFT1.png}
-    \caption{Saving the wavefunction in a box will cause trouble when the degree of freedom increase}
-    \label{fig:fig1}
-\end{figure}
+\chapter{从多体波函数到电子密度}
+\sourcepages{手写笔记第 35--41 页及第 43--44 页}
+\section{降低变量维数的愿望与需要证明的事实}
+多电子波函数依赖全部 $3N$ 个空间坐标，电子数密度 $n(\bm r)$ 却只依赖三个。定义
+\begin{equation}
+n(\bm r)=\left\langle\Psi\left|\sum_i\delta(\bm r-\bm r_i)\right|\Psi\right\rangle,\qquad \int n(\bm r)\dd\bm r=N.
+\end{equation}
+它是将其他粒子坐标与自旋求和积分后的边缘分布。通常边缘分布不决定联合分布，因此“只算密度”首先需要一个关于\emph{基态}的特殊结论，而不能仅凭变量少就成立。
 
-\subsection{Hohenberg-Kohn theorem}
-To define a physical system, we need to define our $V_{ext}(r_i)$
-\begin{align*}
-    \hat{H} = -\frac{\hbar^2}{2m}\sum_i\nabla^2_i + \sum_i V_{ext}(\textbf{r}_i)+\frac{1}{2}\sum_{i \neq j} \frac{e^2}{\vert \textbf{r}_i - \textbf{r}_j \vert}
-\end{align*}
+固定粒子数和电子间作用，写 $\hat H_v=\hat T+\hat W+\sum_i v(\bm r_i)$。外势 $v$ 承载核的位置和电荷信息。本章只讨论标量局域外势；磁场和电流密度理论不能不加修改地套用以下论证。
 
-The only term unique to DFT is $V_{ext}(\textbf{r})$. From $V$, we can obtain the wavefunction $\psi_i(\textbf{r})$, and thus the density of wavefucntion $\rho_0(\textbf{r})$. Normally, we cannot obtain the wavefunction from density, because of the loss of information about phase. By this theorem, we can obtain $V$ from the density $\rho$. In DFT, density as basic variable.
-
-$$V_{ext}(r)\rightarrow\psi_i(r)\rightarrow\rho_0(r)\xrightarrow{HK}V_{ext}(r)$$
- 
-To proof Hohenberg-Kohn theorem, we need to prove that $\rho_0(r)$ is unique for a given Hamiltonian. The proof can be done by contradiction:
-
-\textbf{Proof: } Suppose $\rho_0$ gives two $V_{ext}$: $V^{(1)}_{ext}$ and $V^{(2)}_{ext}$. Each potential gives two different ground state wavefunction $\psi^{(1)}$ and $\psi^{(2)}$:
-
-Start from energy given by $V^{(1)}_{ext}$: 
-\begin{align*}
-    E^{(1)}&=\bra{\psi^{(1)}}H^{(1)}\ket{\psi^{(1)}}< \bra{\psi^{(2)}}H^{(1)}\ket{\psi^{(2)}} \text{(Variational Principle)}\\
-    E^{(1)} &<\bra{\psi^{(2)}}H^{(2)}\ket{\psi^{(2)}}+\bra{\psi^{(2)}}H^{(1)}-H^{(2)}\ket{\psi^{(2)}}\\
-    E^{(1)} &< E^{(2)}+\int(V^{(1)}_{ext}-V^{(2)}_{ext})\rho(r)d\vec{r}
-\end{align*}
-
-Similarly, for $V^{(2)}_{ext}$, we have:
-\begin{align*}
-    E^{(2)} &=\bra{\psi^{(2)}}H^{(2)}\ket{\psi^{(2)}} < \bra{\psi^{(1)}}H^{(2)}\ket{\psi^{(1)}} \text{(Variational Principle)}\\
-    E^{(2)} &< E^{(1)}+\int(V^{(2)}_{ext}-V^{(1)}_{ext})\rho(r)d\vec{r}
-\end{align*}
-
-Adding the two equations gives a contradiction:
-\begin{align*}
-    E^{(1)} + E^{(2)} < E^{(2)} + E^{(1)}
-\end{align*}
-
-This means that the density gives the potential uniquely, and this is the first Hohenberg-Kohn theorem. However, the limitation of the theorem is that we are not sure how we can obtain the external potential by the density.\\
-
-The second part of Hohenberg-Kohn theorem states that by minimizing $E[\rho(r)]$, we can find the ground state density. \\
-
-% By Sch\"{o}rdinger Equation, we can write down:
-% \begin{align*}
-%     \left(-\frac{\hbar^2}{2m}\nabla^2+V_{ext}\right)\psi=E\psi\\
-%     V_{ext}=\frac{E\psi+\frac{\hbar^2}{2m}\nabla^2\psi}{\psi}
-% \end{align*}
-\textbf{Proof:}\\
-Recall that the KE and PE operator is $\displaystyle T=-\frac{\hbar^2}{2m}\sum_i \nabla^2_i, V_{ee}=\frac{1}{2}\sum_{i\neq j}\frac{e^2}{\abs{r_i-r_j}}$. The KE and PE Functional can therefore be written as: $\displaystyle  \left\langle\psi^{(1)}\bigg\vert-\frac{\hbar^2}{2m}\sum_i \nabla^2_i\bigg\vert\psi^{(1)}\right\rangle $ and $\displaystyle  \left\langle\psi^{(1)}\bigg\vert\frac{1}{2}\sum_{i\neq j}\frac{e^2}{\abs{r_i-r_j}}\bigg\vert\psi^{(1)}\right\rangle $.
-
-The functional of two different systems can be written as
+\section{Hohenberg--Kohn 反证法及其边界}
+先考虑非简并基态。假定两个并非只差常数的外势 $v,v'$ 给出相同密度 $n$，但对应不同基态 $\Psi,\Psi'$。严格变分不等式给出
 \begin{align}
-    \text{system 1: }E^{(1)}_{HK}[\rho^{(1)}]=T[\rho^{(1)}]+E_{ee}[\rho^{(1)}]+\int d\vec{r} V^{(1)}_{ext}(r) \rho^{(1)}(r)\\
-    \text{system 2: }E^{(2)}_{HK}[\rho^{(2)}]=T[\rho^{(2)}]+E_{ee}[\rho^{(2)}]+\int d\vec{r} V^{(2)}_{ext}(r) \rho^{(2)}(r)
+E_v&<\langle\Psi'|H_v|\Psi'\rangle=E_{v'}+\int(v-v')n\dd\bm r,\\
+E_{v'}&<E_v+\int(v'-v)n\dd\bm r.
 \end{align}
+相加得到 $E_v+E_{v'}<E_v+E_{v'}$，矛盾。若两外势共享同一波函数，还需由两本征方程相减得到 $\sum_i[v(\bm r_i)-v'(\bm r_i)]\Psi=(E_v-E_{v'})\Psi$；在通常连续空间 Coulomb 问题所需的正则性与唯一延拓条件下，这要求势差为常数。此处不能以相除波函数的方式忽略节点与定义域问题。
 
-If we put the density of system two in the Energy Functional of system one, we have
-\begin{align}
-    E^{(1)}_{HK}[\rho^{(2)}]&=T[\rho^{(2)}]+E_{ee}[\rho^{(2)}]+\int d\vec{r} V^{(1)}_{ext}(r) \rho^{(2)}(r)\\
-    &=\bra{\psi^{(2)}}\hat{T}+\hat{V}_{ee}\ket{\psi^{(2)}}+\int d\vec{r} V^{(1)}_{ext}(r) \rho^{(2)}(r)\\
-    &= \bra{\psi^{(2)}}\hat{T}+\hat{V}_{ee}+V^{(1)}_{ext}\ket{\psi^{(2)}}\\
-    &= \bra{\psi^{(2)}}H^{(1)}\ket{\psi^{(2)}}
-\end{align}
-By variational principle, we have 
-\begin{align}
-    \bra{\psi^{(1)}}H^{(1)}\ket{\psi^{(1)}} < \bra{\psi^{(2)}}H^{(1)}\ket{\psi^{(2)}} \implies E^{(1)}_{HK}[\rho^{(1)}] < E^{(1)}_{HK}[\rho^{(2)}]
-\end{align}
+因此，在上述条件下基态密度确定外势至一个加常数，进而确定 Hamilton 算符。简并情况下，不能继续声称密度唯一挑出某一个纯态；也不能原封不动使用严格不等式。建立能量变分原则时，下面的约束搜索比把每个试探密度都反演成一个势更稳妥。
 
-Therefore to find the ground state, minimize the functional $E_{HK}[\rho]$. Second part of Hohenberg-Kohn theorem states that there exist a energy functional $E_{HK}[\rho]$ such that minimizing this functional gives the ground state energy. The $E_{HK}[\rho]$ is called \textbf{Hohenbeig-Kohn functional}\\
+\section{约束搜索把两次最小化分开}
+对于可由归一化反对称有限动能态产生的密度，定义
+\begin{equation}
+F[n]=\inf_{\Psi\to n}\langle\Psi|T+W|\Psi\rangle.
+\end{equation}
+这里先固定密度，再在所有产生该密度的波函数中寻找最低内部能量。外势不参与这一步，所以 $F$ 对同一种粒子和作用是普适的。然后对密度最小化：
+\begin{equation}
+E_0[v]=\inf_{n\to N}\left\{F[n]+\int vn\dd\bm r\right\}.
+\end{equation}
+理由是每个波函数都有一个密度；把全部波函数按密度分组，组内先取最低值，再在各组之间取最低值，与直接对全部波函数最小化相同。
 
-People notice that V-representability ($\rho$ need to be generated by certain $V_{ext}$) is unnecessary. For a $N$ electron system, the $\rho$ which satisfy $\displaystyle \int \rho(r)dr = N$ is called the N-representability.\\
+这也说明两种可表象性的差别：$N$ 可表象要求密度来自合法 $N$ 电子态；$v$ 可表象还要求它是某个外势的基态密度。仅有非负与积分等于 $N$ 并不足以保证有限动能等全部定义域条件。必要时用混合态密度算符 $\hat\Gamma$ 进行系综约束搜索，避免把纯态唯一性当作普适前提。
 
-\subsection{Constrained search: Levy-Lieb functional}
-This functional is defined as following, as long as $\displaystyle \vert\psi(r)\vert^2=\rho(r)$:
-\begin{align}
-    E_{LL}[\rho]=\min_{\psi\rightarrow\rho(r)}[\bra{\psi}\hat{T}+\hat{V}_{ee}\ket{\psi}]+\int dr V_{ext}(r)\cdot\rho(r)
-\end{align}
-To find the ground state $\rho_0$, we minimize:
-\begin{align}\displaystyle E_{GS}=\min_\rho E_{LL}[\rho]\end{align}
+\section{为什么不能简单丢掉轨道：Thomas--Fermi 尝试}
+均匀无相互作用、非自旋极化电子气中，每个波矢可容纳两个电子。体积 $\Omega$ 内 $k$ 空间态密度为 $\Omega/(2\pi)^3$，故
+\begin{equation}
+n=2\int_{|\bm k|<k_F}\frac{\dd^3k}{(2\pi)^3}=\frac{k_F^3}{3\pi^2}.
+\end{equation}
+同样对每个态的动能 $k^2/2$ 积分，得到 $T/\Omega=k_F^5/(10\pi^2)$。将局域密度代替常密度得到
+\begin{equation}
+T_{\rm TF}[n]=\frac3{10}(3\pi^2)^{2/3}\int n^{5/3}\dd\bm r.
+\end{equation}
+连同 $\int vn$、经典 Hartree 能和选定的交换关联近似，对 $n$ 作带粒子数约束的变分，可得 $\tfrac12(3\pi^2)^{2/3}n^{2/3}+v+v_H+v_{xc}=\mu$。问题是局域均匀气动能难以描述轨道节点和原子壳层。降低变量数量并没有使未知泛函自动变简单。
 
-Therefore, by conducting a two-step minimization, we can find the ground state energy.\\
+\section{Kohn--Sham 辅助体系}
+为保留量子动能的轨道结构，引入一个与真实体系具有相同密度的无相互作用辅助体系。先在可用该辅助体系表示的密度范围内讨论，必要时允许分数占据。记自旋轨道占据数为 $f_i$，则
+\begin{equation}
+n=\sum_i f_i|\phi_i|^2,\qquad
+T_s=\sum_i f_i\langle\phi_i|-\nabla^2/2|\phi_i\rangle.
+\end{equation}
+定义 $E_H[n]=\tfrac12\iint n(\bm r)n(\bm r')/|\bm r-\bm r'|\dd\bm r\dd\bm r'$，并令 $E_{xc}=F-T_s-E_H$。因此
+\begin{equation}
+E[n]=T_s+\int vn+E_H+E_{xc}+E_{NN}.
+\end{equation}
+$E_{xc}$ 不仅包含非经典相互作用，还包含真实动能与辅助动能之差。将它误认为“只是一小部分 Coulomb 修正”会误解这个精确分解。
 
-This approach does not caused problem when degeneracy occurs. If a degeneracy energy corresponds to different wavefunction $E_{GS}\rightarrow \rho_0 \rightarrow 
-\begin{cases}
-\begin{rcases}  
-\psi_1\\
-\psi_2\\
-\psi_3
-\end{rcases}
-\end{cases}$, we can still obtain the external potential
+对 Hartree 能变分时，两个密度因子各贡献相同的一项，消去 $1/2$，得到 $v_H(\bm r)=\int n(\bm r')/|\bm r-\bm r'|\dd\bm r'$。再定义 $v_{xc}=\delta E_{xc}/\delta n$。对正交轨道作带约束变分，利用 $\delta n/\delta\phi_i^*=f_i\phi_i$，得
+\begin{equation}
+[-\nabla^2/2+v+v_H+v_{xc}]\phi_i=\varepsilon_i\phi_i.
+\end{equation}
+这里假定交换关联项具有局域势表示；轨道依赖泛函的广义 KS 情形需另作处理。辅助行列式用于产生密度，通常不等于真实相互作用基态波函数。
 
-\begin{align}
-   \left(-\frac{\hbar^2}{2m}\nabla^2+V_{ext}\right)\psi_1=E_{GS}\psi_1\\
-   V_{ext}=\frac{E_{GS}\psi_1+\frac{\hbar^2}{2m}\nabla^2\psi_1}{\psi_1} 
-\end{align}
+\section{自洽、总能量与有限温度}
+给出 $n_{\rm in}$，建势并解轨道，再算 $n_{\rm out}$。可用 $n_{\rm next}=(1-\alpha)n_{\rm in}+\alpha n_{\rm out}$ 混合。收敛要检查密度残差，而不能只看连续两次能量很接近。自洽点也不必是最低能解，尤其在磁性和多种占据可能时。
 
-\subsection{Finite temperature and ensemble DFT}
-At high temperature (T$>$10000K), we have warm dense material and need to consider effects by temperature.\\
+自洽后对轨道方程取期望并按占据求和：$\sum_i f_i\varepsilon_i=T_s+\int vn+2E_H+\int nv_{xc}$。代回能量式得到
+\begin{equation}
+E=\sum_i f_i\varepsilon_i-E_H+E_{xc}-\int nv_{xc}\dd\bm r+E_{NN}.
+\end{equation}
+未自洽时输入势与输出密度不同，不能随意使用这一简化形式；动能可从轨道直接计算，或明确用建轨道时的输入势扣除。
 
-When $T=0K$, we have the ground state energy, we have the ground state density $\rho_0(\vec{r})$ with wavefunction $\ket{\psi}$. When T is finite, the density is represents by the equilibrium density $\rho_e(\vec{r})$ and the wavefunction is represents by a density matrix:
-\begin{align}
-    \hat{\rho}=\sum_i f_i\ket{\psi_i}\bra{\psi_i}
-\end{align}. This is a mixed state and $f_i$ is the probability that the wavefunction is in a specific state. This factor is proportional to the Boltzmann factor. \\
+有限电子温度下，应最小化自由能而非能量。对固定粒子数的密度算符 $\Gamma$，熵为 $S=-\kb\Tr\Gamma\ln\Gamma$，自由能为 $\Tr\Gamma H-TS$。在密度固定的态中约束搜索，可定义 $F_T[n]=\inf_{\Gamma\to n}\{\Tr\Gamma(T+W)+\kb T\Tr\Gamma\ln\Gamma\}$。外势项随后加入，保持“普适内部部分”与外势分开。
 
-The expected value is defined by: $\langle\hat{O}\rangle = Tr(\hat{\rho}{\hat{O}})$.\\
-
-At finite temperature, we minimize the \term{Mermin Free Energy} instead:
-$$F_{\text{Mermin}}[\rho] = \min \operatorname{Tr}{\hat{\rho}[\hat{H} + \frac{1}{\beta}\ln \hat{\rho}]}$$
-The above minimization problem searches all $\hat{\rho}$ that has density $=\rho$. We then perform another minimization step:
-$$F_0 = \min_\rho F_{\text{Mermin}}[\rho]$$
-At thermal equilibrium, we first find the equilibrium density $\rho_e$, and use it to obtain the denstiy matrix $\hat{\rho}_e$. Then, we have
-$$\hat{\rho} = \frac{e^{-\beta \hat{H}}}{\operatorname{Tr}e^{-\beta\hat{H}}} = \frac{e^{-\beta \hat{H}}}{e^{-\beta \hat{F}}}\qquad \hat{H} = -\frac{1}{\beta}\ln\left(\hat{\rho}_e e^{-\beta \hat{F}}\right)$$
-
-\subsection{Thomas-Fermi-Dirac approximation}
-It is an example of a functional and hints the establishment of DFT.\\
-
-$\displaystyle E_{TF}[\rho]=\underbrace{T[\rho]}_{\text{Kinetic Energy}}+\underbrace{\int V_{ext}(\vec{r})\rho(\vec{r})dr}_{\text{External Energy}}+\underbrace{\frac{e^2}{2}\int d\vec{r} \int d\vec{r'} \frac{\rho(\vec{r})\rho(\vec{r'})}{\vert \vec{r}-\vec{r'}\vert}}_{\text{Hartree-Fock term}}+\underbrace{E_{XC}[\rho]}_{\text{exchange-correlation}}$\\
-
-To evaluate $T[\rho]$, we can use the free electron gas model (non-interacting homogeneous model). In one dimension, the kinetic energy can be find from assuming plane wave solution:
-\begin{align}
-    -\frac{\hbar^2}{2m}\nabla^2\psi =\varepsilon_k\psi\\
-    \psi=\frac{1}{\sqrt{\Omega}}e^{+i\vec{k}\cdot\vec{r}}\\
-    \varepsilon_k=\frac{\hbar^2k^2}{2m}
-\end{align}
-
-In 1D, by proposing a periodic boundary conditions, we have the condition $\displaystyle k_x = 0, \pm\frac{2\pi}{L}, \pm\frac{4\pi}{L} \dots$.\\
-
-But in 3D, The volume of one state is $\displaystyle \left(\frac{2\pi}{L}\right)^3$ and the number of state can be written by $\displaystyle\frac{\frac{4\pi}{3}(k_F^{\sigma})^3}{\frac{(2\pi)^3}{\Omega}}=\frac{\frac{4\pi}{3}(k_F^{\sigma})^3{\Omega}}{(2\pi)^3}=N^{\sigma}$. \\
-
-Using this relation, we can find $(k_F^{\sigma})^3=6\pi^2\rho^{\sigma}=3\pi^2\rho$ where $\rho^{\uparrow}=\rho^{\downarrow}=\rho/2$ and the energy can be written as $\displaystyle E^{\sigma}_F=\frac{\hbar^2( k_F^{\sigma})^2}{2m}=\frac{\hbar^2}{2m}(3\pi^2\rho)^{\frac{2}{3}}$. Our aim is to write everything in terms of density, following the dogma of DFT.\\
-
-UCLA professor \term{Emily A Carter} suggest that we can write the total kinetic energy as:
-\begin{align}
-    T^{\sigma}&=\int^{k_F^{\sigma}}_0 \frac{\hbar^2 k^2}{2m}\frac{4\pi k^2 dk}{\frac{(2\pi)^3}{\Omega}}\\
-    &=\frac{3}{5}\frac{\hbar^2}{2m}(k_F^{\sigma})^2N^{\sigma}=\frac{3}{5}E^{\sigma}_F N^{\sigma}\\
-    T&=T^{\uparrow}+T^{\downarrow}=\frac{3}{5}E_F N=\int \frac{3}{5}E_F \rho(\vec{r})d\vec{r}\\
-    &=\int\frac{3}{5}\frac{\hbar^2}{2m}(3\pi^2\rho)^{\frac{2}{3}}\rho d\vec{r}\\
-    T[\rho]&=\frac{\hbar^2}{m}\frac{3}{10}(3\pi^2)^{\frac{2}{3}}\int\rho^{\frac{5}{3}}(\vec{r})d\vec{r}
-\end{align}
-With the kinetic functional, we can minimize it (Using \eqref{eq:Fd}):
-\begin{align}
-    \frac{\delta}{\delta \rho}\left(E_{TF}[\rho]-\mu\left[\int \rho(\vec{r})d\vec{r}-N\right]\right)=0\\
-    \frac{\hbar^2}{m} \frac{1}{2}(3\pi^2)^{\frac{2}{3}}\rho^{\frac{2}{3}}(\vec{r})+V_{ext}(\vec{r})+\int d\vec{r}\frac{\rho(\vec{r'})}{\vert \vec{r}-\vec{r'}\vert}+\frac{\delta E_{XC}[\rho]}{\delta \rho} = {\mu} = {\text{Chemical Potential}}\\
-\end{align}
-
-This method is sometimes known as \textbf{Orbital Free DFT}. 
-\subsection{Kohn-Sham DFT}
-Ordinary, we calculate kinetic energy as $\displaystyle E_k=\left\langle\phi\left\vert-\frac{\hbar^2}{2m}\nabla^2\right\vert\phi\right\rangle$. Kohn-Sham DFT use density to find orbital, and then use orbital to find kinetic energy.\\
-
-An auxiliary system is a system without the electron-electron interaction term $V_2 (R_i,r_j)$, meaning that this system is relatively easy to term. This gives the Hamiltonian of the fictious system as:
-\begin{align}
-    \hat{H}^{\sigma}_{\text{aux}} = -\frac{\hbar^2}{2m}\nabla^2+V^{\sigma}(\vec{r})
-\end{align}
-
-This fictitious system consist a potential term which is same for every electron:
-\begin{align}
-    \hat{H}^{\sigma}_{aux} = -\frac{\hbar^2}{2m}\nabla^2 + V^{\sigma}(\textbf{r}) \label{eq:fakeH}
-\end{align}
-
-The Slater determinant is the exact solution of the Hamiltonian in Eq \eqref{eq:fakeH}. Noted that this Slater determinant is the exact solution, as there is no electron-electron interaction.:
-\begin{align}
-    \Phi&=\frac{1}{\sqrt{N!}}
-    \begin{vmatrix}
-    \varphi_1(1) & \varphi_1(2) & \dots & \varphi_1(N) \\
-    \varphi_2(1) & \varphi_2(2) & \dots & \varphi_2(N) \\
-    \vdots & & & \vdots\\
-    \varphi_N(1) & \varphi_N(2) & \dots & \varphi_N(N) \\
-    \end{vmatrix}
-\end{align}
-
-Moreover, as there is no electron-electron interaction, the total energy can be exactly written as:
-\begin{align}
-    E_{\text{total}}=\langle \Phi \vert \mathcal{H} \vert \Phi \rangle = \sum_i \varepsilon_i
-\end{align}
-
-The density of this system for all closed shell can be written as:
-\begin{align}
-    \rho(r)&=\langle\Phi\vert\sum^N_{i=1} \delta(\vec{r}-\vec{r_i})\vert\Phi\rangle\\
-    &= \sum^{N}_{i=1}\vert \Phi^{\sigma}_{i}(\vec{r})\vert ^2\\
-    &= \sum^2_{\sigma}\sum^{N_{\text{orb}}}_{i=1}\vert\Phi^{\sigma}_i(\vec{r})\vert^2
-\end{align}
-
-The Slater determinant kinetic energy can be written as:
-\begin{align}
-    T_s &= \left\langle\Phi\left\vert\sum_i \frac{\hbar^2}{2m} \nabla^2_i\right\vert\Phi\right\rangle\\
-    &= -\frac{\hbar^2}{2m}\sum_{\sigma}\sum^{N_{\text{orb}}}_{i=1} \langle \Phi^{\sigma}_i \vert \nabla^2 \vert \Phi^{\sigma}_i \rangle
-\end{align}
-
-The overall Hamiltonian for a N-electron system is:
-\begin{align}
-    \hat{H} = \sum_i-\frac{\hbar^2}{2m}\nabla_i^2 + \sum_i V_{\text{ext}}(\textbf{r}_i)
-\end{align}
-
-In this system, the total Hamiltonian can be written as:
-\begin{align}
-    E_{\text{Tot}}=\langle\Phi\vert\hat{H}\vert\Phi\rangle = \sum_i \varepsilon_i
-\end{align}
-
-In Kohn-Sham DFT, $T_c$ is only the kinetic energy of the auxiliary system. This is not the kinetic of the real system, and the correction term is included in the $E_{\text{XC}}[\rho]$, meaning that the exchange correlation term contains not only the Slater determinant, but also the energy corrected term. This can be achieved by minimize the Energy Functional:
-\begin{align}
-    E_{KS}[\rho] &= T_s + \int d\vec{r}V_{ext}(\vec{r})\rho(\vec{r}) + E_{\text{Hartree}}[\rho]+E_{\text{XC}}[\rho]\\
-    E_{\text{XC}}&=\langle\varphi\vert\hat{T}\vert\varphi\rangle-T_s+\langle\varphi\vert\hat{V}_{ee}\vert\varphi\rangle-E_{\text{Hartree}}[\rho]
-\end{align}
-
-The two last terms we have before, the first two introduced in Kohn-Sham DFT.\\
-
-The Hartree Energy is $\displaystyle \frac{e^2}{2} \int\int \frac{\rho(\vec{r})\rho(\vec{r'})}{\vert\vec{r}-\vec{r'}\vert}d\vec{r}d\vec{r'}$
-
-By Variational Principle, we minimize the Kohn-Sham Energy Functional to obtain the ground state energy:
-\begin{align}
-    \frac{\delta(E_{\text{KS}}[\rho]-\sum_{i, \sigma} \varepsilon^{\sigma}_i (\langle\phi_i^{\sigma}\vert\phi_i^{\sigma}\rangle-1))}{\delta\langle\phi_i^{\sigma}\vert}
-\end{align}
-
-\begin{align}
-    -\frac{\hbar^2}{2m}\nabla^2\phi^{\sigma}_i(\vec{r})+V_{ext}^{\sigma}(\vec{r}) \phi_i(\vec{r})+\int\frac{\rho(\vec{r})}{\vert \vec{r}-\vec{r'}\vert} d\vec{r'} \phi^{\sigma}_i(\vec{r})\\
-    +\frac{\delta E_{xc}}{\delta \rho(\vec{r},\sigma)}-\underbrace{\frac{\partial \rho(\vec{r},\sigma)}{\partial \phi^{\sigma^*}_i(\vec{r})}}_{\phi^{\sigma}_i(\vec{r})}=\varepsilon^{\sigma}_i \phi^{\sigma}_i(\vec{r})\\
-    \text{We use the relationship}\nonumber\\
-    I = \int F[\rho(\phi)] d\vec{r}\\
-    \frac{\partial I}{\delta \phi} = \frac{\delta I}{\delta \rho} \frac{\partial \rho}{\partial \phi}\\
-    \hat{H}_{aux} = H^{\sigma}_{KS} = -\frac{\hbar^2}{2m}\nabla^2 + \underbrace{V_{\text{ext}}^{\sigma}(\vec{r})+V_{\text{Hartree}}(\vec{r})+V^{\sigma}_{XC}(\vec{r})}_{V^{\sigma}_{aux}(\vec{r})}
-\end{align}
-The Hartree potential can be written as $\displaystyle \int \frac{\rho(\vec{r'})}{\vert \vec{r}-\vec{r'}\vert}d\vec{r'}$
-
-We have not need to consider electron-electron interaction:
-\begin{align}
-    \hat{V}_{ee}=\frac{1}{2}\sum_{i\neq j}\frac{e^2}{\vert r_i-r_j\vert}
-\end{align}
-
-We get the Kohn-Sham Equation:
-\begin{align}
-    H^{\sigma}_{KS} \phi_i^{\sigma}(\vec{R}) = \varepsilon^{\sigma}_i \phi^{\sigma}_i (\vec{r})
-\end{align}
-
-To solve the Kohn-Sham Equation, we calculate the $V_{aux}$ from $\rho^{\text{in}}(\vec{r})$. Solving the equation gives $\displaystyle \rho^{\text{out}}=\sum^N_{i=1}\vert\phi_i(\vec{r})\vert^2$. If the equation is not self-consistent, we do the relaxation and update the density. The density is update by $\alpha \rho^{\text{out}}+(1-\alpha)\rho^{\text{in}}$. The $\alpha$ value is sometimes set to be around 30\% to 50\%. It is not updated with $\rho^{out}$ directly because it gives instability.
-
-The total energy of the Kohn-Sham system is different from the fictitious system, as we double count the term $\displaystyle\frac{1}{2}\int\frac{\rho(\vec{r})}{\vert \vec{r}-\vec{r'}\vert} d\vec{r'} \phi^{\sigma}_i(\vec{r})$. Actually, we have:
-\begin{align}
-    T_S[\rho]=\sum_i \varepsilon_i - \int d\vec{r} V_{\text{aux}}^{\text{in}}(\vec{r})\rho^{\text{out}}(\vec{r})
-\end{align}
-
-Kohn-Sham Equation can be written as:
-\begin{align}
-    \left[-\frac{\hbar^2}{2m}\nabla^2+V_{\text{KS}}(\vec{r})\right]\varphi_i=\varepsilon_i\varphi_i
-\end{align}
-
+在 KS 辅助态中，以 $0\le f_i\le1$ 的自旋轨道占据表示熵 $S_s=-\kb\sum_i[f_i\ln f_i+(1-f_i)\ln(1-f_i)]$。对占据变分，并固定平均电子数，给出 $\varepsilon_i-\mu+\kb T\ln[f_i/(1-f_i)]=0$，即 Fermi--Dirac 分布。数值展宽不一定代表真实电子温度，电子温度也不自动等于核温度。
