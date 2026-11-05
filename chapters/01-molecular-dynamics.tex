@@ -1,5 +1,4 @@
 \chapter{从微观运动到统计平均}
-\sourcepages{手写笔记第 2--5 页}
 \section{为什么一条轨迹还不是一个宏观答案}
 设想一盒液体。我们想知道温度、压强和扩散速度，却不可能在实验中逐一指定所有原子的位置。计算机能够追踪有限个原子，但它输出的位置序列本身也不是温度。因此，分子动力学需要两座桥：从力学模型得到轨迹，从轨迹得到统计平均。
 
@@ -8,7 +7,9 @@
 H(R,P)=K(P)+U(R),\qquad K=\sum_i\frac{\bm p_i^2}{2m_i},\qquad
 \bm F_i=-\nabla_i U.
 \end{equation}
-$H$ 是能量函数，$U$ 是势能。Hamilton 方程 $\dot{\bm r}_i=\partial H/\partial\bm p_i$、$\dot{\bm p}_i=-\partial H/\partial\bm r_i$ 正好给出 Newton 方程。这里的相空间坐标是普通变量，不是量子算符。
+$H$ 是能量函数，$U$ 是势能。这里以 Newton 定律和保守力的功关系为力学起点：$\dd U=-\sum_i\bm F_i\cdot\dd\bm r_i$ 对任意位移成立，所以 $\bm F_i=-\nabla_iU$。动能由 $\dd K_i=\bm v_i\cdot\dd\bm p_i$ 积分得到 $K_i=m_i v_i^2/2=p_i^2/(2m_i)$，零速时取动能为零。
+
+Hamilton 形式把同一动力学写为 $\dot{\bm r}_i=\partial H/\partial\bm p_i$、$\dot{\bm p}_i=-\partial H/\partial\bm r_i$。对上式分别求偏导，得到 $\dot{\bm r}_i=\bm p_i/m_i$ 与 $\dot{\bm p}_i=-\nabla_iU=\bm F_i$；对第一式再求时间导数，就有 $m_i\ddot{\bm r}_i=\bm F_i$。这里的相空间坐标是普通变量，不是量子算符。
 
 宏观可观测量用相空间函数 $A(\Gamma)$ 表示。若平衡状态的概率密度是 $\rho(\Gamma)$，则
 \begin{equation}
@@ -18,7 +19,7 @@ $H$ 是能量函数，$U$ 是势能。Hamilton 方程 $\dot{\bm r}_i=\partial H/
 概率不是在否认力学的确定性，而是在描述我们没有指定的微观信息。
 
 \section{能量固定与温度固定意味着不同的分布}
-孤立系统的粒子数、体积和能量固定，称为微正则或 NVE 系综。能量为 $E$ 的状态只在能量面上出现，于是
+孤立系统的粒子数、体积和能量固定，称为微正则或 NVE 系综。仅有能量守恒还没有指定概率；微正则系综另采用等先验权重，在允许的薄能量壳内按相空间体积等权。令 $\delta_\epsilon(H-E)$ 在宽度 $\epsilon$ 的壳内为 $1/\epsilon$、壳外为零，则归一化密度为 $\rho_{E,\epsilon}=\delta_\epsilon(H-E)/\int\delta_\epsilon(H-E)\dd\Gamma$。代入平均值定义，再取薄壳极限 $\epsilon\to0$，得到
 \begin{equation}
 \langle A\rangle_E=\frac{\int\dd\Gamma\,\delta(H(\Gamma)-E)A(\Gamma)}{\int\dd\Gamma\,\delta(H(\Gamma)-E)}.
 \end{equation}
@@ -34,7 +35,17 @@ S_b(E_{\rm tot}-H)\simeq S_b(E_{\rm tot})-H/T.
 \end{equation}
 这里讨论归一化平均，经典配分函数中用于量纲和不可分辨性的公共常数已约去。计算绝对自由能时必须恢复这些常数。
 
-动量与位置在 $H=K+U$ 中可分离。一个速度分量的分布因此为
+动量与位置在 $H=K+U$ 中可分离，故 $e^{-\beta H}=e^{-\beta U}\prod_{i\alpha}e^{-\beta m_i v_{i\alpha}^2/2}$。积分掉其他变量后，一个速度分量的密度只差归一化常数。为求这个常数，令 $a=\beta m/2$、$I(a)=\int_{-\infty}^{\infty}e^{-av^2}\dd v$。将两个相同积分相乘，再在二维平面改用极坐标：
+\begin{equation}
+I(a)^2=\iint e^{-a(x^2+y^2)}\dd x\dd y
+=2\pi\int_0^\infty r e^{-ar^2}\dd r=\frac\pi a.
+\end{equation}
+因为积分为正，$I(a)=\sqrt{\pi/a}$。对 $a$ 求导，还得到二阶矩
+\begin{equation}
+\langle v_x^2\rangle=\frac{\int v_x^2e^{-av_x^2}\dd v_x}{I(a)}
+=-\frac{I'(a)}{I(a)}=\frac1{2a}=\frac{\kb T}{m}.
+\end{equation}
+于是归一化分布与每个二次自由度的平均动能为
 \begin{equation}
 f(v_x)=\sqrt{\frac{m}{2\pi\kb T}}\exp[-mv_x^2/(2\kb T)],\qquad
 \langle mv_x^2/2\rangle=\kb T/2.
@@ -62,7 +73,7 @@ x_{n+1}=2x_n-x_{n-1}+h^2F(x_n)/m.
 \end{equation}
 精确轨迹代入该递推式的残差是 $O(h^4)$，而稳定、光滑条件下在固定物理时间内累积的位置误差是 $O(h^2)$。不能因残差含四次幂就称它为四阶积分器。
 
-位置递推要知道前两帧。若已知 $x_0,v_0$，可用 $x_1=x_0+hv_0+h^2F(x_0)/(2m)$ 起步。更方便的形式是速度 Verlet：
+位置递推要知道前两帧。若已知 $x_0,v_0$，将上面的正向 Taylor 式截到二阶，可用 $x_1=x_0+hv_0+h^2F(x_0)/(2m)$ 起步。若同时保存整步速度，则位置公式为 $x_{n+1}=x_n+hv_n+h^2F_n/(2m)$；速度增量的精确表达式是 $v_{n+1}-v_n=m^{-1}\int_{t_n}^{t_n+h}F(x(t))\dd t$。用梯形积分近似右端，得到 $v_{n+1}=v_n+h(F_n+F_{n+1})/(2m)$。将位置式中的 $v_n+hF_n/(2m)$ 记为 $v_{n+1/2}$，这两式便可依次执行为速度 Verlet：
 \begin{align}
 v_{n+1/2}&=v_n+\frac h{2m}F(x_n),\\
 x_{n+1}&=x_n+h v_{n+1/2},\\
@@ -70,7 +81,7 @@ v_{n+1}&=v_{n+1/2}+\frac h{2m}F(x_{n+1}).
 \end{align}
 这三个步骤分别是半步速度更新、整步位置更新、半步速度更新。合并后得到 $v_{n+1}=v_n+h(F_n+F_{n+1})/(2m)$。力只依赖位置时，每一步在已有 $F_n$ 的基础上只需再计算一次新力。
 
-相邻的两个半步速度满足 $v_{n+1/2}=v_{n-1/2}+hF_n/m$，这就是 leapfrog 的交错存储。消去半步速度即回到式 \eqref{md:verlet}。二者等价需要一致的初始化；整步与半步速度不能直接混用来计算动能。
+上一时步的末次半步更新给出 $v_n=v_{n-1/2}+hF_n/(2m)$，再加本时步的首次半步更新，得到 $v_{n+1/2}=v_{n-1/2}+hF_n/m$，这就是 leapfrog 的交错存储。将 $hv_{n+1/2}=x_{n+1}-x_n$ 和 $hv_{n-1/2}=x_n-x_{n-1}$ 代入并相减，得 $x_{n+1}-2x_n+x_{n-1}=h^2F_n/m$，回到式\eqref{md:verlet}。二者等价需要一致的初始化；整步与半步速度不能直接混用来计算动能。
 
 \section{可逆性、稳定性与能量误差}
 把速度 Verlet 的三个步骤逆序，并令 $h\to-h$，每一步都撤销原来的更新，所以它具有时间可逆性。但时间反演是离散对称性，不能据此推出数值能量严格守恒。连续体系的能量守恒来自时间平移不变性。
@@ -79,12 +90,18 @@ v_{n+1}&=v_{n+1/2}+\frac h{2m}F(x_{n+1}).
 \begin{equation}
 z+z^{-1}=2-h^2\omega^2.
 \end{equation}
-若 $z=e^{\ii\theta}$，则 $\cos\theta=1-h^2\omega^2/2$。只有 $0<h\omega<2$ 时两个根一般都在单位圆上且不重合；在边界 $h\omega=2$ 会有不稳定的线性增长解。即使在稳定范围，$\theta/h$ 也不等于 $\omega$，因此相位会产生误差。时间步要比最短振动周期小得多，不能只满足稳定条件。
+设 $a=1-h^2\omega^2/2$，将上式乘以 $z$ 后解二次方程，得 $z=a\pm\sqrt{a^2-1}$。当 $|a|<1$ 时，$z=a\pm\ii\sqrt{1-a^2}$ 的模为一，可写成 $e^{\pm\ii\theta}$，其中 $\cos\theta=a$。不等式 $-1<1-h^2\omega^2/2<1$ 等价于 $0<h\omega<2$。边界 $h\omega=2$ 的重根是 $z=-1$，通解为 $x_n=(A+Bn)(-1)^n$，故一般含线性增长。即使在稳定范围，$\theta/h$ 也不等于 $\omega$，因此相位会产生误差。时间步要比最短振动周期小得多，不能只满足稳定条件。
 
 Verlet 对可分离 Hamilton 系统还是辛方法，即保持相空间的辛结构。光滑、稳定且步长足够小时，它通常表现出长期有界的能量振荡，而非逐步精确守恒。混沌轨迹仍可与精确轨迹指数分离。可信性要靠步长收敛、守恒量检查和统计量收敛共同判断，不能靠轨迹看起来平滑。
 
 \section{离散作用量提供另一条理解路径}
-作用量是一个把整条路径映成数的泛函：$S[x]=\int(\tfrac12m\dot x^2-U(x))\dd t$。固定两端位置，改变中间路径；分部积分给出
+作用量是一个把整条路径映成数的泛函，定义为 $S[x]=\int(\tfrac12m\dot x^2-U(x))\dd t$。固定两端位置，改变中间路径，速度变化为 $\delta\dot x=\dd(\delta x)/\dd t$。保留一阶项并分部积分：
+\begin{align}
+\delta S&=\int[m\dot x\,\delta\dot x-U'(x)\delta x]\dd t\\
+&=[m\dot x\,\delta x]_{t_i}^{t_f}
+-\int[m\ddot x+U'(x)]\delta x\dd t.
+\end{align}
+端点处 $\delta x=0$，所以
 \begin{equation}
 \delta S=\int[-m\ddot x-U'(x)]\delta x\,\dd t.
 \end{equation}

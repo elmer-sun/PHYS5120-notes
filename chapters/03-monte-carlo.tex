@@ -1,7 +1,12 @@
 \chapter{只为平衡平均设计运动：Monte Carlo}
-\sourcepages{手写笔记第 11--12 页}
 \section{为什么可以放弃真实时间}
-如果目标只是平均势能或结构，并不需要每一次原子运动都是真实的。正则平均中 $H=K(P)+U(R)$；对于只依赖位置的 $A(R)$，分子分母的动量积分完全约去，因此
+如果目标只是平均势能或结构，并不需要每一次原子运动都是真实的。正则平均中 $H=K(P)+U(R)$；对于只依赖位置的 $A(R)$，先将积分分离：
+\begin{equation}
+\langle A\rangle=
+\frac{[\int e^{-\beta K(P)}\dd P][\int A(R)e^{-\beta U(R)}\dd R]}
+{[\int e^{-\beta K(P)}\dd P][\int e^{-\beta U(R)}\dd R]}.
+\end{equation}
+分子分母含同一个有限、非零的动量积分，约去后得到
 \begin{equation}
 \langle A\rangle=\frac{\int A(R)e^{-\beta U(R)}\dd R}{\int e^{-\beta U(R)}\dd R}.
 \end{equation}
@@ -12,7 +17,13 @@
 \begin{equation}
 \pi(x)q(y|x)a(x,y)=\pi(y)q(x|y)a(y,x),
 \end{equation}
-则对 $x$ 求和，连同留在原状态的概率，得到 $\sum_x\pi(x)P(y|x)=\pi(y)$。这称为细致平衡，是平稳分布成立的充分条件。
+这称为细致平衡。为验证它保证平稳分布，对 $y\ne x$ 定义 $P(y|x)=q(y|x)a(x,y)$，对角元由概率归一化给出 $P(x|x)=1-\sum_{y\ne x}P(y|x)$。于是
+\begin{align}
+\sum_x\pi(x)P(y|x)
+&=\sum_{x\ne y}\pi(y)P(x|y)+\pi(y)P(y|y)\\
+&=\pi(y)\sum_xP(x|y)=\pi(y).
+\end{align}
+第一步对非对角项使用细致平衡，第二步使用从 $y$ 出发的总概率为一。故细致平衡是平稳性成立的充分条件。
 
 令 $r=\pi(y)q(x|y)/[\pi(x)q(y|x)]$，取 $a(x,y)=\min(1,r)$：若 $r<1$，正向接受率为 $r$、反向为一，概率流相等；若 $r>1$，两边互换，仍然成立。因此
 \begin{equation}
@@ -25,16 +36,39 @@ a(x,y)=\min\{1,e^{-\beta[U(y)-U(x)]}q(x|y)/q(y|x)\}.
 \section{拒绝步也是样本}
 若低能状态需要等待许多步才能离开，这段停留时间正是它较大统计权重的体现。只记录接受的构型会删掉停留时间，改变分布。每次尝试后都应记录当前状态，包括未改变的状态。
 
-设平衡后的样本为 $A_1,\ldots,A_M$，归一化自相关为 $c(k)$。直接展开平均值的方差得
+用两个状态就能看清这一点。取 $U_A=0$、$U_B=\kb T\ln4$，则 Boltzmann 权重之比为 $4:1$，目标概率为 $\pi_A=4/5$、$\pi_B=1/5$。每次总是提议切换到另一个状态，正反提议概率都为一；接受率于是为 $a(A,B)=1/4$、$a(B,A)=1$。从 A 出发时抽取 $[0,1)$ 上的均匀随机数，小于 $1/4$ 才移到 B，否则仍记录 A；从 B 出发则必定移到 A。
+
+将概率列向量记为 $\bm p=(p_A,p_B)^{\mathsf T}$，一步更新为
+\begin{equation}\label{mc:two-state}
+\bm p_{n+1}=P\bm p_n,\qquad
+P=\begin{pmatrix}3/4&1\\1/4&0\end{pmatrix},\qquad
+P\begin{pmatrix}4/5\\1/5\end{pmatrix}=\begin{pmatrix}4/5\\1/5\end{pmatrix}.
+\end{equation}
+矩阵的列表示出发状态，行表示更新后的状态。设 A 中连续停留的平均步数为 $m_A$。下一次尝试必耗一步，且以 $3/4$ 的概率拒绝后重新面对相同等待问题，所以 $m_A=1+(3/4)m_A$，解得 $m_A=4$；B 中只停留一步。因此长时间记录的比例为 $4:1$。若删掉全部拒绝步，剩下的接受序列必然是 A、B、A、B 交替，反而给出各一半的错误概率。算法中的等待时间正是正确采样所需的权重。
+
+设平衡后的样本为 $A_1,\ldots,A_M$，定义 $\delta A_i=A_i-\langle A\rangle$、$s_A^2=\langle\delta A_i^2\rangle$、$c(k)=\langle\delta A_i\delta A_{i+k}\rangle/s_A^2$。样本平均为 $\overline A=M^{-1}\sum_iA_i$，所以
+\begin{align}
+\operatorname{Var}(\overline A)
+&=\frac1{M^2}\sum_{i,j=1}^M\langle\delta A_i\delta A_j\rangle\\
+&=\frac{s_A^2}{M^2}\left[M+2\sum_{k=1}^{M-1}(M-k)c(k)\right].
+\end{align}
+对角项有 $M$ 个；相隔 $k$ 步的每组非对角项有 $M-k$ 个，两个次序再给因子二。提出 $M$ 并代回 $s_A^2=\operatorname{Var}(A)$，得到
 \begin{equation}
 \operatorname{Var}(\overline A)=\frac{\operatorname{Var}(A)}M
 \left[1+2\sum_{k=1}^{M-1}(1-k/M)c(k)\right].
 \end{equation}
-因为相距 $k$ 的样本对有 $M-k$ 个，相关项不能像独立样本那样忽略。长链中若相关和收敛，可定义 $\tau_{\rm int}=1/2+\sum_{k\ge1}c(k)$，有效样本数约为 $M/(2\tau_{\rm int})$。分块平均应使用比相关时间长的块。
+长链中若相关和收敛，可定义 $\tau_{\rm int}=1/2+\sum_{k\ge1}c(k)$，括号便趋于 $2\tau_{\rm int}$。将所得方差写成独立样本的形式 $s_A^2/M_{\rm eff}$，解得有效样本数 $M_{\rm eff}\simeq M/(2\tau_{\rm int})$。分块平均应使用比相关时间长的块。
 
 \section{Hamiltonian Monte Carlo 如何借用力学}
 局部随机移动探索高维空间缓慢，可以引入辅助动量 $P$，把目标分布扩为 $e^{-\beta[K(P)+U(R)]}$。先从相应 Maxwell 分布独立抽取动量，再用可逆、保体积的 leapfrog 积分若干步，最后以 $\min(1,e^{-\beta\Delta H})$ 接受整个提议。
 
-为什么这里用总能量差？因为当前采样空间已经包含动量，其目标密度由 $H$ 决定。令积分映射为 $\Phi$、动量反转为 $\mathcal R(R,P)=(R,-P)$，可逆性给出 $\mathcal R\Phi\mathcal R=\Phi^{-1}$，所以提议 $\mathcal R\Phi$ 是自逆的；保体积则使 Jacobian 为一。两者使上述简单接受率合法，并校正有限步长造成的能量误差。
+为什么这里用总能量差？辅助 Hamilton 函数定义为 $H=\sum_aP_a^2/(2m_a)+U(R)$，所以条件动量分布由第一章的高斯积分归一化为 $p(P|R)=\prod_a[\beta/(2\pi m_a)]^{1/2}e^{-\beta P_a^2/(2m_a)}$；其方差为 $m_a/\beta$。积分掉动量只留下与 $R$ 无关的常数，位置边缘分布仍是目标 $\pi(R)$。
+
+令积分映射为 $\Phi$、动量反转为 $\mathcal R(R,P)=(R,-P)$。速度 Verlet 的逆步撤销正步，给出 $\mathcal R\Phi\mathcal R=\Phi^{-1}$，因而提议 $\mathcal S=\mathcal R\Phi$ 满足 $\mathcal S^2=\mathcal R\Phi\mathcal R\Phi=1$。每个半步动量更新保持位置不变，每个整步位置更新保持动量不变，其 Jacobian 都是对角块为单位矩阵的三角矩阵，行列式为一；反转动量的 Jacobian 绝对值也为一。因此自逆提议在正反两个体积元上有相同提议权重，接受率只剩目标密度比
+\begin{equation}
+a=\min\left(1,\frac{e^{-\beta H(R',P')}}{e^{-\beta H(R,P)}}\right)
+=\min(1,e^{-\beta\Delta H}).
+\end{equation}
+这一步校正有限步长造成的能量误差。
 
 辅助质量控制探索效率，辅助时间并非材料真实时间。HMC 能得到平衡构型，却不能把接受后的序列直接用于测量真实扩散系数。这正是“正确采样分布”与“正确动力学”之间的区别。

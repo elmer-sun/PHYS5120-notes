@@ -1,22 +1,21 @@
 \chapter{从势能曲率到晶格振动}
-\sourcepages{原英文稿第 11 章；朋友的 50 页笔记未覆盖本章}
 \section{平衡结构附近的第一个非平凡近似}
 电子结构给出核构型的能量 $E(R)$，但一个极小值只告诉我们原子平均停在哪里。温度与零点运动使原子在附近振动，振动频率由势能曲率决定。设平衡位置为 $R^0$，位移为 $u_{I\alpha}=R_{I\alpha}-R^0_{I\alpha}$。平衡要求一阶导数为零，故
 \begin{equation}
 E=E_0+\frac12\sum_{I\alpha,J\beta}C_{I\alpha,J\beta}u_{I\alpha}u_{J\beta}+O(u^3),\quad
 C_{I\alpha,J\beta}=\frac{\partial^2E}{\partial R_{I\alpha}\partial R_{J\beta}}.
 \end{equation}
-$C$ 是力常数矩阵，$C=-\partial F/\partial R$。光滑能量的混合导数相等，使它对称。Newton 方程变成 $M_I\ddot u_{I\alpha}=-\sum_{J\beta}C_{I\alpha,J\beta}u_{J\beta}$。
+$C$ 是力常数矩阵。由 $F_{I\alpha}=-\partial E/\partial R_{I\alpha}$ 再求一次导数，就有 $C_{I\alpha,J\beta}=-\partial F_{I\alpha}/\partial R_{J\beta}$。光滑能量的混合导数相等，使 $C$ 对称。对二次势能求导时，$u_{I\alpha}$ 在两个因子中各贡献一次；两项借助 $C$ 的对称性合并，消去 $1/2$。于是谐近似下 $F_{I\alpha}=-\sum_{J\beta}C_{I\alpha,J\beta}u_{J\beta}$，Newton 方程为 $M_I\ddot u_{I\alpha}=F_{I\alpha}$。
 
-试取所有原子以同一频率振动，$u_{I\alpha}(t)=U_{I\alpha}e^{-\ii\omega t}$，得 $\omega^2M_IU_{I\alpha}=\sum C_{I\alpha,J\beta}U_{J\beta}$。令 $e_{I\alpha}=\sqrt{M_I}U_{I\alpha}$，便得到普通对称本征问题
+试取所有原子以同一频率振动，$u_{I\alpha}(t)=U_{I\alpha}e^{-\ii\omega t}$。两次时间求导给出 $\ddot u=-\omega^2u$；代入 Newton 方程并消去共同的时间因子和负号，得 $\omega^2M_IU_{I\alpha}=\sum_{J\beta}C_{I\alpha,J\beta}U_{J\beta}$。令 $e_{I\alpha}=\sqrt{M_I}U_{I\alpha}$，右端用 $U_{J\beta}=e_{J\beta}/\sqrt{M_J}$ 代换，再把等式两边除以 $\sqrt{M_I}$，得到普通对称本征问题
 \begin{equation}
 \sum_{J\beta}D_{I\alpha,J\beta}e_{J\beta}=\omega^2e_{I\alpha},\qquad
 D_{I\alpha,J\beta}=\frac{C_{I\alpha,J\beta}}{\sqrt{M_IM_J}}.
 \end{equation}
-质量加权使相同的势能曲率对重原子产生较低的频率。例如双原子一维弹簧 $E=k(u_1-u_2)^2/2$ 有平移零模和 $\omega^2=k(1/M_1+1/M_2)=k/\mu_{\rm red}$ 的相对振动。
+质量加权使相同的势能曲率对重原子产生较低的频率。例如双原子一维弹簧 $E=k(u_1-u_2)^2/2$ 给出力 $F_1=-k(u_1-u_2)$、$F_2=+k(u_1-u_2)$。两条运动方程相减，令 $q=u_1-u_2$，得 $\ddot q=-k(1/M_1+1/M_2)q$，所以 $\omega^2=k(1/M_1+1/M_2)=k/\mu_{\rm red}$，其中约化质量定义为 $\mu_{\rm red}=M_1M_2/(M_1+M_2)$。另一方面，质量加权相加给出质心 $X=(M_1u_1+M_2u_2)/(M_1+M_2)$ 满足 $\ddot X=0$，这就是平移零模。
 
 \section{冻结位移如何测出曲率}
-所谓冻结声子或有限位移方法，是暂时把一个坐标移开 $\pm\Delta$，分别计算所有原子的力：
+所谓冻结声子或有限位移方法，是暂时把一个坐标移开 $\pm\Delta$，分别计算所有原子的力。将待测力分量简记为 $f(x)$，其中 $x$ 是被移动的坐标。Taylor 展开为 $f(\pm\Delta)=f(0)\pm f'(0)\Delta+f''(0)\Delta^2/2\pm f'''(0)\Delta^3/6+O(\Delta^4)$；两式相减再除以 $2\Delta$，得 $[f(\Delta)-f(-\Delta)]/(2\Delta)=f'(0)+O(\Delta^2)$。代入 $C=-\partial F/\partial R$，便有
 \begin{equation}
 C_{I\alpha,J\beta}\simeq-\frac{F_{I\alpha}(R^0+\Delta\bm e_{J\beta})-F_{I\alpha}(R^0-\Delta\bm e_{J\beta})}{2\Delta}.
 \end{equation}
@@ -27,17 +26,45 @@ C_{I\alpha,J\beta}\simeq-\frac{F_{I\alpha}(R^0+\Delta\bm e_{J\beta})-F_{I\alpha}
 \section{零模数量取决于系统}
 孤立非线性分子的整体平移和转动不改变能量，通常有三个平移及三个转动零模，剩 $3N-6$ 个振动模；线性分子只有两个独立转动方向，剩 $3N-5$ 个振动模。固定周期晶胞不能任意刚体转动而保持边界不变，晶体在 $\bm q=0$ 有三个声学平移零模，不能照搬分子的六零模计数。
 
-整体平移使所有原子同向移动，力仍为零，故 $\sum_JC_{I\alpha,J\beta}=0$，称声学和规则。它既是物理约束，也是数值检验；强制修正不能替代检查原始力的收敛。
+沿 $\beta$ 方向整体平移一个小距离 $a$，即 $u_{J\gamma}=a\delta_{\beta\gamma}$。代入力公式，得到 $F_{I\alpha}=-a\sum_JC_{I\alpha,J\beta}$。整体平移不改变平衡结构的力，而 $a$ 可任取，所以 $\sum_JC_{I\alpha,J\beta}=0$，称声学和规则。它既是物理约束，也是数值检验；强制修正不能替代检查原始力的收敛。
 
 \section{从超胞力常数到声子}
-晶体中以胞标号 $l$ 和胞内原子 $\kappa$ 区分原子。取振动形式 $u_{l\kappa\alpha}=M_\kappa^{-1/2}e_{\kappa\alpha}(\bm q)e^{\ii(\bm q\cdot\bm R_l-\omega t)}$，代入运动方程，得到
+晶体中以胞标号 $l$ 和胞内原子 $\kappa$ 区分原子。平移对称性允许不同胞的振动幅度相差相位，取 $u_{l\kappa\alpha}=M_\kappa^{-1/2}e_{\kappa\alpha}(\bm q)e^{\ii(\bm q\cdot\bm R_l-\omega t)}$。考察原点胞 $l=0$ 的运动方程，消去时间因子后有
+\begin{equation}
+\omega^2\sqrt{M_\kappa}\,e_{\kappa\alpha}
+=\sum_{l\kappa'\beta}C_{0\kappa\alpha,l\kappa'\beta}
+\frac{e_{\kappa'\beta}}{\sqrt{M_{\kappa'}}}e^{\ii\bm q\cdot\bm R_l}.
+\end{equation}
+再除以 $\sqrt{M_\kappa}$，将乘在每个 $e_{\kappa'\beta}$ 前的系数定义为 $D_{\kappa\alpha,\kappa'\beta}(\bm q)$，就得到 $De=\omega^2e$，其中
 \begin{equation}
 D_{\kappa\alpha,\kappa'\beta}(\bm q)=\frac1{\sqrt{M_\kappa M_{\kappa'}}}\sum_l C_{0\kappa\alpha,l\kappa'\beta}e^{\ii\bm q\cdot\bm R_l}.
 \end{equation}
 超胞决定可可靠恢复的作用距离；极性材料的长程偶极作用还需处理非解析修正。本式采用只在胞向量上带相位的约定，其他加入胞内坐标的约定给出等价频率。
 
-上述正则模可以用经典力学求频率，但声子是它们量子化后的激发。每个独立模的能级为 $\hbar\omega(n+1/2)$，因此即使零温也有零点能。有限温谐振动自由能为
+\section{从正则模到量子能级与自由能}
+上述正则模可以用经典力学求频率，但声子是它们量子化后的激发。本节恢复 $\hbar$。先对有限体系的实对称 $D$ 取正交本征向量 $e_{a\lambda}$，其中 $a$ 合并原子与方向指标，$\lambda$ 标记模。令质量加权位移 $y_a=\sqrt{M_a}u_a=\sum_\lambda e_{a\lambda}Q_\lambda$。正交性给出 $\sum_a\dot y_a^2=\sum_\lambda\dot Q_\lambda^2$，而 $De_\lambda=\omega_\lambda^2e_\lambda$ 给出 $\sum_{ab}y_aD_{ab}y_b=\sum_\lambda\omega_\lambda^2Q_\lambda^2$。因此谐 Hamilton 函数解耦为 $\sum_\lambda(\Pi_\lambda^2+\omega_\lambda^2Q_\lambda^2)/2$，其中 $\Pi_\lambda=\dot Q_\lambda$ 是该正则坐标的共轭动量。
+
+对一个 $\omega>0$ 的模，量子化要求 $[\hat Q,\hat\Pi]=\ii\hbar$。定义
+\begin{equation}
+\hat a=\sqrt{\frac\omega{2\hbar}}\hat Q
++\frac{\ii\hat\Pi}{\sqrt{2\hbar\omega}},\qquad
+\hat a^\dagger=\sqrt{\frac\omega{2\hbar}}\hat Q
+-\frac{\ii\hat\Pi}{\sqrt{2\hbar\omega}}.
+\end{equation}
+展开乘积，交叉项为 $\ii[Q,\Pi]/(2\hbar)=-1/2$，所以 $\hat a^\dagger\hat a=(\hat\Pi^2+\omega^2\hat Q^2)/(2\hbar\omega)-1/2$；反向相乘则交叉项为 $+1/2$，从而 $[a,a^\dagger]=1$。整理前一关系就得到下面的 Hamilton 算符；再用 $[a^\dagger a,a^\dagger]=a^\dagger[a,a^\dagger]=a^\dagger$，得到对易式：
+\begin{equation}
+\hat H_\omega=\hbar\omega(\hat a^\dagger\hat a+1/2),\qquad
+[\hat H_\omega,\hat a^\dagger]=\hbar\omega\hat a^\dagger.
+\end{equation}
+第一式说明能量不低于 $\hbar\omega/2$，因为 $\langle a^\dagger a\rangle=\|a\psi\|^2\ge0$。在 $\Pi=-\ii\hbar\partial_Q$ 表示下，$a\psi_0=0$ 化为 $(\partial_Q+\omega Q/\hbar)\psi_0=0$，其可归一化解为 $\psi_0\propto e^{-\omega Q^2/(2\hbar)}$，所以这个下界能够达到。第二式使每作用一次 $a^\dagger$ 就增加能量 $\hbar\omega$。反复用 $a$ 降低能量必须终止于基态，故允许的能级是 $E_n=\hbar\omega(n+1/2)$，$n=0,1,\ldots$。
+
+对这些能级作正则求和，令 $x=e^{-\beta\hbar\omega}<1$，几何级数给出
+\begin{equation}
+Z_\omega=\sum_{n=0}^\infty e^{-\beta\hbar\omega(n+1/2)}
+=\frac{e^{-\beta\hbar\omega/2}}{1-e^{-\beta\hbar\omega}}.
+\end{equation}
+自由能与配分函数的关系也可由定义推出。正则概率为 $p_n=e^{-\beta E_n}/Z_\omega$，故 $\ln p_n=-\beta E_n-\ln Z_\omega$。代入熵 $S=-\kb\sum_n p_n\ln p_n$，得到 $S=\kb\beta\langle E\rangle+\kb\ln Z_\omega$；再代入 $F=\langle E\rangle-TS$，能量项抵消，留下 $F_\omega=-\kb T\ln Z_\omega$。对上式的 $Z_\omega$ 取对数，便有 $F_\omega=\hbar\omega/2+\kb T\ln(1-e^{-\beta\hbar\omega})$。独立模的配分函数相乘，自由能相加；在晶体中改用波矢 $\bm q$ 和分支 $\nu$ 标记每个模，得到
 \begin{equation}
 F_{\rm vib}=\sum_{\bm q\nu}\left[\frac{\hbar\omega_{\bm q\nu}}2+\kb T\ln(1-e^{-\beta\hbar\omega_{\bm q\nu}})\right],
 \end{equation}
-其中求和按所需总量或每胞量归一化，刚体零模需另行处理。高温才恢复每模平均能量约 $\kb T$ 的经典极限。因此“频率由经典方程求出”不等于“声子没有量子性”。
+其中求和按所需总量或每胞量归一化，刚体零模需另行处理。要检查高温极限，先对配分函数求导：$\partial_\beta Z_\omega=-\sum_n E_ne^{-\beta E_n}=-Z_\omega\langle E_\omega\rangle$，所以 $\langle E_\omega\rangle=-\partial_\beta\ln Z_\omega=\hbar\omega/2+\hbar\omega/(e^{\beta\hbar\omega}-1)$。令 $z=\beta\hbar\omega\ll1$，由 $e^z-1=z+z^2/2+O(z^3)$ 得 $1/(e^z-1)=z^{-1}[1-z/2+O(z^2)]=1/z-1/2+O(z)$。代回后两个 $\hbar\omega/2$ 项抵消，留下 $\langle E_\omega\rangle=1/\beta+O(\beta\hbar^2\omega^2)\simeq\kb T$，恢复经典极限。

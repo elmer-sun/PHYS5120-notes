@@ -1,12 +1,11 @@
 \chapter{让电子变量与原子核一起推进}
-\sourcepages{原英文稿第 12 章；朋友的 50 页笔记未覆盖本章}
 \section{Born--Oppenheimer 动力学的计算负担}
 第四章给出在电子基态势能面上推进原子核的方法：每到一个新构型，先充分求解电子基态，再由能量梯度求力，最后进行核的时间积分。电子自洽循环嵌套在核动力学循环内部。Car--Parrinello 方法的动机，是让电子轨道沿着随核移动的最低能附近连续演化，减少逐步从头最小化的工作。
 
 这里的轨道运动是辅助数值动力学，不是实际电子的含时 Schrödinger 演化。下面为清楚起见采用固定单占据的正交自旋轨道；闭壳层双占据形式须一致地处理占据系数。
 
 \section{扩展 Lagrange 函数与约束}
-给轨道引入正的虚拟惯性参数 $\mu$，采用约定
+这里要设计一套辅助动力学，而不是从真实电子时间演化推出新定律。保留真实核动能，以电子能量泛函作为势能，再给轨道速度添加正的二次项；系数 $\mu$ 是可选择的虚拟惯性参数。最后用乘子加入轨道正交约束。这些选择定义扩展 Lagrange 函数
 \begin{equation}
 L=\frac12\sum_I M_I|\dot{\bm R}_I|^2+
 \mu\sum_i\langle\dot\phi_i|\dot\phi_i\rangle-E[\{\phi\},R]
@@ -14,18 +13,28 @@ L=\frac12\sum_I M_I|\dot{\bm R}_I|^2+
 \end{equation}
 两个动能项都带正号，核动能含速度平方。$\mu$ 的量纲使 $\mu\langle\dot\phi|\dot\phi\rangle$ 为能量；它不是电子的真实质量。本章取复轨道约定，不在该项前再放 $1/2$。
 
-对核坐标应用 Euler--Lagrange 方程，并假设基组不随核移动，得到
+对每个坐标重复第一章作用量变分中的分部积分，端点变化为零后，任意内部路径变化的系数必须为零。这给出 Euler--Lagrange 方程
+\begin{equation}
+\frac{\dd}{\dd t}\frac{\partial L}{\partial\dot q}=\frac{\partial L}{\partial q}.
+\end{equation}
+对核坐标，$\partial L/\partial\dot{\bm R}_I=M_I\dot{\bm R}_I$；假设基组不随核移动，则固定轨道时的约束项不含核坐标，$\partial L/\partial\bm R_I=-\partial E/\partial\bm R_I$。因此
 \begin{equation}
 M_I\ddot{\bm R}_I=-\frac{\partial E}{\partial\bm R_I}.
 \end{equation}
-对 $\phi_i^*$ 作独立变分，$\delta L/\delta\dot\phi_i^*=\mu\dot\phi_i$，所以
+对 $\phi_i^*$ 作独立变分，$\delta L/\delta\dot\phi_i^*=\mu\dot\phi_i$，而 $\delta L/\delta\phi_i^*=-\delta E/\delta\phi_i^*+\sum_j\Lambda_{ij}\phi_j$。把二者代入同一 Euler--Lagrange 方程，再使用第七章已推导的单占据轨道能量导数 $\delta E/\delta\phi_i^*=\hat H_{\rm KS}\phi_i$，得到
 \begin{equation}
 \mu\ddot\phi_i=-\frac{\delta E}{\delta\phi_i^*}+\sum_j\Lambda_{ij}\phi_j
 =-\hat H_{\rm KS}\phi_i+\sum_j\Lambda_{ij}\phi_j.
 \end{equation}
-这里将乘子矩阵的转置重命名，保持 Hermitian 约束力。乘子使轨道保持正交，而不是让所有轨道落到同一个最低态。静止轨道的驻值方程可经占据子空间酉变换化为 KS 本征方程，但一般传播中的轨道并非瞬时基态。
+乘子矩阵取 Hermitian 形式，使约束项为实数。乘子使轨道保持正交，而不是让所有轨道落到同一个最低态。静止轨道的驻值方程可经占据子空间酉变换化为 KS 本征方程，但一般传播中的轨道并非瞬时基态。
 
-时间不显含的扩展体系在连续精确动力学下守恒
+守恒量也应从这个辅助 Lagrange 函数推导。把核坐标、轨道的实部与虚部以及约束乘子合并记为广义坐标 $q_a$，定义 $\mathcal E=\sum_a\dot q_a\partial L/\partial\dot q_a-L$。逐项求时间导数，含 $\ddot q_a$ 的项抵消，得到
+\begin{equation}
+\frac{\dd\mathcal E}{\dd t}
+=\sum_a\dot q_a\left[\frac{\dd}{\dd t}\frac{\partial L}{\partial\dot q_a}
+-\frac{\partial L}{\partial q_a}\right]-\frac{\partial L}{\partial t}=0.
+\end{equation}
+最后一步用了运动方程及没有显式时间依赖。核与轨道的速度项都是二次齐次函数，所以 $\sum_a\dot q_a\partial L/\partial\dot q_a$ 等于它们的两倍；减去 $L$ 后，各留下一个正的动能项，并加回电子势能。约束项在 $\langle\phi_i|\phi_j\rangle=\delta_{ij}$ 时为零，乘子本身也没有速度项。因此连续精确动力学守恒的量是
 \begin{equation}
 E_{\rm ext}=\frac12\sum_I M_I|\dot{\bm R}_I|^2+
 \mu\sum_i\langle\dot\phi_i|\dot\phi_i\rangle+E[\{\phi\},R].
@@ -33,12 +42,18 @@ E_{\rm ext}=\frac12\sum_I M_I|\dot{\bm R}_I|^2+
 这不等于物理核动能加 BO 基态能量：虚拟电子动能也包含其中。数值积分还会带误差。仅见 $E_{\rm ext}$ 近似守恒，不能证明核始终在正确的基态面上运动。
 
 \section{两能级模型解释频率分离}
-固定核，令 $H|1\rangle=\varepsilon_1|1\rangle$、$H|2\rangle=\varepsilon_2|2\rangle$，$\Delta=\varepsilon_2-\varepsilon_1>0$。以归一化试探态 $|\phi\rangle=\cos(\theta/2)|1\rangle+\sin(\theta/2)|2\rangle$ 描述偏离基态的程度。直接计算可得
+固定核，令 $H|1\rangle=\varepsilon_1|1\rangle$、$H|2\rangle=\varepsilon_2|2\rangle$，$\Delta=\varepsilon_2-\varepsilon_1>0$。以归一化试探态 $|\phi\rangle=\cos(\theta/2)|1\rangle+\sin(\theta/2)|2\rangle$ 描述偏离基态的程度。求导得 $|\dot\phi\rangle=(\dot\theta/2)[-\sin(\theta/2)|1\rangle+\cos(\theta/2)|2\rangle]$。由两态正交性，速度范数中的交叉项为零，余下 $\dot\theta^2[\sin^2(\theta/2)+\cos^2(\theta/2)]/4$。能量期望值同样只有 $\varepsilon_1\cos^2(\theta/2)+\varepsilon_2\sin^2(\theta/2)$；使用 $\cos^2=1-\sin^2$，两者分别成为
 \begin{equation}
 \langle\dot\phi|\dot\phi\rangle=\dot\theta^2/4,\qquad
 \langle\phi|H|\phi\rangle=\varepsilon_1+\Delta\sin^2(\theta/2).
 \end{equation}
-因此 $L=\mu\dot\theta^2/4-\varepsilon_1-\Delta\sin^2(\theta/2)$。Euler--Lagrange 方程为 $(\mu/2)\ddot\theta=-(\Delta/2)\sin\theta$。小振幅下
+因此 $L=\mu\dot\theta^2/4-\varepsilon_1-\Delta\sin^2(\theta/2)$。逐项求导有
+\begin{equation}
+\frac{\partial L}{\partial\dot\theta}=\frac\mu2\dot\theta,\qquad
+\frac{\partial L}{\partial\theta}=-\Delta\sin\frac\theta2\cos\frac\theta2
+=-\frac\Delta2\sin\theta.
+\end{equation}
+Euler--Lagrange 方程成为 $(\mu/2)\ddot\theta=-(\Delta/2)\sin\theta$。小振幅时用 $\sin\theta=\theta+O(\theta^3)$，再除以 $\mu/2$；试取 $\theta\propto e^{\ii\omega_et}$，有 $-\omega_e^2+\Delta/\mu=0$。故
 \begin{equation}
 \ddot\theta+(\Delta/\mu)\theta=0,\qquad \omega_e=\sqrt{\Delta/\mu}.
 \end{equation}

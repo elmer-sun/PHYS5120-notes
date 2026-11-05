@@ -1,5 +1,4 @@
 \chapter{超越单个行列式：电子关联}
-\sourcepages{手写笔记第 31--35 页}
 \section{Hartree--Fock 已经做了什么，还缺什么}
 上一章把固定核的多电子问题变成了自洽轨道问题。每个电子在其他电子产生的平均场中运动，同时整个波函数满足电子交换时的反对称性。这样既保留了量子轨道，也保留了交换效应，但仍然把试探波函数限制在\emph{单个 Slater 行列式}内。本章始终保持核构型固定，讨论怎样放宽这一限制。
 
@@ -39,13 +38,13 @@ H=\begin{pmatrix}E_0&V\\V&E_0+\Delta\end{pmatrix}.
 \end{equation}
 $\Phi_1$ 可以是一个双激发行列式。这里的两个构型是教学模型，尚不代表真实分子的完整基空间。
 
-用 $\Psi=(\Phi_0+t\Phi_1)/\sqrt{1+t^2}$ 作为试探态，能量变为
+用 $\Psi=(\Phi_0+t\Phi_1)/\sqrt{1+t^2}$ 作为试探态。正交性使分母的平方等于范数；将 bra 与 ket 各展开一次，能量分子是 $H_{00}+tH_{01}+tH_{10}+t^2H_{11}=E_0+2Vt+(E_0+\Delta)t^2$。先把其中的 $E_0(1+t^2)$ 与归一化分母约去，得到
 \begin{equation}
 E(t)=E_0+\frac{2Vt+\Delta t^2}{1+t^2}.
 \end{equation}
 这个式子已经解释了混合的作用。加入较高能构型的代价是 $\Delta t^2$，但干涉贡献为 $2Vt$。选择与 $V$ 相反符号的小 $t$，负的线性项就能压过正的二次项，使总能量低于 $E_0$。降低能量不是因为第二个构型本身更低，而是因为它与第一个构型相干叠加后改变了量子态。
 
-从 $\det(H-EI)=0$ 出发，有 $(E_0-E)(E_0+\Delta-E)-V^2=0$。解这个二次方程，较低根为
+从 $\det(H-EI)=0$ 出发，有 $(E_0-E)(E_0+\Delta-E)-V^2=0$。令 $x=E-E_0$，则 $x^2-\Delta x-V^2=0$；配方为 $(x-\Delta/2)^2=\Delta^2/4+V^2$。取平方根的负号分支，再加回 $E_0$，较低根为
 \begin{equation}\label{ci:lower}
 E_-=E_0+\frac{\Delta}{2}-\sqrt{\frac{\Delta^2}{4}+V^2}.
 \end{equation}
@@ -53,10 +52,24 @@ E_-=E_0+\frac{\Delta}{2}-\sqrt{\frac{\Delta^2}{4}+V^2}.
 
 例如取 $E_0=-1$、$\Delta=0.4$、$V=0.1$，能量均以 Hartree 为单位。由式 \eqref{ci:lower} 得 $E_-=-1.0236068$；本征方程第一行给出 $t=(E_--E_0)/V=-0.236068$，第二构型的权重约为 $5.28\%$。这些是便于复算的模型参数，不是氢分子的计算结果。少量混合已经能产生可见的能量改变。
 
-当 $|V|\ll\Delta$ 时，对平方根展开得 $E_--E_0\simeq-V^2/\Delta$，第二构型只是小修正。若 $\Delta$ 缩小至与 $|V|$ 相当，这一展开不再可靠；在 $\Delta=0$ 时，两个构型以相同权重参与，能量为 $E_0-|V|$。我们由此得到物理判断：重要的不是“第二个构型是不是激发态”，而是构型间的能量差与耦合相比有多大。弱混合适合微扰，近简并往往需要同时保留多个构型。
+当 $|V|\ll\Delta$ 时，先提出 $\Delta/2$，再用 $\sqrt{1+y}=1+y/2+O(y^2)$：$\sqrt{\Delta^2/4+V^2}=(\Delta/2)[1+2V^2/\Delta^2+O(V^4/\Delta^4)]$。代回得 $E_--E_0=-V^2/\Delta+O(V^4/\Delta^3)$，第二构型只是小修正。若 $\Delta$ 缩小至与 $|V|$ 相当，这一展开不再可靠。在 $\Delta=0$、$V\ne0$ 时，$E_-=E_0-|V|$ 且 $t=-|V|/V$，所以 $t^2=1$，两个构型以相同权重参与。我们由此得到物理判断：构型间的能量差必须与耦合比较。弱混合适合微扰，近简并往往需要同时保留多个构型。
+
+还可以把“参与多少”直接画出来。对 $V\ne0$，令 $Q=\sqrt{\Delta^2+4V^2}$，则 $t=(\Delta-Q)/(2V)$。由于 $4V^2=(Q-\Delta)(Q+\Delta)$，有 $t^2=(Q-\Delta)/(Q+\Delta)$，进而 $1+t^2=2Q/(Q+\Delta)$。两式相除得到
+\begin{equation}\label{ci:weight}
+w_1=\frac{t^2}{1+t^2}
+=\frac12\left(1-\frac{\Delta}{\sqrt{\Delta^2+4V^2}}\right).
+\end{equation}
+图\ref{ci:mixing-figure}用 $\Delta/|V|$ 作横轴，因此同一条曲线适用于不同能量尺度。能量代价越大，第二构型权重越小；接近简并时，两者共同决定基态。
+
+\begin{figure}[htbp]
+\centering
+\input{figures/ci-mixing-weight.tex}
+\caption{双构型模型中第二构型的权重。$\Delta=0$ 且 $V\ne0$ 时权重为 $1/2$；正文算例 $\Delta/|V|=4$ 对应约 $5.28\%$。曲线来自式\eqref{ci:weight}，没有引入新的模型参数。}
+\label{ci:mixing-figure}
+\end{figure}
 
 \section{完整 CI 与截断 CI 的取舍}
-若有 $M$ 条自旋轨道，选择 $N$ 条的方式共有 $\binom MN$ 种。保留所有这些行列式称为 full CI：它在\emph{该有限轨道基空间内}给出精确多体解，但仍有单粒子基组不完备误差。构型数随体系迅速增长，所以实际计算常截断激发阶数，例如 CISD 保留参考、单激发和双激发。
+若有 $M$ 条自旋轨道，依次选出 $N$ 条不同轨道有 $M(M-1)\cdots(M-N+1)$ 种次序。同一组占据的 $N!$ 种排列只改变行列式整体符号，不能重复计数，所以独立选择共有 $M!/[N!(M-N)!]=\binom MN$ 种。保留所有这些行列式称为 full CI：它在\emph{该有限轨道基空间内}给出精确多体解，但仍有单粒子基组不完备误差。构型数随体系迅速增长，所以实际计算常截断激发阶数，例如 CISD 保留参考、单激发和双激发。
 
 扩大嵌套的 CI 空间时，最低能量不会升高，因为原来的最佳波函数仍然是新空间中的允许选择。然而“具有变分上界”不等于所有物理性质都自动正确。一个重要检验是尺寸一致性：把两个片段移得足够远、使它们不相互作用后，计算的总能量应等于分别计算的能量之和。
 
@@ -77,14 +90,16 @@ $\lambda$ 只是组织展开的参数，最后取一。注意 $\hat H_0$ 的参�
 \end{equation}
 投影到参考态给出 $E^{(1)}=\langle0|\hat V|0\rangle$；投影到其他未扰动态 $|K\rangle$，给出它混入波函数的系数 $\langle K|\Psi^{(1)}\rangle=\langle K|\hat V|0\rangle/(E_0^{(0)}-E_K^{(0)})$。
 
-再把本征方程的二阶部分投影到参考态，并代入这些系数，得到
-\begin{equation}
+二阶部分为 $(H_0-E_0^{(0)})|\Psi^{(2)}\rangle=-(V-E^{(1)})|\Psi^{(1)}\rangle+E^{(2)}|0\rangle$。左乘 $\langle0|$ 时，左侧因本征方程为零，$E^{(1)}\langle0|\Psi^{(1)}\rangle$ 也为零，因此 $E^{(2)}=\langle0|V|\Psi^{(1)}\rangle$。将 $|\Psi^{(1)}\rangle=\sum_{K\ne0}|K\rangle\langle K|\Psi^{(1)}\rangle$ 代入，利用 $V$ 的 Hermitian 性将两个共轭矩阵元合成模平方，得到
+\begin{equation}\label{corr:second-order}
 E^{(2)}=\langle0|\hat V|\Psi^{(1)}\rangle
 =\sum_{K\ne0}\frac{|\langle K|\hat V|0\rangle|^2}{E_0^{(0)}-E_K^{(0)}}.
 \end{equation}
 每一项都表示一个虚拟混合通道：耦合越大，影响越大；代价越高，影响越小。这与双构型模型的弱混合极限相同。
 
-对驻定的 HF 参考，单激发耦合为零。这可以从轨道变分理解：把占据轨道向未占据轨道作微小旋转，会在行列式中产生单激发分量；HF 已经对此类一阶变化驻定，故相应线性能量项为零。一体、二体算符又不能直接改变三个及以上占据轨道，所以二阶能量只剩双激发贡献：
+对驻定的 HF 参考，令占据轨道 $\phi_i\to\phi_i+\eta\phi_a$，其中 $\phi_a$ 未占据。由行列式对每行的线性性，$\Phi\to\Phi_0+\eta\Phi_i^a+O(|\eta|^2)$；能量一阶变化为 $2\operatorname{Re}[\eta\langle\Phi_0|H|\Phi_i^a\rangle]$。它必须对任意复数 $\eta$ 为零，故 $\langle\Phi_i^a|H|\Phi_0\rangle=0$。正则轨道下 $H_0$ 对这些行列式为对角，也无非对角耦合，因此单激发的 $V=H-H_0$ 矩阵元为零。
+
+一体算符只作用于一个坐标，若两个行列式有两条以上轨道不同，未被算符作用的坐标积分中必有正交内积使矩阵元为零；二体算符同理最多连接双激发。于是式\eqref{corr:second-order}只剩双激发。未扰动能量为轨道本征值之和，双激发的能量是 $E_{ij}^{ab,(0)}=E_0^{(0)}-\varepsilon_i-\varepsilon_j+\varepsilon_a+\varepsilon_b$，其与参考态的差给出分母。零阶加一阶满足 $E_0^{(0)}+\langle\Phi_0|H-H_0|\Phi_0\rangle=E_{\rm HF}$，所以
 \begin{equation}
 E_{\rm MP2}=E_{\rm HF}+\sum_{i<j,a<b}
 \frac{|\langle\Phi_{ij}^{ab}|\hat V|\Phi_0\rangle|^2}
@@ -99,7 +114,7 @@ CI 截断的尺寸一致性问题提示我们：独立片段上的激发应该�
 \end{equation}
 组织波函数，其中 $\hat T_1$ 产生单激发，$\hat T_2$ 产生双激发。即使只保留 $T_1,T_2$，指数展开 $1+T+T^2/2+\cdots$ 仍含 $T_2^2/2$，因而包含两个独立双激发同时发生的贡献。这里不是把所有四激发都当作独立参数求解，而是保留由已有激发组成的乘积。
 
-对不相互作用的片段，若 $T=T_A+T_B$ 且两算符可交换，则 $e^T=e^{T_A}e^{T_B}$，自然得到片段波函数的乘积。这解释了指数形式为何有用。
+对不相互作用的片段，若 $T=T_A+T_B$ 且两算符可交换，二项式展开给出 $(T_A+T_B)^n=\sum_{k=0}^n\binom nkT_A^kT_B^{n-k}$。代入指数级数，令 $l=n-k$，系数 $\binom nk/n!=1/(k!l!)$，所以 $e^T=\sum_{k,l}T_A^kT_B^l/(k!l!)=e^{T_A}e^{T_B}$。这自然得到片段波函数的乘积，也解释了指数形式为何有用。
 
 求系数时，把指数形式代入 Schrödinger 方程，再左乘 $e^{-T}$。对参考态和激发态分别投影得
 \begin{equation}
@@ -118,7 +133,7 @@ E(\theta)=\frac{\int\Psi_\theta^*\hat H\Psi_\theta\dd X}{\int|\Psi_\theta|^2\dd 
 
 这称为变分 Monte Carlo。先按 $p_\theta$ 采样并估计能量，再调整参数降低它。精确本征态处处满足 $\hat H\Psi=E\Psi$，故局部能量是常数，采样方差为零；一般试探态的局部能量会随构型涨落。优化和增加样本分别改善试探态与统计误差，二者不能互相替代。
 
-扩散 Monte Carlo 则利用虚时投影。把实际时间形式改写为 $-\partial_\tau\Psi=(H-E_T)\Psi$（原子单位），展开到本征态上得到
+扩散 Monte Carlo 则利用虚时投影。在原子单位下，以 $t=-\ii\tau$ 将含时方程改写为 $-\partial_\tau\Psi=H\Psi$，再减去只控制整体幅度的常数 $E_T$，得到 $-\partial_\tau\Psi=(H-E_T)\Psi$。这已是辅助投影方程，不是真实时间演化。写 $\Psi(\tau)=\sum_n a_n(\tau)\Phi_n$ 并逐个投影，得到 $\dot a_n=-(E_n-E_T)a_n$。分离变量积分得 $a_n(\tau)=a_n(0)e^{-(E_n-E_T)\tau}$，令 $c_n=a_n(0)$，便有
 \begin{equation}
 \Psi(\tau)=\sum_n c_n e^{-(E_n-E_T)\tau}\Phi_n.
 \end{equation}

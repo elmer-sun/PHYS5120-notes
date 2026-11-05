@@ -1,5 +1,4 @@
 \chapter{从多体波函数到电子密度}\label{dft:chapter}
-\sourcepages{手写笔记第 35--41 页及第 43--44 页}
 \section{为什么想改用密度描述材料}
 CI 告诉我们，只要有足够多的行列式，就能逐步改善多电子波函数。但代价也清楚：即使每个电子只需有限个轨道，多电子排布的组合数也会迅速增长。对许多原子组成的材料，完整求出波函数通常不是可行的日常方法。能否不保存全部多体信息，仍然得到基态能量和结构？密度泛函理论（density functional theory，DFT）从这个问题出发。
 
@@ -8,7 +7,7 @@ CI 告诉我们，只要有足够多的行列式，就能逐步改善多电子�
 n(\bm r)=\left\langle\Psi\left|\sum_{i=1}^N\delta(\bm r-\bm r_i)\right|\Psi\right\rangle,
 \qquad \int n(\bm r)\dd\bm r=N.
 \end{equation}
-因此 $n$ 的积分是电子数 $N$，不是一。一个电子在什么位置的概率，与所有电子在某处的平均数量，不能混为一谈。
+对定义中的 $\bm r$ 积分，每个 $\delta(\bm r-\bm r_i)$ 都给一，所以 $\int n\dd\bm r=\langle\Psi|\sum_i1|\Psi\rangle=N$。归一化的是多电子态，数密度的积分则是电子数。外势能也由同一定义得到：$\int vn\dd\bm r=\langle\Psi|\sum_i\int v(\bm r)\delta(\bm r-\bm r_i)\dd\bm r|\Psi\rangle=\langle\Psi|\sum_i v(\bm r_i)|\Psi\rangle$。
 
 密度究竟丢失了什么？想象两个远离的区域 A、B，里面总共有两个电子。一种状态总是每处一个电子；另一种状态有一半概率两个都在 A，另一半概率两个都在 B。两种状态在每个区域的平均电子数都为一，但两电子同时靠近的概率不同，排斥能也可能不同。这个例子说明：一般来说，知道一体密度，并不等于知道任意多体态的全部联合概率。
 
@@ -54,14 +53,14 @@ E_0[v]=\inf_{n\to N}\left\{F[n]+\int v(\bm r)n(\bm r)\dd\bm r\right\}.
 \section{先试最直接的办法：局域近似动能}
 既然想用密度，最直接的尝试是把动能也写成密度的简单函数。均匀、无相互作用的电子气提供了一个可以算清的参考。电子在体积 $\Omega$ 的盒子中取平面波，每个空间波矢可容纳自旋相反的两个电子。零温时从低能向高能填充，直到半径为 $k_F$ 的球。
 
-每个允许波矢在 $k$ 空间占体积 $(2\pi)^3/\Omega$。因此数电子数和求动能分别给出
+为数出允许的波矢，先在边长 $L$ 的立方盒内使用周期边界。平面波 $e^{\ii k_xx}$ 满足 $e^{\ii k_xL}=1$，所以 $k_x=2\pi m_x/L$，另外两个方向同理。相邻波矢间隔均为 $2\pi/L$，故每个允许波矢在 $k$ 空间占体积 $(2\pi/L)^3=(2\pi)^3/\Omega$。将离散求和在大体积极限下换成球内积分，并乘两种自旋的因子二，数电子数和求动能分别给出
 \begin{align}
 n&=\frac{2\cdot4\pi}{(2\pi)^3}\int_0^{k_F}k^2\dd k
 =\frac{k_F^3}{3\pi^2},\\
 \frac{T}{\Omega}&=\frac{2\cdot4\pi}{(2\pi)^3}\int_0^{k_F}\frac{k^2}{2}k^2\dd k
 =\frac{k_F^5}{10\pi^2}.
 \end{align}
-消去 $k_F$，再把均匀密度换成随位置变化的局部密度，得到 Thomas--Fermi 动能近似
+第一式给出 $k_F=(3\pi^2 n)^{1/3}$。代入第二式，有 $T/\Omega=(3\pi^2n)^{5/3}/(10\pi^2)=\tfrac3{10}(3\pi^2)^{2/3}n^{5/3}$。到这里仍是均匀非相互作用电子气的结果。再作局域模型假设：将每个小体积元的动能取为这个表达式乘 $\dd\bm r$，最后对空间相加，得到 Thomas--Fermi 动能近似
 \begin{equation}
 T_{\rm TF}[n]=\frac3{10}(3\pi^2)^{2/3}\int n(\bm r)^{5/3}\dd\bm r.
 \end{equation}
@@ -70,12 +69,14 @@ T_{\rm TF}[n]=\frac3{10}(3\pi^2)^{2/3}\int n(\bm r)^{5/3}\dd\bm r.
 这个近似能描述一部分平滑的密度变化，却很难准确描述原子的壳层、轨道节点和化学键中的量子结构。困难因此不只在电子排斥，\emph{动能本身}也需要足够精细的描述。Kohn--Sham 方法的关键选择是：不必为了“只谈密度”而放弃一切轨道；可以引入一个简单辅助体系，用它准确计算辅助动能。
 
 \section{Kohn--Sham：用辅助轨道再现真实密度}
-设想一组没有显式电子--电子相互作用的辅助粒子，在某个待定有效势 $v_s$ 中运动。要求它们的基态密度与真实相互作用体系相同。辅助轨道 $\phi_i$ 正交归一，若 $i$ 标记自旋轨道，零温非简并情形下占据数 $f_i$ 为零或一；必要时可使用分数占据。密度与辅助动能为
+设想一组没有显式电子--电子相互作用的辅助粒子，在某个待定有效势 $v_s$ 中运动。要求它们的基态密度与真实相互作用体系相同。沿用第五章的记号，自旋轨道为 $\phi_i(\bm r,s)$，内积包括空间积分和自旋求和；这些轨道正交归一。零温非简并情形下每条自旋轨道的占据数 $f_i$ 为零或一，必要时可使用分数占据。密度不分辨电子自旋，因此要对 $s$ 求和：
 \begin{equation}
-n(\bm r)=\sum_i f_i|\phi_i(\bm r)|^2,\qquad
+n(\bm r)=\sum_i f_i\sum_s|\phi_i(\bm r,s)|^2,\qquad
 T_s=\sum_i f_i\langle\phi_i|-\nabla^2/2|\phi_i\rangle.
 \end{equation}
-若改用闭壳层空间轨道记号，每条占据空间轨道需计两个电子，不能把这两套占据约定混用。辅助体系能再现所需密度是 KS 构造的重要前提；以下在这种表示适用的范围内讨论。
+以下先讨论自旋可分离的情形，写 $\phi_i(\bm r,s)=\varphi_i(\bm r)\chi_i(s)$，其中自旋函数满足 $\sum_s|\chi_i(s)|^2=1$。自旋求和后便有 $n=\sum_i f_i|\varphi_i|^2$。为简化后续公式，下面将空间因子 $\varphi_i(\bm r)$ 简记为 $\phi_i(\bm r)$，但指标 $i$ 仍区分自旋标签：两条自旋相反的轨道可以有相同空间因子。正交约束始终作用于完整自旋轨道；两条轨道的自旋函数若正交，空间因子相同也不妨碍这一约束成立。
+
+若进一步合并成闭壳层空间轨道求和，才改写为 $n=2\sum_{a\,\mathrm{occ}}|\varphi_a|^2$。这个因子二来自两种自旋占据，不是额外的归一化因子。辅助体系能再现所需密度是 KS 构造的重要前提；以下在这种表示适用的范围内讨论。
 
 “没有显式相互作用”不等于忽略真实排斥。我们先把真实能量中容易计算的部分单列出来。外势能为 $\int vn$，把密度当作连续电荷云的经典排斥能为
 \begin{equation}
@@ -107,7 +108,7 @@ v_H(\bm r)=\int\frac{n(\bm r')}{|\bm r-\bm r'|}\dd\bm r'.
 
 为推导轨道方程，先考虑所有占据自旋轨道都有 $f_i=1$ 的情形。对第 $i$ 条轨道的复共轭变化，有 $\delta n=\phi_i\delta\phi_i^*$；辅助动能的对应变化为 $\int\delta\phi_i^*(-\nabla^2/2)\phi_i$。因此总能量的一阶变化中，乘在 $\delta\phi_i^*$ 前的系数是 $[-\nabla^2/2+v+v_H+v_{xc}]\phi_i$。
 
-还需保持轨道正交，故如同 HF 一样引入矩阵乘子。把该乘子矩阵在占据子空间对角化后，得到 KS 方程
+还需保持完整自旋轨道正交，故如同第五章式\eqref{hf:stationary}的推导，引入 $-\sum_{ab}\lambda_{ab}(\langle\phi_b|\phi_a\rangle-\delta_{ba})$。对 $\phi_i^*$ 的变分使刚才的系数等于 $\sum_j\lambda_{ji}\phi_j$。这里所有占据数相同，重组占据轨道不改变 $n$ 或 $T_s$，因此可以在占据子空间对角化 Hermitian 乘子矩阵，得到 KS 方程
 \begin{equation}\label{dft:ks}
 \left[-\frac12\nabla^2+v(\bm r)+v_H(\bm r)+v_{xc}(\bm r)\right]\phi_i
 =\varepsilon_i\phi_i.
@@ -117,7 +118,7 @@ v_H(\bm r)=\int\frac{n(\bm r')}{|\bm r-\bm r'|}\dd\bm r'.
 \section{为什么必须自洽，怎样读总能量}
 如果已经知道密度，就能构造 $v_H$ 与 $v_{xc}$，再求出轨道；可是密度恰恰要由轨道算出。因此实际求解是一个闭合过程：从合理的 $n_{\rm in}$ 出发建势，解式 \eqref{dft:ks}，按电子数占据轨道，再算 $n_{\rm out}$。当两者一致时，电子感受到的势与它们自身产生的密度相容，这就是自洽。
 
-直接把输出当成下一轮输入可能来回振荡。例如某次把电荷移到一个区域，它的排斥势随之上升，下一轮又可能把过多电荷推走。简单混合
+直接把输出当成下一轮输入可能来回振荡。例如某次把电荷移到一个区域，它的排斥势随之上升，下一轮又可能把过多电荷推走。定义待修正量 $r_n=n_{\rm out}-n_{\rm in}$，每次只沿这个差值走比例 $\alpha$，即 $n_{\rm next}=n_{\rm in}+\alpha r_n$。展开得到简单混合的算法定义
 \begin{equation}
 n_{\rm next}=(1-\alpha)n_{\rm in}+\alpha n_{\rm out},\qquad 0<\alpha\le1
 \end{equation}
@@ -142,9 +143,16 @@ F_T[n]=\inf_{\Gamma\to n}\left\{\Tr[\Gamma(\hat T+\hat W)]+\kb T\Tr(\Gamma\ln\Ga
 \end{equation}
 再加外势项并对密度最小化，便得到有限温度 DFT 的自由能原则。它与零温的结构相同，只是内部能量换成了内部自由能。
 
-在常用的独立粒子辅助描述中，以化学势 $\mu$ 调节平均电子数，单个自旋轨道可以空着或被占据。若占据概率为 $f_i$，它贡献的熵为 $-\kb[f_i\ln f_i+(1-f_i)\ln(1-f_i)]$。对占据变化极小化相应自由能，得到
+在常用的独立粒子辅助描述中，以化学势 $\mu$ 调节平均电子数。单个自旋轨道只有空着和被占据两种结果，概率分别为 $1-f_i$ 与 $f_i$；代入统计熵的定义 $-\kb\sum_a p_a\ln p_a$，得 $S_i=-\kb[f_i\ln f_i+(1-f_i)\ln(1-f_i)]$。求导时，$\dd(f\ln f)/\dd f=\ln f+1$，$\dd[(1-f)\ln(1-f)]/\dd f=-\ln(1-f)-1$，因此 $\partial S_i/\partial f_i=-\kb\ln[f_i/(1-f_i)]$。
+
+有限温度时，交换关联项也应使用相应的自由能泛函，并由它的导数构造有效势。固定轨道改变 $f_i$，有 $\partial T_s/\partial f_i=\langle\phi_i|-\nabla^2/2|\phi_i\rangle$ 与 $\partial n/\partial f_i=|\phi_i|^2$；其余密度项的导数为 $\int v_s|\phi_i|^2$。因此，除辅助占据熵外的自由能部分，其占据导数就是 $\langle\phi_i|\hat H_s|\phi_i\rangle=\varepsilon_i$。驻定轨道的隐式变化不再产生一阶贡献，这一点将在第九章展开验证。
+
+对辅助系综的自由能减去粒子数约束项 $\mu\sum_i f_i$ 后变分，结合刚算出的熵导数，得到
 \begin{equation}
-\varepsilon_i-\mu+\kb T\ln\frac{f_i}{1-f_i}=0,
-\qquad f_i=\frac1{1+e^{(\varepsilon_i-\mu)/(\kb T)}}.
+\varepsilon_i-\mu+\kb T\ln\frac{f_i}{1-f_i}=0.
 \end{equation}
-这是 Fermi--Dirac 占据，适用于这里以平均粒子数为约束的辅助系综。$T\to0$ 时，低于 $\mu$ 的态被占据，高于它的态为空；有限温度把这一边界变平滑。数值上为帮助积分而引入的展宽不一定是实际电子温度，更不能直接等同于原子核的温度。
+移项并取指数，得到 $f_i/(1-f_i)=e^{(\mu-\varepsilon_i)/(\kb T)}$。记右侧为 $z_i$，则 $f_i=z_i(1-f_i)$，所以 $f_i=z_i/(1+z_i)$。将分子分母同除以 $z_i$，得到 Fermi--Dirac 占据
+\begin{equation}
+f_i=\frac1{1+e^{(\varepsilon_i-\mu)/(\kb T)}}.
+\end{equation}
+它适用于这里以平均粒子数为约束的辅助系综。$T\to0$ 时，低于 $\mu$ 的态使分母中的指数趋零，占据数趋一；高于它的态使指数趋于无穷，占据数趋零。有限温度把这一边界变平滑。数值上为帮助积分而引入的展宽不一定是实际电子温度，更不能直接等同于原子核的温度。

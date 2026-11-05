@@ -1,5 +1,4 @@
 \chapter{Born--Oppenheimer 近似}\label{bo:chapter}
-\sourcepages{手写笔记第 12--18 页}
 \section{先明确两个不同的问题}
 前三章把势能函数 $U(R)$ 当作已知，研究原子怎样运动，以及怎样采样平衡构型。这种安排是先学习一个给定模型的用法，再追问模型的来源；它不表示经典力场已经解释了电子。现在我们从电子与原子核共同组成的量子体系出发，说明在什么条件下能够用一张核坐标的势能面代替显式电子运动。
 
@@ -16,10 +15,12 @@
 \end{equation}
 星号表示复共轭，下标 $r$ 提醒我们只对电子坐标积分，核坐标 $R$ 在积分中固定。归一化是 $\langle\psi|\psi\rangle_r=1$，正交是两个不同态的内积为零。算符 $\hat A$ 是作用在函数上的线性规则，例如电子动能含有二阶微分；归一化态中的平均值为 $\langle\psi|\hat A|\psi\rangle_r$。这一记号表示先让 $\hat A$ 作用在右侧函数，再与左侧函数取内积。
 
-表示能量的 Hamilton 算符具有 Hermitian 性：对其定义域内的态，$\langle a|\hat H b\rangle=\langle\hat H a|b\rangle$。这保证能量本征值为实数，并允许在内积中将算符从右侧作用移到左侧；后面的投影推导将使用这一性质。若 $\hat H\phi=E\phi$，算符作用后只把原函数乘上一个数，我们称 $\phi$ 为本征态，$E$ 为本征值；对能量本征态测量能量会得到 $E$。一般态随时间服从含时 Schrödinger 方程 $\ii\hbar\partial_t\Psi=\hat H\Psi$，其中 $\ii^2=-1$，$\hbar$ 是约化 Planck 常数。对固定的 $\hat H$，单个本征态只获得相位 $e^{-\ii Et/\hbar}$，所以概率密度不随时间改变。一般态则可由不同本征态线性叠加，彼此相对相位会随时间改变。
+表示能量的 Hamilton 算符具有 Hermitian 性：对其定义域内的态，$\langle a|\hat H b\rangle=\langle\hat H a|b\rangle$，因此可在内积中将算符从右侧作用移到左侧。若 $\hat H\phi=E\phi$，算符作用后只把原函数乘上一个数，我们称 $\phi$ 为本征态，$E$ 为本征值；对能量本征态测量能量会得到 $E$。在 Hermitian 关系中取 $a=b=\phi$，得到 $E\langle\phi|\phi\rangle=E^*\langle\phi|\phi\rangle$，所以非零态的本征值必为实数。对两个本征态同理有 $(E_b-E_a)\langle\phi_a|\phi_b\rangle=0$；不同能量的本征态因此正交，同能量的态则可以选成正交基。
+
+一般态随时间服从含时 Schrödinger 方程 $\ii\hbar\partial_t\Psi=\hat H\Psi$，其中 $\ii^2=-1$，$\hbar$ 是约化 Planck 常数。对固定的 $\hat H$，令 $\Psi(t)=c(t)\phi$ 并代入，得到 $\ii\hbar\dot c=Ec$；分离变量积分为 $c(t)=c(0)e^{-\ii Et/\hbar}$。实能量使这个相位因子的模为一，所以单个本征态的概率密度不随时间改变。一般态可由不同本征态线性叠加，彼此相对相位会随时间改变。
 
 \section{从全体系定义固定核电子问题}
-非相对论 Coulomb 模型可写成
+这里以非相对论 Schrödinger 方程、位置表示的动量算符 $\hat{\bm p}=-\ii\hbar\nabla$ 和 Coulomb 定律为量子模型的基本输入。它们不是从前面的经典轨迹推出来的。对质量为 $m$ 的粒子，$\hat{\bm p}^{\,2}/(2m)=(-\ii\hbar)^2\nabla^2/(2m)=-\hbar^2\nabla^2/(2m)$。对每一对电荷只计一次 $q_aq_b/(4\pi\epsilon_0r_{ab})$；分别代入电子电荷 $-e$ 与核电荷 $Z_Ie$，电子--核项为负，同类电荷项为正。将所有核动能单独分组，便得到非相对论 Coulomb 模型
 \begin{align}
 \hat H&=\hat T_N+\hat H_e(R),\qquad \hat T_N=-\sum_I\frac{\hbar^2}{2M_I}\nabla_I^2,\\
 \hat H_e(R)&=-\sum_i\frac{\hbar^2}{2m_e}\nabla_i^2
@@ -76,24 +77,58 @@
 \end{equation}
 这个乘积不是把电子函数写成与核无关的 $\phi_n(r)$：电子态仍然随核构型调整。近似掉的是调整过程中导致通道混合和相应修正的导数作用。研究基态材料时通常选最低电子面 $n=0$，核的有效势能就是 $U(R)=E_0(R)$。
 
-例如在 $\mathrm H_2^+$ 中，每个固定的质子间距都对应一个电子本征问题；把所得电子能量加上质子间排斥，便得到核振动所用的势能曲线。然后才在这条曲线上求核的运动。因此 BO 近似并不是把核在整个计算中永久钉住，而是把“给定核位置求电子”与“利用所得能量求核运动”分层处理。此时\emph{核仍是量子的}；将核进一步视为经典粒子，是另一个近似。
+例如在 $\mathrm H_2^+$ 中，每个固定的质子间距都对应一个电子本征问题。按本章约定，所得 $E_n(R)$ 已包含质子间排斥，就是核振动所用的势能曲线；然后才在这条曲线上求核的运动。若另外用 $\mathcal E_n(R)$ 表示不含核排斥的电子能量，两种记法的关系为 $E_n=\mathcal E_n+E_{NN}$，如图\ref{bo:energy-accounting}所示。因此 BO 近似把“给定核位置求电子”与“利用所得能量求核运动”分层处理。此时\emph{核仍是量子的}；将核进一步视为经典粒子，是另一个近似。
 
-若只丢掉不同面之间的耦合而保留对角修正，在可局域取实且光滑的规范下，归一化给出 $\langle\phi_n|\nabla_I\phi_n\rangle=0$，再对该等式求导可得 $\langle\phi_n|\nabla_I^2\phi_n\rangle=-\langle\nabla_I\phi_n|\nabla_I\phi_n\rangle$。因此势能还有正的对角修正
+\begin{figure}[htbp]
+\centering
+\input{figures/bo-energy-accounting.tex}
+\caption{固定核构型下的能量记账示意。核间排斥使电子能量增加 $E_{NN}(R)$；本章 $H_e$ 的本征值已是相加后的 $E_n(R)$。图中线段只表示同一构型下的能量关系，不是随核间距变化的势能曲线。}
+\label{bo:energy-accounting}
+\end{figure}
+
+若只丢掉不同面之间的耦合而保留对角修正，先在可局域取实且光滑的规范下，对归一化求导。两个实内积相等，因此
+\begin{align}
+0&=\nabla_I\langle\phi_n|\phi_n\rangle
+=2\langle\phi_n|\nabla_I\phi_n\rangle,\\
+0&=\nabla_I\cdot\langle\phi_n|\nabla_I\phi_n\rangle
+=\langle\nabla_I\phi_n|\nabla_I\phi_n\rangle
++\langle\phi_n|\nabla_I^2\phi_n\rangle.
+\end{align}
+第一式使对角一阶导数耦合为零，第二式给出 $\tau_{nn}^I=-\langle\nabla_I\phi_n|\nabla_I\phi_n\rangle$。将它代入核方程中的 $-\hbar^2\tau_{nn}^I/(2M_I)$，就得到正的对角修正
 \begin{equation}
 U_{\rm DBOC}=\sum_I\frac{\hbar^2}{2M_I}\langle\nabla_I\phi_n|\nabla_I\phi_n\rangle.
 \end{equation}
 不能在所有拓扑或简并情形下全局选择这种实规范；一般单面理论还含几何矢势。本书使用最低阶 BO 力学时默认远离这类情形。“Born--Huang 展开”通常指前节的通道展开，不应把这一名称直接定义为某一个删项方案。
 
 \section{从核波包到经典轨迹}
-量子平均值的运动与经典轨迹并不自动相同。为比较二者，定义两个算符的对易子 $[\hat A,\hat B]=\hat A\hat B-\hat B\hat A$；它衡量交换作用顺序是否改变结果。核动量在位置表示中是 $\hat{\bm P}_I=-\ii\hbar\nabla_I$。例如将位置乘法与动量微分依次作用在任意光滑函数上，用乘积求导便得 $[\hat R_\alpha,\hat P_\beta]=\ii\hbar\delta_{\alpha\beta}$。
-对量子平均值求时间导数，并使用 Schrödinger 方程，得到 Ehrenfest 恒等式 $\dd\langle\hat A\rangle/\dd t=\langle\partial_t\hat A\rangle+\langle[\hat A,\hat H]\rangle/(\ii\hbar)$。取核位置与动量，利用 $[\hat R_\alpha,\hat P_\beta]=\ii\hbar\delta_{\alpha\beta}$，便有
+量子平均值未必沿经典轨迹运动。为比较二者，先定义对易子 $[\hat A,\hat B]=\hat A\hat B-\hat B\hat A$；它衡量交换两个算符的作用顺序是否改变结果。核动量在位置表示中是 $\hat{\bm P}_I=-\ii\hbar\nabla_I$。对任意光滑函数 $f$，乘积求导给出 $[\hat R_\alpha,\hat P_\beta]f=-\ii\hbar R_\alpha\partial_\beta f+\ii\hbar\partial_\beta(R_\alpha f)=\ii\hbar\delta_{\alpha\beta}f$，所以 $[\hat R_\alpha,\hat P_\beta]=\ii\hbar\delta_{\alpha\beta}$。
+
+从 $\ii\hbar|\dot\Psi\rangle=\hat H|\Psi\rangle$ 及其共轭转置出发，对平均值的三个因子逐个求导：
+\begin{align}
+\frac{\dd\langle\hat A\rangle}{\dd t}
+&=\langle\dot\Psi|\hat A|\Psi\rangle
++\langle\Psi|\partial_t\hat A|\Psi\rangle
++\langle\Psi|\hat A|\dot\Psi\rangle\\
+&=\frac{\ii}{\hbar}\langle\hat H\hat A\rangle
+-\frac{\ii}{\hbar}\langle\hat A\hat H\rangle
++\langle\partial_t\hat A\rangle
+=\frac{\langle[\hat A,\hat H]\rangle}{\ii\hbar}
++\langle\partial_t\hat A\rangle.
+\end{align}
+这就是 Ehrenfest 恒等式。对单面核 Hamilton 算符，$[\hat R_\alpha,\hat P_\alpha^2]=[\hat R_\alpha,\hat P_\alpha]\hat P_\alpha+\hat P_\alpha[\hat R_\alpha,\hat P_\alpha]=2\ii\hbar\hat P_\alpha$；而乘积求导给出 $[\hat P_\alpha,E_n]f=-\ii\hbar(\partial_\alpha E_n)f$。因此
 \begin{equation}
 \frac{\dd\langle\bm R_I\rangle}{\dd t}=\frac{\langle\bm P_I\rangle}{M_I},\qquad
 \frac{\dd\langle\bm P_I\rangle}{\dd t}=-\langle\nabla_I E_n(R)\rangle.
 \end{equation}
 要把右侧换成 $-\nabla_I E_n(\langle R\rangle)$，还需波包在势能变化尺度上足够窄。对力在平均位置附近展开，线性涨落项平均为零，下一项与位置协方差及力的二阶导数相乘；只有这一修正小，经典封闭方程才合理。
 
-热 de Broglie 波长的常用约定是 $\lambda_{\rm th}=h_{\rm P}/\sqrt{2\pi M\kb T}$，其中 $h_{\rm P}=2\pi\hbar$。大质量和高温有利于经典极限，但轻核的零点运动和隧穿仍可能重要。对一个振动频率 $\omega$，$\hbar\omega\ll\kb T$ 是忽略该模量子占据效应的有用判断。
+热 de Broglie 波长可从一个自由粒子的平动配分函数定义出来。每个量子态在相空间占据体积 $h_{\rm P}^3$，其中 $h_{\rm P}=2\pi\hbar$；利用第一章的高斯积分，
+\begin{equation}
+Z_1=\frac{V}{h_{\rm P}^3}\int e^{-\beta P^2/(2M)}\dd^3P
+=\frac{V(2\pi M\kb T)^{3/2}}{h_{\rm P}^3}
+\equiv\frac{V}{\lambda_{\rm th}^3}.
+\end{equation}
+由最后一个等号解得 $\lambda_{\rm th}=h_{\rm P}/\sqrt{2\pi M\kb T}$。它变小有利于经典极限，但还应与粒子间距和势能变化尺度比较。对相邻能级间隔为 $\hbar\omega$ 的振动模，$\hbar\omega\ll\kb T$ 使相邻能级 Boltzmann 权重比 $e^{-\beta\hbar\omega}$ 接近一，大量能级参与；第十一章将由能级求和验证此时的经典能量极限。轻核的零点运动和隧穿仍可能重要。
 
 \section{Hellmann--Feynman 力为什么成立}
 设归一化电子态是精确本征态。对 $E_n=\langle\phi_n|\hat H_e|\phi_n\rangle$ 求导，得到三项：

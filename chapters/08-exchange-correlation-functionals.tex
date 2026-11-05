@@ -1,8 +1,13 @@
 % 避免本章目录标题孤悬在上一页末尾。
 \addtocontents{toc}{\protect\newpage}
 \chapter{交换关联近似：把未知泛函变成计算}
-\sourcepages{手写笔记第 41--43 页}
 KS 方程把未知部分集中在 $E_{xc}$，却没有给出它的具体形式。本章从一个问题出发：为了描述电子怎样共同分布，还需要在近似中加入什么物理信息？
+
+先明确本章“关联能”的参考。对可由单个 KS 行列式表示的密度，记该辅助行列式为 $\Phi_s[n]$；它在给定密度下给出 $T_s[n]$。沿用第五章的交换积分，其相互作用期望值可分为 $E_H[n]+E_x[n]$。因此 DFT 中的关联泛函定义为
+\begin{equation}
+E_c[n]=F[n]-T_s[n]-E_H[n]-E_x[n],\qquad E_{xc}[n]=E_x[n]+E_c[n].
+\end{equation}
+它比较的是给定密度下的内部能量与 KS 参考态。第六章的 $E_{\rm exact}-E_{\rm HF}$ 则以对真实 Hamilton 算符优化得到的 HF 态为参考；HF 态的密度一般也不同。因此两者虽然都描述超出行列式参考的关联，却不是一般可互换的同一个数。本章下面的 $E_c^{\rm PBE}$ 等记号均指 DFT 关联泛函的近似。
 
 \section{LDA：用同密度的均匀电子气作参照}
 先考虑密度处处相同的电子气，并用均匀正电背景保持电中性。平移对称性使所有位置等价，我们可以用一个数 $\epsilon_{xc}^{\rm unif}(n)$ 表示每个电子的交换关联能。交换部分来自反对称性：给定一个电子的位置，同自旋电子在它附近出现的概率受到抑制。关联部分则进一步描述电子在 Coulomb 排斥下相互避开，以及伴随这种调整的动能变化。
@@ -32,54 +37,82 @@ E_{xc}^{\rm GGA}[n]=\int g(n,\nabla n)\dd\bm r.
 \delta E_{xc}=\int\left[\frac{\partial g}{\partial n}\delta n+
 \frac{\partial g}{\partial(\nabla n)}\cdot\nabla\delta n\right]\dd\bm r.
 \end{equation}
-在周期边界或边界变化消失时，第二项分部积分，把导数从 $\delta n$ 移到它的系数上。因此
+令 $\bm a=\partial g/\partial(\nabla n)$，用乘积法则 $\nabla\cdot(\bm a\delta n)=(\nabla\cdot\bm a)\delta n+\bm a\cdot\nabla\delta n$，得到
+\begin{equation}
+\int\bm a\cdot\nabla\delta n\,\dd\bm r
+=\oint\delta n\,\bm a\cdot\dd\bm S
+-\int(\nabla\cdot\bm a)\delta n\,\dd\bm r.
+\end{equation}
+周期边界的相对两面贡献抵消；若边界变分为零，表面项也消失。剩余的一阶变分全都乘以 $\delta n$，读出其系数便有
 \begin{equation}
 v_{xc}=\frac{\partial g}{\partial n}-\nabla\cdot\frac{\partial g}{\partial(\nabla n)}.
 \end{equation}
 密度的变化既改变本地输入，也改变周围的梯度，所以势不再只是对 $n$ 作普通偏导。
 
-meta-GGA 再加入如轨道动能密度
+轨道动能还给出一个局部量。对每条轨道分部积分，在周期边界或波函数足够快衰减时，$-\tfrac12\int\phi_i^*\nabla^2\phi_i\dd\bm r=\tfrac12\int\nabla\phi_i^*\cdot\nabla\phi_i\dd\bm r$。按占据数求和，就有 $T_s=\int\tau(\bm r)\dd\bm r$，其中定义正的轨道动能密度
 \begin{equation}
 \tau(\bm r)=\frac12\sum_i f_i|\nabla\phi_i(\bm r)|^2
 \end{equation}
-这样的信息。即使两处有相同的 $n$ 和 $\nabla n$，组成它们的轨道仍可能具有不同的空间变化；$\tau$ 帮助近似辨别这种差别。它仍以每个位置附近的信息为主，并没有自动包含相隔很远的电子涨落关联。由于引入了轨道依赖，实际变分也可能得到比局域乘法势更一般的算符。
+meta-GGA 将这样的量也作为输入。即使两处有相同的 $n$ 和 $\nabla n$，组成它们的轨道仍可能具有不同的空间变化；$\tau$ 帮助近似辨别这种差别。它仍以每个位置附近的信息为主，并没有自动包含相隔很远的电子涨落关联。由于引入了轨道依赖，实际变分也可能得到比局域乘法势更一般的算符。
 
 \section{混合泛函：为什么借用一部分 HF 交换}
 再做一个最简单的物理检查：只有一个电子时，它不应与自己相互排斥。然而由密度构造的经典项 $E_H[n]$ 仍为正，因为电荷云的不同部分在公式中相互作用。精确理论必须用 $E_{xc}=-E_H$ 抵消它，此时 $T_s=T$，也没有真实的电子间关联。
 
 HF 交换对占据轨道的自相互作用能够精确抵消，但一般的 LDA、GGA 未必做得到。自相互作用残留会影响电子局域程度和能量。这提供了引入一部分 Fock 型交换的动机。该交换在当前轨道上按交换积分计算，记为 $E_x^{\rm exact}$；“精确”只修饰这一交换表达式，不表示总能量或多体关联已经精确。
 
-全局混合泛函在所有距离使用同一个交换比例。例如 PBE0 取
+全局混合泛函在所有距离使用同一个交换比例。以 PBE 为起点，定义用 Fock 型交换替换比例 $\alpha$ 的模型：$E_{xc}^{\rm mix}=E_x^{\rm PBE}+E_c^{\rm PBE}+\alpha(E_x^{\rm exact}-E_x^{\rm PBE})$。将同类项合并，便有 $\alpha E_x^{\rm exact}+(1-\alpha)E_x^{\rm PBE}+E_c^{\rm PBE}$。PBE0 选择 $\alpha=1/4$，代入得到
 \begin{equation}
 E_{xc}^{\rm PBE0}=\frac14E_x^{\rm exact}+\frac34E_x^{\rm PBE}+E_c^{\rm PBE}.
 \end{equation}
-它以四分之一的 Fock 型交换替换相应比例的 PBE 交换，相关部分仍采用 PBE。B3LYP 采用另一种组合，含 $20\%$ 的 Fock 型交换，并结合局域项、B88 梯度交换修正和 LYP 相关。
+这里的四分之一是 PBE0 模型构造中的比例选择，不能由上述代数或自相互作用抵消条件唯一确定；相关部分仍采用 PBE。B3LYP 采用另一种组合，含作为该模型参数的 $20\%$ Fock 型交换，并结合局域项、B88 梯度交换修正和 LYP 相关。
 
 混合泛函通常只能部分改善自相互作用与相关误差。Fock 型交换的变分产生非局域算符，故这类计算通常称为广义 Kohn--Sham（广义 KS）计算。它与上一章的局域 KS 方程有相同的自洽思路，但有效算符的形式不同。
 
 \section{范围分离与介电屏蔽：远处的电子怎样影响这里}
 固体中，电子引起的周围电荷重排会减弱它在远处产生的有效作用，这就是屏蔽。全局混合对所有距离使用相同交换比例；范围分离则分别处理短程和长程。
 
-用误差函数 $\operatorname{erf}$ 及其互补函数 $\operatorname{erfc}=1-\operatorname{erf}$，可以严格分解 Coulomb 核：
+定义误差函数 $\operatorname{erf}(x)=2\pi^{-1/2}\int_0^x e^{-t^2}\dd t$，其互补函数为 $\operatorname{erfc}(x)=1-\operatorname{erf}(x)$。后者是定义，因此两者之和恒为一；将这个恒等式除以 $r$，就严格分解了 Coulomb 核：
 \begin{equation}
 \frac1r=\frac{\operatorname{erfc}(\omega r)}r+
 \frac{\operatorname{erf}(\omega r)}r.
 \end{equation}
 这里 $r$ 是两点间距。对非负参数，$\operatorname{erf}$ 从零平滑增大并趋近一；因此当距离增大时，第一项迅速衰减，第二项趋近 $1/r$，分别用于构造短程和长程交换。$\omega$ 的量纲是长度的倒数，$1/\omega$ 给出两种处理之间的过渡尺度。
 
-HSE 的基本选择是只在短程混入 Fock 型交换：
+HSE 的基本选择是只在短程混入 Fock 型交换。先按所选核分解将 PBE 交换写成 $E_x^{\rm PBE,SR}+E_x^{\rm PBE,LR}$，再加上替换项 $\tfrac14(E_x^{\rm exact,SR}-E_x^{\rm PBE,SR})$。将短程 PBE 的系数 $1-1/4$ 合并，并保留原相关项，得到
 \begin{equation}
 E_{xc}^{\rm HSE}=\frac14E_x^{\rm exact,SR}
 +\frac34E_x^{\rm PBE,SR}+E_x^{\rm PBE,LR}+E_c^{\rm PBE}.
 \end{equation}
 SR、LR 分别表示按上述分解得到的短程、长程部分。它并没有删去长程交换，而是在长程保留 PBE 近似。作为检查，$\omega\to0$ 时短程核恢复整个 $1/r$，该式回到 PBE0；$\omega\to\infty$ 时短程部分消失，回到 PBE。改变范围参数是在改变交换近似，不只是改变计算精度。
 
-另一条思路是让交换比例反映材料的电子屏蔽能力。在均匀、宏观的简化图像中，长程作用约被介电常数除弱，于是得到介电依赖混合的启发式关系 $\alpha\approx1/\epsilon_\infty$。这里 $\epsilon_\infty$ 指固定离子位置时的电子介电响应，不包括离子移动的贡献。屏蔽强时采用较少的裸 Fock 型交换，屏蔽弱时采用较多。若介电常数也由同一计算求出，就需要让交换比例与算得的响应彼此一致。这是模型选择的物理依据，并不是对任意非均匀材料都严格成立的恒等式。
+另一条思路是让交换比例反映材料的电子屏蔽能力。在均匀、宏观的简化图像中，长程作用近似为 $1/(\epsilon_\infty r)$；若用比例 $\alpha$ 的裸交换模拟这一作用，就令 $\alpha/r\approx1/(\epsilon_\infty r)$。两边乘 $r$，得到介电依赖混合的启发式关系 $\alpha\approx1/\epsilon_\infty$。这里 $\epsilon_\infty$ 指固定离子位置时的电子介电响应，不包括离子移动的贡献。屏蔽强时采用较少的裸 Fock 型交换，屏蔽弱时采用较多。若介电常数也由同一计算求出，就需要让交换比例与算得的响应彼此一致。这是模型选择的物理依据，并不是对任意非均匀材料都严格成立的恒等式。
 
 \section{色散：平均密度不变，涨落仍能相互关联}
 两个相距很远的中性原子即使都没有永久偶极，也会相互吸引。关键是电子云存在瞬时涨落：一个原子的瞬时偶极影响另一个原子的电子分布，使两者的涨落发生关联。平均偶极为零，并不意味着偶极之间的关联为零。
 
-局域与半局域泛函主要读取每处的密度及邻近变化。当两个片段的密度几乎不重叠时，这些输入接近各自孤立时的输入，能量也接近简单相加，因而一般缺少正确的长程色散吸引。对两个远离的有限中性片段，常见的主导形式是 $-C_6/R^6$。成对修正据此写成
+局域与半局域泛函主要读取每处的密度及邻近变化。当两个片段的密度几乎不重叠时，这些输入接近各自孤立时的输入，能量也接近简单相加，因而一般缺少正确的长程色散吸引。
+
+第六章的二阶微扰能说明 $R^{-6}$ 从哪里来。考虑两个无永久偶极、具有非简并球对称基态的有限中性片段，间距远大于片段尺寸，但仍忽略电磁传播迟滞。令 $\widehat{\bm R}=\bm R/R$，片段内两个电荷的相对偏移为 $\bm\delta$。Coulomb 核的远距离展开为
+\begin{equation}
+\frac1{|\bm R+\bm\delta|}
+=\frac1R-\frac{\widehat{\bm R}\cdot\bm\delta}{R^2}
++\frac{3(\widehat{\bm R}\cdot\bm\delta)^2-\delta^2}{2R^3}
++O(R^{-4}).
+\end{equation}
+它由 $R^{-1}(1+z)^{-1/2}$ 的 Taylor 展开得到，其中 $z=2\widehat{\bm R}\cdot\bm\delta/R+\delta^2/R^2$，保留 $1-z/2+3z^2/8$ 中到二阶的位移项。对片段间所有电荷对求和，中性条件使常数项和一次项为零，二次项中只依赖单一片段的项也为零。写 $\bm\delta=\bm r_b-\bm r_a$，其交叉项留下偶极--偶极算符
+\begin{equation}
+\hat V_{AB}=\frac{\hat Q}{R^3},\qquad
+\hat Q=\hat{\bm d}_A\cdot\hat{\bm d}_B
+-3(\hat{\bm d}_A\cdot\widehat{\bm R})(\hat{\bm d}_B\cdot\widehat{\bm R}),
+\end{equation}
+其中 $\hat{\bm d}_A=\sum_{a\in A}q_a\bm r_a$，B 同理，仍采用原子单位。一阶能量是 $\langle0_A0_B|\hat V_{AB}|0_A0_B\rangle$；无永久偶极使它为零。二阶则由式\eqref{corr:second-order}给出
+\begin{equation}
+\Delta E^{(2)}=-\frac1{R^6}
+\sum_{m,n\ne0}\frac{|\langle m_An_B|\hat Q|0_A0_B\rangle|^2}
+{(E_m^A-E_0^A)+(E_n^B-E_0^B)}
+\equiv-\frac{C_6}{R^6}.
+\end{equation}
+分母是正的激发能，故定义出的 $C_6$ 非负。距离的六次幂来自 $R^{-3}$ 的耦合矩阵元被平方；吸引来自二阶能量分母的负号。将这一渐近结果推广为原子对的经验修正，并加入短程阻尼，便采用
 \begin{equation}
 E_{\rm disp}=-\sum_{A<B}d(R_{AB})\frac{C_{6,AB}}{R_{AB}^6}+\cdots.
 \end{equation}

@@ -1,0 +1,17 @@
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.78\linewidth,height=5.5cm,
+  xlabel={构型能量差与耦合之比 $\Delta/|V|$},
+  ylabel={第二构型权重 $w_1$},
+  xmin=0,xmax=6,ymin=0,ymax=0.55,
+  xtick={0,1,2,4,6},ytick={0,0.1,0.25,0.5},
+  tick label style={font=\small},label style={font=\small},
+  axis lines=left,grid=major,grid style={gray!20}]
+\addplot[thick,blue!65!black,domain=0:6,samples=121]
+  {0.5*(1-x/sqrt(x*x+4))};
+\addplot[dashed,gray] coordinates {(4,0) (4,0.0527864045)};
+\addplot[only marks,mark=*,orange!75!black]
+  coordinates {(4,0.0527864045)};
+\node[anchor=south,font=\small] at (axis cs:4,0.09) {正文算例：$5.28\%$};
+\end{axis}
+\end{tikzpicture}

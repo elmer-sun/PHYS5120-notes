@@ -1,15 +1,18 @@
 \chapter{力场、边界与可观测量}
-\sourcepages{手写笔记第 5--10 页}
 \section{势能模型怎样决定计算的问题}
-上一章假定已知 $U(R)$。现在必须说明它包含什么物理。分子中常把键伸缩和键角变化近似成平衡附近的谐振动，例如 $U_b=k_b(r-r_0)^2/2$。它来自势能在极小值附近的 Taylor 展开，一阶导数为零，二阶导数 $k_b$ 给出刚度。这种展开适合小振幅，不能可靠描述断键。
+上一章假定已知 $U(R)$。现在必须说明它包含什么物理。对键长在平衡值 $r_0$ 附近展开，令 $\delta r=r-r_0$，有 $U(r)=U(r_0)+U'(r_0)\delta r+U''(r_0)\delta r^2/2+O(\delta r^3)$。极小值处 $U'(r_0)=0$；选择 $U(r_0)$ 为零点，并定义刚度 $k_b=U''(r_0)$，保留到二阶就得到 $U_b=k_b(r-r_0)^2/2$。键角的小变化可作同样展开。这种谐近似适合小振幅，不能可靠描述断键。
 
-非键作用常包含 Coulomb 项与短程排斥、色散项。以中性稀有气体的简单模型为例，Lennard--Jones 对势为
+非键作用常包含 Coulomb 项与短程排斥、色散项。以中性稀有气体的简单模型为例，先选择经验形式 $u(r)=A/r^{12}-B/r^6$，其中 $A,B>0$。这是一种模型假设，并非从经典力学推出的定律。令势能过零的位置为 $\sigma$，则 $A=B\sigma^6$；令 $y=(\sigma/r)^6$，势能成为 $(B/\sigma^6)(y^2-y)$。配方 $y^2-y=(y-1/2)^2-1/4$ 表明势阱深度为 $B/(4\sigma^6)$。将它定义为 $\epsilon$，就有 $B=4\epsilon\sigma^6$、$A=4\epsilon\sigma^{12}$，得到 Lennard--Jones 对势
 \begin{equation}
 u(r)=4\epsilon[(\sigma/r)^{12}-(\sigma/r)^6],\qquad U=\sum_{i<j}u(r_{ij}).
 \end{equation}
 $\epsilon$ 是势阱深度，$\sigma$ 是势能过零的距离，$r_{ij}=|\bm r_i-\bm r_j|$。远距离 $r^{-6}$ 吸引反映瞬时偶极涨落之间的量子相关；诱导偶极的能量标度也提示这一幂律，但不能把它当成 London 色散的完整推导。$r^{-12}$ 是方便的经验排斥形式，不是普适定律。
 
-令 $\bm r_{ij}=\bm r_i-\bm r_j$。利用 $\nabla_i r_{ij}=\bm r_{ij}/r_{ij}$ 求导得
+令 $\bm r_{ij}=\bm r_i-\bm r_j$。由 $r_{ij}^2=\bm r_{ij}\cdot\bm r_{ij}$ 求导，$2r_{ij}\nabla_i r_{ij}=2\bm r_{ij}$，故 $\nabla_i r_{ij}=\bm r_{ij}/r_{ij}$。先对距离求导：
+\begin{equation}
+u'(r)=4\epsilon[-12\sigma^{12}r^{-13}+6\sigma^6r^{-7}].
+\end{equation}
+再用链式法则 $\bm F_{ij}=-u'(r_{ij})\bm r_{ij}/r_{ij}$，得到
 \begin{equation}
 \bm F_{ij}=24\epsilon[2\sigma^{12}/r_{ij}^{14}-\sigma^6/r_{ij}^8]\bm r_{ij}.
 \end{equation}
@@ -18,20 +21,25 @@ $\epsilon$ 是势阱深度，$\sigma$ 是势能过零的距离，$r_{ij}=|\bm r_
 势能应在整体平移、整体转动以及相同粒子置换下不变。若机器学习模型拟合势能，再以负梯度给力，这些对称性与能量一致性仍是模型的一部分。训练误差小只说明在训练分布附近拟合好，不能代替对新构型的检验。
 
 \section{约化单位、截断与周期边界}
-Lennard--Jones 模型有自然单位 $\sigma,\epsilon,m$。令 $r^*=r/\sigma$、$T^*=\kb T/\epsilon$、$t^*=t/\tau$，其中 $\tau=\sigma\sqrt{m/\epsilon}$。代入 $m\ddot r=F$，质量和能量标度消去，得到只含无量纲变量的方程。“令 $m=\epsilon=\sigma=1$”是在选择单位，不是把实际粒子性质改成一。
+Lennard--Jones 模型有自然单位 $\sigma,\epsilon,m$。定义 $r^*=r/\sigma$、$U^*=U/\epsilon$、$T^*=\kb T/\epsilon$，再令 $t=\tau t^*$。链式求导给出 $\ddot r=(\sigma/\tau^2)\dd^2r^*/\dd t^{*2}$ 和 $F=-(\epsilon/\sigma)\partial U^*/\partial r^*$。Newton 方程于是为
+\begin{equation}
+\frac{m\sigma^2}{\epsilon\tau^2}\frac{\dd^2r^*}{\dd t^{*2}}
+=-\frac{\partial U^*}{\partial r^*}.
+\end{equation}
+选择 $\tau^2=m\sigma^2/\epsilon$，即 $\tau=\sigma\sqrt{m/\epsilon}$，左侧系数变成一。这就是只含无量纲变量的运动方程。“令 $m=\epsilon=\sigma=1$”是在选择单位，不是把实际粒子性质改成一。
 
-直接在 $r_c$ 之外把势能设零会产生能量跳跃。平移截断 $u_s(r)=u(r)-u(r_c)$（$r<r_c$）使势连续，却仍使力跳变。若需要力也连续，可用
+直接在 $r_c$ 之外把势能设零会产生能量跳跃。若内部仅加常数 $a$，连续条件 $u(r_c)+a=0$ 给出 $a=-u(r_c)$，即平移截断 $u_s(r)=u(r)-u(r_c)$。它不改变内部导数，故力通常仍在边界跳变。若允许加线性项 $a+b(r-r_c)$，势与力同时连续要求 $u(r_c)+a=0$、$u'(r_c)+b=0$。解得 $a=-u(r_c)$、$b=-u'(r_c)$，因而
 \begin{equation}
 u_{sf}(r)=u(r)-u(r_c)-(r-r_c)u'(r_c),\quad r<r_c,
 \end{equation}
 外部为零。这会在截断内部也改变力，因而是模型修改。比较结果时必须报告截断方式，而不只报告截断距离。
 
-有限盒子的表面比例过大，周期边界通过无限复制盒子模拟体相环境。立方盒边长 $L$ 时，将相对坐标逐分量变为 $\Delta x\mapsto\Delta x-L\operatorname{round}(\Delta x/L)$，得到最小镜像。短程球形截断通常要求 $r_c<L/2$，否则一个粒子的多个镜像可能进入作用范围。长程 Coulomb 相互作用不能由这一短程近似可靠处理。
+有限盒子的表面比例过大，周期边界通过无限复制盒子模拟体相环境。立方盒边长 $L$ 时，一个方向上的等价间距为 $\Delta x-nL$，$n$ 为整数。要使其绝对值最小，应选离 $\Delta x/L$ 最近的整数，故最小镜像映射为 $\Delta x\mapsto\Delta x-L\operatorname{round}(\Delta x/L)$。三个方向分别执行即可。相邻镜像相距至少 $L$；若两个镜像都落入半径 $r_c$ 的球，三角不等式要求 $L\le2r_c$。因此 $r_c<L/2$ 能排除重复镜像。长程 Coulomb 相互作用不能由这一短程近似可靠处理。
 
 计算扩散时另有一个关键区别：用于求力的坐标可以折回盒内，但位移必须用记录跨边界次数的展开坐标。如果把每次跨边界都看成跳回盒子的另一端，算出的运动距离将完全错误。
 
 \section{怎样从快照得到结构}
-平均数密度为 $\rho=N/V$。在均匀各向同性体系中，给定一个粒子后，在半径 $r$、厚度 $\dd r$ 的球壳中找到其他粒子的平均数定义为
+平均数密度定义为 $\rho=N/V$。在均匀各向同性体系中，给定一个粒子后，将距离 $r$ 处的条件数密度定义为 $\rho g(r)$。半径 $r$ 的球体体积为 $4\pi r^3/3$，对 $r$ 求导得薄壳体积 $4\pi r^2\dd r$；条件密度乘以壳体积，就是其中的平均其他粒子数：
 \begin{equation}
 \dd N(r)=4\pi r^2\rho g(r)\dd r.
 \end{equation}
@@ -40,34 +48,102 @@ $g(r)$ 因而是相对于无关联分布的局部概率增强。计算时对每�
 第一峰表示优选近邻距离；峰后第一个谷值以内的配位数为 $4\pi\rho\int_0^{r_{\min}}r^2g(r)\dd r$。立方盒中一般只分析 $r<L/2$ 的完整球壳，避免几何截断。
 
 \section{扩散为何与均方位移相连}
-宏观上，浓度 $c$ 的梯度引起粒子流密度 $\bm j=-D\nabla c$。结合粒子数守恒 $\partial_t c+\nabla\cdot\bm j=0$，若 $D$ 为常数，得到扩散方程 $\partial_t c=D\nabla^2 c$。对起点在原点、总概率为一的传播分布 $c$，在无穷远边界项消失的条件下分部积分两次：
-\begin{equation}
-\frac{\dd}{\dd t}\int r^2c\,\dd^dr=D\int c\nabla^2r^2\,\dd^dr=2dD.
-\end{equation}
-于是三维中 $\langle|\Delta\bm r(t)|^2\rangle=6Dt$。微观轨迹的短时位移是 $\bm v(0)t$，均方位移正比于 $t^2$；只有速度记忆丧失后的扩散区才能用线性斜率估计 $D$。局域振动形成的平台也不是扩散区。
+先在平衡液体中标记一个粒子，问它经过时间 $t$ 后移动了多远。令 $p(\bm r,t)$ 为该粒子位移的概率密度，满足 $\int p\,\dd^dr=1$，其中 $d$ 是空间维数。这里 $\bm r$ 表示相对初始位置的位移，$p$ 描述同一个粒子的运动，不是所有粒子的数密度。
 
-平衡体系中定义 $C_v(t)=\langle\bm v(t)\cdot\bm v(0)\rangle$。将 $\Delta\bm r=\int_0^t\bm v(s)\dd s$ 代入均方位移，并用平稳性把双重积分化成时间差积分：
+在没有平均漂移、均匀各向同性且存在正常扩散的长时间尺度上，用概率流 $\bm j_p=-D\nabla p$ 描述这种扩散。结合概率守恒 $\partial_t p+\nabla\cdot\bm j_p=0$，常数 $D$ 给出扩散方程 $\partial_t p=D\nabla^2p$。它是已经忽略短时速度记忆的有效描述。在无穷远边界项消失的条件下分部积分两次，得到
+\begin{align}
+\frac{\dd}{\dd t}\int r^2p\,\dd^dr
+&=D\int r^2\nabla^2p\,\dd^dr
+=-D\int\nabla r^2\cdot\nabla p\,\dd^dr\\
+&=D\int p\nabla^2r^2\,\dd^dr=2dD.
+\end{align}
+这里 $r^2=\sum_{\alpha=1}^d r_\alpha^2$，每一项的二阶导数为二，所以 $\nabla^2r^2=2d$；最后再用概率归一化。因此三维中均方位移的长时间斜率为 $6D$，所得 $D$ 称为\emph{自扩散系数}。若把点源初态的扩散方程从 $t=0$ 起作为理想模型，从零初始位移积分就有 $\langle|\Delta\bm r(t)|^2\rangle=6Dt$；真实微观轨迹在短时却有 $\Delta\bm r\simeq\bm v(0)t$，均方位移正比于 $t^2$。实际拟合应选取长时间线性区，并允许截距非零；局域振动形成的平台也不是扩散区。
+
+宏观浓度梯度引起的流也常写成 Fick 形式 $\bm j_c=-D_c\nabla c$，但此时跟踪的是浓度分布的集体变化。$D_c$ 与这里跟踪标记粒子所得的 $D$ 一般不同，不能仅因两条方程形式相同就将它们等同。
+
+平衡体系中定义 $C_v(t)=\langle\bm v(t)\cdot\bm v(0)\rangle$。位移是速度积分，故
+\begin{align}
+\langle|\Delta\bm r(t)|^2\rangle
+&=\int_0^t\dd s\int_0^t\dd s'\,
+\langle\bm v(s)\cdot\bm v(s')\rangle\\
+&=2\int_0^t\dd s\int_0^s\dd s'\,C_v(s-s').
+\end{align}
+第二步先用平稳性将相关写成时间差，再利用两个三角形积分区域对称。内层令 $u=s-s'$，积分区域变成 $0\le u\le s\le t$；交换次序时，对每个固定 $u$，$s$ 的区间长度是 $t-u$，所以
 \begin{equation}
 \langle|\Delta\bm r(t)|^2\rangle=2\int_0^t(t-s)C_v(s)\dd s.
 \end{equation}
-求导并取长时间极限，即得 Green--Kubo 形式
+用积分求导法则，上限项因 $t-s=0$ 消失，得到 $\dd\langle|\Delta\bm r|^2\rangle/\dd t=2\int_0^t C_v(s)\dd s$。令 $t\to\infty$，左侧等于已定义的 $6D$，两边除以六，即得 Green--Kubo 形式
 \begin{equation}
 D=\frac13\int_0^\infty C_v(s)\dd s.
 \end{equation}
 前提是相关函数可积且存在正常扩散极限。多粒子自扩散取各粒子自身相关的平均，不能随意加入不同粒子间的交叉项。速度相关的 Fourier 谱能显示振动频率；只有在适当谐性、质量加权和归一化条件下，才能把它直接解释为振动态密度。
 
 \section{电输运为何不能只看单粒子扩散}
-令展开坐标形成的电偶极矩为 $\bm M=\sum_iq_i\bm r_i$，总电流为 $\bm J=\dot{\bm M}$。各向同性平衡系统的线性响应给出
+令展开坐标形成的电偶极矩为 $\bm M=\sum_iq_i\bm r_i$，求导得到总电流 $\bm J=\dot{\bm M}=\sum_iq_i\bm v_i$。从无外场平衡体系出发，施加弱的均匀电场 $\bm E(t)$。电荷在场中的势能使 Hamilton 函数改变为 $H=H_0-\bm E(t)\cdot\bm M$。下面保留外场的一阶项，推导电流响应。
+
+定义 Poisson 括号 $\{A,B\}=\sum_a(\partial_{q_a}A\,\partial_{p_a}B-\partial_{p_a}A\,\partial_{q_a}B)$，其中 $a$ 遍历所有坐标分量。代入 Hamilton 方程可知 $\dot A=\{A,H\}$。概率守恒要求 $\partial_t\rho+\nabla_\Gamma\cdot(\rho\dot\Gamma)=0$；Hamilton 速度场的散度为 $\sum_a(\partial_{q_a}\partial_{p_a}H-\partial_{p_a}\partial_{q_a}H)=0$，于是 $\partial_t\rho=-\{\rho,H\}$。
+
+令 $\rho=\rho_0+\delta\rho$，其中 $\rho_0=Z^{-1}e^{-\beta H_0}$。利用链式法则，$\{\rho_0,M_\alpha\}=-\beta\rho_0\{H_0,M_\alpha\}=\beta\rho_0J_\alpha$。丢掉 $\delta\rho$ 与电场的乘积，得到
+\begin{equation}
+(\partial_t+\mathcal L_0)\delta\rho
+=\beta\rho_0\sum_\alpha E_\alpha(t)J_\alpha,
+\qquad \mathcal L_0 A=\{A,H_0\}.
+\end{equation}
+这里 $\mathcal L_0$ 表示沿无外场轨迹的导数。把从初始相点 $\Gamma$ 出发、经过时间 $t$ 的相点记为 $\Phi_t\Gamma$，定义传播记号 $e^{t\mathcal L_0}A(\Gamma)=A(\Phi_t\Gamma)$。密度满足相反符号的演化，故用 $e^{-t\mathcal L_0}$ 传播。若初始扰动为零，把每一时刻产生的源沿无外场轨迹传播并相加，即得
+\begin{equation}
+\delta\rho(t)=\beta\int_0^t e^{-(t-s)\mathcal L_0}
+\left[\rho_0\sum_\alpha E_\alpha(s)J_\alpha\right]\dd s.
+\end{equation}
+对该式求导会得到上面的源项与 $-\mathcal L_0\delta\rho$，因此它确实解出了一阶演化方程。转为平均值时，可令 $\Gamma'=\Phi_{-\tau}\Gamma$；相空间体积不变，$\rho_0(\Phi_{-\tau}\Gamma)=\rho_0(\Gamma)$，所以
+\begin{equation}
+\int A(\Gamma)e^{-\tau\mathcal L_0}[\rho_0 B](\Gamma)\dd\Gamma
+=\int A(\Phi_\tau\Gamma')\rho_0(\Gamma')B(\Gamma')\dd\Gamma'
+=\langle A(\tau)B(0)\rangle_0.
+\end{equation}
+在扰动密度中取 $A=J_\gamma$、$B=J_\alpha$、$\tau=t-s$，就有
+\begin{equation}
+\delta\langle J_\gamma(t)\rangle
+=\beta\sum_\alpha\int_0^t E_\alpha(s)
+\langle J_\gamma(t-s)J_\alpha(0)\rangle_0\dd s.
+\end{equation}
+现在取恒定弱场和存在稳态的长时间极限。电流密度是 $\langle\bm J\rangle/V$，电导张量由 $\delta\langle J_\gamma\rangle/V=\sum_\alpha\sigma_{\gamma\alpha}E_\alpha$ 定义，因此
+\begin{equation}
+\sigma_{\gamma\alpha}=\frac\beta V\int_0^\infty
+\langle J_\gamma(t)J_\alpha(0)\rangle_0\dd t.
+\end{equation}
+各向同性时三个对角分量相等，取迹再除以三。另一方面，将上一节的位移积分步骤用于 $\Delta\bm M=\int_0^t\bm J(s)\dd s$，有 $\dd\langle|\Delta\bm M|^2\rangle/\dd t=2\int_0^t\langle\bm J(s)\cdot\bm J(0)\rangle\dd s$。结合两者，得到
 \begin{equation}
 \sigma=\frac1{3V\kb T}\int_0^\infty\langle\bm J(t)\cdot\bm J(0)\rangle\dd t
 =\lim_{t\to\infty}\frac{\dd\langle|\bm M(t)-\bm M(0)|^2\rangle/\dd t}{6V\kb T}.
 \end{equation}
-第二个等式由与上节相同的双重积分恒等式得到；第一个等式还依赖线性响应理论，不能仅由位移恒等式证明。展开平方会出现 $q_iq_j\langle\Delta\bm r_i\cdot\Delta\bm r_j\rangle$。忽略 $i\ne j$ 的离子协同运动，才得到 $\sigma_{\rm NE}=\sum_s\rho_s q_s^2D_s/(\kb T)$ 的 Nernst--Einstein 近似。
+为看清自扩散能贡献多少，把偶极位移的平方展开为 $\langle|\Delta\bm M|^2\rangle=\sum_{ij}q_iq_j\langle\Delta\bm r_i\cdot\Delta\bm r_j\rangle$。若忽略所有 $i\ne j$ 的交叉项，物种 $s$ 的 $N_s$ 个粒子各贡献长时间斜率 $6D_s$。代入上式并用 $\rho_s=N_s/V$，就得到
+\begin{equation}
+\sigma_{\rm NE}=\frac{\sum_s N_s q_s^2(6D_s)}{6V\kb T}
+=\sum_s\frac{\rho_s q_s^2D_s}{\kb T}.
+\end{equation}
+因此 Nernst--Einstein 近似丢掉的是不同离子的协同运动，而不是一种积分误差。
 
-热导率也能由平衡涨落计算。若 $\bm J_Q$ 定义为总热流，而非单位体积流密度，则各向同性体系有
+\section{温度梯度怎样引出热流相关}
+热导率的额外 $1/T$ 因子来自驱动力是逆温度梯度。先限于无宏观质量流、能流就是热流的情形，例如固定质心且没有物质输运的固体。令 $e(\bm r)$ 是局部能量密度，$\bm j_Q(\bm r)$ 是热流密度，能量守恒为 $\dot e=-\nabla\cdot\bm j_Q$，总热流定义为 $\bm J_Q=\int\bm j_Q\dd\bm r$。
+
+在大样品内部取缓慢变化的温度场，以局域平衡作为起点：$\rho_{\rm le}\propto\exp[-\int\beta(\bm r)e(\bm r)\dd\bm r]$。这里的局域平衡是线性输运的假设，不是任意非平衡状态的精确分布。沿无扰动力学求导，并在分部积分时忽略边界影响，得到
+\begin{align}
+\mathcal L_0\ln\rho_{\rm le}
+&=-\int\beta\dot e\,\dd\bm r
+=\int\beta\nabla\cdot\bm j_Q\,\dd\bm r\\
+&=-\int\nabla\beta\cdot\bm j_Q\,\dd\bm r
+\simeq-\nabla\beta\cdot\bm J_Q.
+\end{align}
+末步在所考察区域取近似常量的微弱梯度。令 $\rho=\rho_{\rm le}+\delta\rho$，温度场由边界维持；在一阶近似中，概率演化给出 $(\partial_t+\mathcal L_0)\delta\rho=-\mathcal L_0\rho_{\rm le}\simeq\rho_0\bm J_Q\cdot\nabla\beta$。与上节一样沿轨迹积分这个源，再取热流平均，得到
+\begin{equation}
+\frac{\delta\langle J_{Q,\alpha}\rangle}{V}
+=\frac1V\sum_\gamma\int_0^\infty
+\langle J_{Q,\alpha}(t)J_{Q,\gamma}(0)\rangle_0\dd t\;\partial_\gamma\beta.
+\end{equation}
+从 $\beta=1/(\kb T)$ 求导得 $\nabla\beta=-\nabla T/(\kb T^2)$。与 Fourier 定律的定义 $\delta\langle J_{Q,\alpha}\rangle/V=-\sum_\gamma\kappa_{\alpha\gamma}\partial_\gamma T$ 比较，再在各向同性时取迹除以三，便有
 \begin{equation}
 \kappa=\frac1{3V\kb T^2}\int_0^\infty\langle\bm J_Q(t)\cdot\bm J_Q(0)\rangle\dd t.
 \end{equation}
-具体热流必须从所用势能的能量连续性方程推导，并处理平流贡献。周期边界与多体势下，不能不加修正地把 $\sum_i e_i\bm r_i$ 的时间导数当成完整热流。
+推导中的 $\bm J_Q$ 是总流，所以分母含 $V$；若存储的是总流除以体积，相关函数前则应乘 $V$。具体热流必须满足所用势能的能量连续性方程。存在物质流的流体或混合物还要剔除平流及相应耦合贡献，不能无条件把能流当作导热热流。周期边界与多体势下，也不能不加修正地把 $\sum_i e_i\bm r_i$ 的时间导数当成完整热流。这里求的是体相线性响应系数，实际可用周期体系的平衡相关估计，并检查有限尺寸误差。
 
 输运系数的困难往往在统计而不在公式。应改变积分上限检查平台，比较多个独立时间段，并检查盒子大小与总采样时间。相关函数的长时噪声会使积分漂移，延长积分区间并不自动提高准确度。
