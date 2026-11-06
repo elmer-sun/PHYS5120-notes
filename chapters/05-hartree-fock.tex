@@ -49,7 +49,7 @@ E_H=\sum_i h_{ii}+\frac12\sum_{i\ne j}J_{ij}.
 \end{equation}
 每个粒子看到其他粒子的平均密度。由于势依赖未知轨道，需要猜轨道、建势、解方程、更新轨道，直到输入与输出一致。这是自洽场方法。这里用 Hartree 乘积展示平均场如何由变分产生，但一般的乘积不满足电子反对称性。因此它在乘积函数族中的驻值或最小值，并不自动给出真实电子基态的变分上界；下一节要把粒子统计纳入试探态。
 
-\section{反对称性怎样产生交换}
+\section{反对称性怎样产生交换}\label{hf:exchange}
 相同电子互换全部坐标时，波函数必须变号。用正交归一自旋轨道构造 Slater 行列式 $\Phi=(N!)^{-1/2}\det[\phi_i(x_j)]$，即可自动满足这一要求。两电子时它是
 \begin{equation}
 \Phi(x_1,x_2)=\frac{\phi_1(x_1)\phi_2(x_2)-\phi_2(x_1)\phi_1(x_2)}{\sqrt2}.
@@ -62,11 +62,46 @@ E_H=\sum_i h_{ii}+\frac12\sum_{i\ne j}J_{ij}.
 \end{equation}
 轨道正交性使不同排列的交叉项为零，因此必须除以 $\sqrt{N!}$。交换两个粒子坐标等于交换行列式的两列，符号随之改变。
 
-将两电子表达式代入相互作用期望值，两个模平方项各给 $J_{12}/2$，两个交叉项各给 $-K_{12}/2$，其中
+\subsection{先把两个电子的每一项算清楚}
+把 $\phi_i(x_a)$ 简记为 $\phi_i(a)$，并定义 $h_{ij}=\int\phi_i^*(x)\hat h\phi_j(x)\dd x$。一体算符 $\hat h(1)$ 只作用在第一个坐标上；将行列式的两项在 bra 与 ket 中分别展开，四项不能先省略：
+\begin{align}
+\langle\Phi|\hat h(1)|\Phi\rangle
+=\frac12\iint\dd x_1\dd x_2\,\bigl[&
+\phi_1^*(1)\phi_2^*(2)\hat h(1)\phi_1(1)\phi_2(2)\notag\\
+&-\phi_1^*(1)\phi_2^*(2)\hat h(1)\phi_2(1)\phi_1(2)\notag\\
+&-\phi_2^*(1)\phi_1^*(2)\hat h(1)\phi_1(1)\phi_2(2)\notag\\
+&+\phi_2^*(1)\phi_1^*(2)\hat h(1)\phi_2(1)\phi_1(2)\bigr]\notag\\
+=\frac12\bigl[&h_{11}\langle\phi_2|\phi_2\rangle
+-h_{12}\langle\phi_2|\phi_1\rangle\notag\\
+&-h_{21}\langle\phi_1|\phi_2\rangle
++h_{22}\langle\phi_1|\phi_1\rangle\bigr]
+=\frac12(h_{11}+h_{22}).
+\end{align}
+交叉项消失是因为\emph{未被算符作用的第二个坐标}给出正交内积，不是因为 $h_{12}$ 必须为零。对 $\hat h(2)$ 交换两个坐标，得到同样的 $\tfrac12(h_{22}+h_{11})$；两者相加，一体能量为 $h_{11}+h_{22}$。
+
+两体算符 $w_{12}=1/|\bm r_1-\bm r_2|$ 同时联系两个坐标，因此不能把交叉项拆成两个独立的正交内积。其完整展开为
+\begin{align}
+\langle\Phi|w_{12}|\Phi\rangle
+=\frac12\iint\dd x_1\dd x_2\,w_{12}\bigl[&
+|\phi_1(1)|^2|\phi_2(2)|^2\notag\\
+&-\phi_1^*(1)\phi_2(1)\phi_2^*(2)\phi_1(2)\notag\\
+&-\phi_2^*(1)\phi_1(1)\phi_1^*(2)\phi_2(2)\notag\\
+&+|\phi_2(1)|^2|\phi_1(2)|^2\bigr].
+\end{align}
+第一、第四项分别定义出 $J_{12},J_{21}$，第二、第三项分别是交换积分 $K_{12},K_{21}$，其中
 \begin{equation}
 K_{ij}=\iint\frac{\phi_i^*(x)\phi_j(x)\phi_j^*(x')\phi_i(x')}{|\bm r-\bm r'|}\dd x\dd x'.
 \end{equation}
-因此两电子相互作用为 $J_{12}-K_{12}$。一般 $N$ 电子也可从同一排列展开计算。先只保留一个坐标，定义一体约化密度矩阵 $\gamma(x,x')=N\int\Phi(x,x_2,\ldots)\Phi^*(x',x_2,\ldots)\dd x_2\cdots$。积分掉的坐标要求对应轨道完全匹配；每条保留轨道有 $(N-1)!$ 个相同贡献，与前面的 $N/N!$ 相乘为一，所以 $\gamma(x,x')=\sum_i\phi_i(x)\phi_i^*(x')$。
+交换哑变量 $x,x'$，利用 Coulomb 核的对称性，得到 $J_{21}=J_{12}$、$K_{21}=K_{12}$。因此
+\begin{equation}\label{hf:two-electron-energy}
+E_{\rm HF}^{(2)}=h_{11}+h_{22}
++\frac12(J_{12}+J_{21}-K_{12}-K_{21})
+=h_{11}+h_{22}+J_{12}-K_{12}.
+\end{equation}
+这里有两个不同的 $1/2$ 来源，必须分清。归一化行列式的模平方带来 $1/2$；若把相互作用写成 $\tfrac12(w_{12}+w_{21})$，每个有序项展开时暂时带 $1/4$，但两个有序项相加又恢复上述结果。两电子 Hamilton 算符的相互作用是一个完整的 $w_{12}$，不能最终再除以二。
+
+\subsection{怎样推广到任意电子数}
+一般 $N$ 电子也可从同一排列展开计算。先只保留一个坐标，定义一体约化密度矩阵 $\gamma(x,x')=N\int\Phi(x,x_2,\ldots)\Phi^*(x',x_2,\ldots)\dd x_2\cdots$。积分掉的坐标要求对应轨道完全匹配；每条保留轨道有 $(N-1)!$ 个相同贡献，与前面的 $N/N!$ 相乘为一，所以 $\gamma(x,x')=\sum_i\phi_i(x)\phi_i^*(x')$。
 
 再保留两个坐标，定义有序对密度 $n_2(x,x')=N(N-1)\int|\Phi(x,x',x_3,\ldots)|^2\dd x_3\cdots$。其余 $N-2$ 条轨道必须匹配，剩下的两条轨道只有保持次序或交换次序两种方式；后者多一个负号。每组的因子为 $N(N-1)(N-2)!/N!=1$，故
 \begin{equation}\label{hf:pair-density}
@@ -75,7 +110,7 @@ n_2(x,x')=\sum_{ij}\left[
 -\phi_i(x)\phi_j^*(x)\phi_j(x')\phi_i^*(x')\right].
 \end{equation}
 一体能量为 $\int[\hat h_x\gamma(x,x')]_{x'=x}\dd x=\sum_i h_{ii}$；两体能量为 $\tfrac12\iint n_2(x,x')/|\bm r-\bm r'|\dd x\dd x'$，因有序对把每对电子计了两遍。代入上式，直接项给 $J_{ij}$，交换项在交换 $x,x'$ 后给 $K_{ij}$，最终得到
-\begin{equation}
+\begin{equation}\label{hf:energy}
 E_{\rm HF}=\sum_i h_{ii}+\frac12\sum_{ij}(J_{ij}-K_{ij}).
 \end{equation}
 $i=j$ 时 $J_{ii}=K_{ii}$，故这里可把自项纳入求和而不产生自相互作用。交换不是额外的一种经典力，而是反对称态的干涉结果。若自旋轨道的自旋部分正交，交换积分的自旋积分为零，所以交换仅在同自旋通道出现。
@@ -87,6 +122,56 @@ $i=j$ 时 $J_{ii}=K_{ii}$，故这里可把自项纳入求和而不产生自相�
 =\sum_i|\phi_i(x)|^2=n(x).
 \end{equation}
 因此 $\int h_x(x,x')\dd x'=-1$，对应条件分布中少了一个电子的总权重。
+
+\section{自旋求和、闭壳层与 Hund 规则}\label{hf:spin}
+为了把上面的自旋轨道公式变成空间轨道公式，取
+$\alpha=(1,0)^{\mathsf T}$、$\beta=(0,1)^{\mathsf T}$ 为两个正交归一自旋函数。用 $\zeta_\sigma(s)$ 统一表示它们，其中 $\sigma=\uparrow,\downarrow$，并写
+$\phi_{p\sigma}(\bm r,s)=u_p^\sigma(\bm r)\zeta_\sigma(s)$。$p$ 是该自旋通道的空间轨道标签。对不作用于自旋的算符 $o$，自旋求和可以直接做完：
+\begin{equation}
+\langle\phi_{p\sigma}|o|\phi_{q\tau}\rangle
+=\int u_p^{\sigma *}o u_q^\tau\dd\bm r
+\sum_s\zeta_\sigma^*(s)\zeta_\tau(s)
+=\delta_{\sigma\tau}\int u_p^{\sigma *}o u_q^\tau\dd\bm r.
+\end{equation}
+直接积分在两个坐标各含一个自旋模平方，给出的因子是 $1\times1$；交换积分则给出
+\begin{equation}
+\langle\zeta_\sigma|\zeta_\tau\rangle
+\langle\zeta_\tau|\zeta_\sigma\rangle=\delta_{\sigma\tau}.
+\end{equation}
+于是，若 $J_{pq}^{\sigma\tau}$ 表示两个空间密度的直接积分，$K_{pq}^{\sigma\sigma}$ 表示同自旋空间交换积分，能量为
+\begin{equation}\label{hf:spin-energy}
+E_{\rm HF}=\sum_{p\sigma}h_{pp}^\sigma
++\frac12\sum_{pq\sigma\tau}J_{pq}^{\sigma\tau}
+-\frac12\sum_{pq\sigma}K_{pq}^{\sigma\sigma}.
+\end{equation}
+求和只包含占据轨道。直接排斥来自两种自旋，交换只联系相同自旋。这里使用的是非相对论、无自旋--轨道耦合的模型；所谓标量相对论修正可以改动空间算符而保留这种自旋结构，但不等于已经包含自旋--轨道耦合。
+
+限制性闭壳层进一步要求每条空间轨道 $u_p$ 同时容纳一个向上和一个向下自旋电子，且 $u_p^\uparrow=u_p^\downarrow=u_p$。一体项的自旋求和给二，直接项的 $(\sigma,\tau)$ 有四种组合，交换项只有两种。因此式\eqref{hf:spin-energy}成为
+\begin{equation}\label{hf:closed-energy}
+E_{\rm RHF}=2\sum_{p=1}^{N/2}h_{pp}
++\sum_{p,q=1}^{N/2}(2J_{pq}-K_{pq}).
+\end{equation}
+当 $p=q$ 时，$2J_{pp}-K_{pp}=J_{pp}$ 并不应消失：同一空间轨道中的两个\emph{不同自旋电子}确实相互排斥。被抵消的是单个自旋轨道的电子与自己的相互作用。
+
+交换为何与 Hund 第一规则联系起来？取两个固定的、正交的空间轨道 $a,b$，先比较空间对称与反对称组合
+\begin{equation}
+U_\pm(1,2)=\frac{a(1)b(2)\pm b(1)a(2)}{\sqrt2}.
+\end{equation}
+两项模平方各积分为一，交叉内积为 $\langle a|b\rangle\langle b|a\rangle=0$，所以都已归一化。重复前节四项展开，一体能量同为 $h_{aa}+h_{bb}$，两体交叉项的符号则改变，得到
+\begin{equation}
+E_\pm=h_{aa}+h_{bb}+J_{ab}\pm K_{ab}.
+\end{equation}
+总电子态必须反对称，所以对称空间态 $U_+$ 要配反对称自旋单态
+$(\alpha\beta-\beta\alpha)/\sqrt2$；反对称空间态 $U_-$ 要配对称自旋三重态，例如 $\alpha\alpha$。在固定轨道比较中，单态与三重态的能量差为 $2K_{ab}$。
+
+这里 $K_{ab}\ge0$ 不是把复函数的被积式逐点看成正数。令 $q=a^*b$，并定义
+$V_q(\bm r)=\int q(\bm r')/|\bm r-\bm r'|\dd\bm r'$。
+Coulomb Green 函数满足 $-\nabla^2V_q=4\pi q$，且 $K_{ab}=\int q^*V_q\dd\bm r$。对局域、足够快衰减的轨道分部积分，表面项为零，便有
+\begin{equation}
+K_{ab}=-\frac1{4\pi}\int(\nabla^2V_q^*)V_q\dd\bm r
+=\frac1{4\pi}\int|\nabla V_q|^2\dd\bm r\ge0.
+\end{equation}
+因此交换降低三重态的能量。对简并或近简并的原子轨道，这解释了优先单占据并使自旋平行的趋势。若轨道能量分裂较大、轨道可重新弛豫或关联很强，还必须比较完整总能量；不能用这个固定双轨道例子宣称所有体系都偏好最大自旋。Pauli 限制同样作用于完整坐标 $x=(\bm r,s)$：相同自旋电子在相同位置的振幅为零，反自旋电子则可以占据同一空间轨道。
 
 \section{轨道变分与 Fock 算符}
 现在对行列式能量求驻值。先只改变第 $i$ 条轨道的复共轭 $\phi_i^*$，把 $\phi_i$ 与其他轨道暂作独立变量。自项 $J_{ii}-K_{ii}$ 恒为零，先将它消去。对 $j\ne i$，直接积分的变化为
@@ -132,29 +217,63 @@ $i=j$ 时 $J_{ii}=K_{ii}$，故这里可把自项纳入求和而不产生自相�
 \begin{equation}
 E_{\rm HF}=\sum_i\varepsilon_i-\frac12\sum_{ij}(J_{ij}-K_{ij}).
 \end{equation}
-对偶数电子闭壳层，每个空间轨道双占据，空间轨道形式为 $\hat f=\hat h+\sum_{j=1}^{N/2}(2\hat J_j-\hat K_j)$。因直接相互作用有两种自旋来源，而交换只有同自旋来源，系数分别是二和一。
+把第\ref{hf:spin}节的自旋求和用于轨道方程，给定自旋 $\sigma$ 的电子满足
+\begin{equation}
+\left[\hat h+\sum_{q\tau}\hat J_q^\tau-\sum_q\hat K_q^\sigma\right]u_p^\sigma
+=\varepsilon_p^\sigma u_p^\sigma.
+\end{equation}
+这里 $J,K$ 按前面的定义仅作空间积分。直接项对所有占据自旋轨道求和，交换项只对同自旋占据轨道求和。限制性闭壳层中，两种自旋的空间函数相同，故
+\begin{equation}\label{hf:closed-fock}
+\hat f=\hat h+\sum_{q=1}^{N/2}(2\hat J_q-\hat K_q).
+\end{equation}
+系数二与一由自旋求和产生。若直接对式\eqref{hf:closed-energy}变分，一体项会带二，轨道乘子也需按双占据一致地定义，最后仍得到同一方程。
 
 \section{非正交基组怎样变成可解矩阵问题}
 写 $\phi_i=\sum_\nu C_{\nu i}\chi_\nu$，定义重叠矩阵 $S_{\mu\nu}=\langle\chi_\mu|\chi_\nu\rangle$ 和 $F_{\mu\nu}=\langle\chi_\mu|\hat f|\chi_\nu\rangle$。将展开代入 $\hat f\phi_i=\varepsilon_i\phi_i$，再左乘 $\langle\chi_\mu|$，得到 $\sum_\nu F_{\mu\nu}C_{\nu i}=\varepsilon_i\sum_\nu S_{\mu\nu}C_{\nu i}$。将各个 $i$ 并列成矩阵，就是 $FC=SC\varepsilon$。同样将展开代入 $\langle\phi_i|\phi_j\rangle=\delta_{ij}$，得到 $C^\dagger SC=I$。
 
-以实基函数闭壳层为例，定义 $P_{\lambda\sigma}=2\sum_{i\,\mathrm{occ}}C_{\lambda i}C_{\sigma i}$ 与
+先说明密度矩阵的来源，再构造 $F$。本节用 $M$ 个线性无关空间基函数 $\chi_\mu$ 展开闭壳层轨道，且允许基与系数为复数。自旋求和后的一体密度算符是
 \begin{equation}
-(\mu\nu|\lambda\sigma)=\iint\frac{\chi_\mu(\bm r)\chi_\nu(\bm r)\chi_\lambda(\bm r')\chi_\sigma(\bm r')}{|\bm r-\bm r'|}\dd\bm r\dd\bm r'.
+\hat\gamma=2\sum_{i=1}^{N/2}|u_i\rangle\langle u_i|
+=\sum_{\lambda\kappa}P_{\lambda\kappa}|\chi_\lambda\rangle\langle\chi_\kappa|,
+\qquad P_{\lambda\kappa}=2\sum_{i=1}^{N/2}C_{\lambda i}C_{\kappa i}^*.
 \end{equation}
-对闭壳层空间轨道，把两个系数展开分别代入直接、交换矩阵元：
+这里 $\kappa$ 是基函数指标，不是自旋。将 ket 与 bra 的基展开各代入一次就得到第二个等号。坐标表示与电子数分别为
+\begin{align}
+\gamma(\bm r,\bm r')&=\sum_{\lambda\kappa}P_{\lambda\kappa}
+\chi_\lambda(\bm r)\chi_\kappa^*(\bm r'),
+\qquad n(\bm r)=\gamma(\bm r,\bm r),\\
+N=\int n(\bm r)\dd\bm r
+&=\sum_{\lambda\kappa}P_{\lambda\kappa}S_{\kappa\lambda}
+=\Tr(PS).
+\end{align}
+因此非正交基中不能用 $\Tr P$ 数电子，也不能把这些展开系数直接当成 $\langle\chi_\mu|\hat\gamma|\chi_\nu\rangle$；后者在两侧各多一个重叠矩阵，为 $(SPS)_{\mu\nu}$。
+
+固定四中心积分的复共轭约定：
+\begin{equation}
+(\mu\nu|\kappa\lambda)=\iint\frac{\chi_\mu^*(\bm r)\chi_\nu(\bm r)\chi_\kappa^*(\bm r')\chi_\lambda(\bm r')}{|\bm r-\bm r'|}\dd\bm r\dd\bm r'.
+\end{equation}
+一体矩阵 $h_{\mu\nu}=\int\chi_\mu^*[-\nabla^2/2-\sum_I Z_I/|\bm r-\bm R_I|]\chi_\nu\dd\bm r$ 来自动能与核吸引。直接项的轨道乘积位于第二个坐标，故展开为
 \begin{align}
 2\sum_j\langle\chi_\mu|\hat J_j|\chi_\nu\rangle
-&=2\sum_{j\lambda\sigma}C_{\lambda j}C_{\sigma j}(\mu\nu|\lambda\sigma)
-=\sum_{\lambda\sigma}P_{\lambda\sigma}(\mu\nu|\lambda\sigma),\\
-\sum_j\langle\chi_\mu|\hat K_j|\chi_\nu\rangle
-&=\sum_{j\lambda\sigma}C_{\lambda j}C_{\sigma j}(\mu\lambda|\nu\sigma)
-=\frac12\sum_{\lambda\sigma}P_{\lambda\sigma}(\mu\lambda|\nu\sigma).
+&=2\sum_j\iint\frac{\chi_\mu^*(\bm r)\chi_\nu(\bm r)
+u_j^*(\bm r')u_j(\bm r')}{|\bm r-\bm r'|}\dd\bm r\dd\bm r'\notag\\
+&=2\sum_{j\lambda\kappa}C_{\kappa j}^*C_{\lambda j}(\mu\nu|\kappa\lambda)
+=\sum_{\lambda\kappa}P_{\lambda\kappa}(\mu\nu|\kappa\lambda).
 \end{align}
-第二式中 $\nu,\sigma$ 处于同一积分坐标，实基函数的乘法可交换。将直接项加上、交换项减去，并补入一体矩阵 $h$，得到
+交换算符则将轨道分配到不同坐标，必须跟踪哪一个因子共轭：
+\begin{align}
+\sum_j\langle\chi_\mu|\hat K_j|\chi_\nu\rangle
+&=\sum_j\iint\frac{\chi_\mu^*(\bm r)u_j(\bm r)
+u_j^*(\bm r')\chi_\nu(\bm r')}{|\bm r-\bm r'|}\dd\bm r\dd\bm r'\notag\\
+&=\sum_{j\lambda\kappa}C_{\lambda j}C_{\kappa j}^*(\mu\lambda|\kappa\nu)
+=\frac12\sum_{\lambda\kappa}P_{\lambda\kappa}(\mu\lambda|\kappa\nu).
+\end{align}
+将直接项加上、交换项减去，得到
 \begin{equation}
-F_{\mu\nu}=h_{\mu\nu}+\sum_{\lambda\sigma}P_{\lambda\sigma}[(\mu\nu|\lambda\sigma)-\tfrac12(\mu\lambda|\nu\sigma)].
+F_{\mu\nu}=h_{\mu\nu}+\sum_{\lambda\kappa}P_{\lambda\kappa}
+\bigl[(\mu\nu|\kappa\lambda)-\tfrac12(\mu\lambda|\kappa\nu)\bigr].
 \end{equation}
-$F$ 依赖 $P$，而 $P$ 又依赖 $F$ 的本征向量，这就是矩阵层面的自洽循环。
+实基与实系数时 $P$ 为实对称矩阵，同一坐标的两个基函数可以互换，便恢复常见的实数公式。对复基不能擅自沿用这些额外对称性。$F$ 依赖 $P$，而 $P$ 又依赖 $F$ 的本征向量，这就是矩阵层面的自洽循环。
 
 若基线性无关，对任意非零系数 $a$，$a^\dagger Sa=\|\sum_\mu a_\mu\chi_\mu\|^2>0$，所以 $S$ 正定。将它对角化为 $S=UsU^\dagger$，其中 $s$ 是正本征值构成的对角矩阵。令 $X=Us^{-1/2}U^\dagger$，逐个消去相邻的 $U^\dagger U$，有
 \begin{equation}
@@ -162,9 +281,35 @@ X^\dagger SX=Us^{-1/2}s\,s^{-1/2}U^\dagger=UIU^\dagger=I.
 \end{equation}
 在 $FC=SC\varepsilon$ 中取 $C=XC'$ 并左乘 $X^\dagger$，得到 $X^\dagger FXC'=X^\dagger SXC'\varepsilon=C'\varepsilon$。又因 $(X^\dagger FX)^\dagger=X^\dagger F^\dagger X=X^\dagger FX$，变换后的矩阵仍为 Hermitian 矩阵。小重叠本征值通过 $s^{-1/2}$ 放大误差，应控制近线性相关。每轮检查密度残差、能量变化和 $C^\dagger SC=I$，必要时混合新旧密度以减小振荡。
 
-\section{Koopmans 结论的边界}
-固定其他轨道，从占据轨道 $k$ 移去一个电子：总能量中删去 $h_{kk}$，并删去它与每个其他电子的一次相互作用。因此
+实际循环先计算固定几何下的 $h,S$ 与双电子积分，再由 $S$ 求 $X$。可从一体方程的最低 $N/2$ 条轨道构造初始 $P$；若从 $P=0$ 启动，零矩阵仅用于第一次建 $F=h$，本身并不是具有 $N$ 个电子的密度。每轮依次建 $F[P]$、求 $F'=X^\dagger FX$ 的本征向量、还原 $C=XC'$、占据最低轨道并更新 $P$，直到输入输出一致。
+
+总能量也能直接用矩阵计算。因为
+$\Tr(Ph)=2\sum_i h_{ii}$，而
+$\Tr[P(F-h)]=2\sum_{ij}(2J_{ij}-K_{ij})$，式\eqref{hf:closed-energy}给出
+\begin{equation}
+E_{\rm RHF}=\frac12\Tr[P(h+F)].
+\end{equation}
+第二个迹中的因子二来自 $P$ 的双占据；前面的二分之一防止重复计数。完整核势能还要加 $E_{NN}$。直接存储四中心积分需要 $M^4$ 个带指标的位置，构建一个 $M\times M$ 的 $F$ 时每个矩阵元又对两个指标求和，朴素实现的工作量也按 $M^4$ 增长。对角化稠密矩阵通常按 $M^3$ 增长；这些是给定实现的计数，不是所有利用稀疏性或积分近似的算法都必须达到的代价。
+
+\section{Koopmans 结论的边界}\label{hf:koopmans}
+仍用自旋轨道表示，并把相互作用组合简记为 $B_{ij}=J_{ij}-K_{ij}$。它满足 $B_{ij}=B_{ji}$、$B_{ii}=0$。设原占据集合为 $\mathcal O$，固定所有轨道，从占据轨道 $k$ 移去一个电子。对删去 $k$ 前后的能量明确作差：
+\begin{align}
+E_N-E_{N-1}^{\rm frozen}
+&=h_{kk}+\frac12\left(\sum_{j\in\mathcal O\setminus k}B_{kj}
++\sum_{i\in\mathcal O\setminus k}B_{ik}+B_{kk}\right)\notag\\
+&=h_{kk}+\sum_{j\in\mathcal O}B_{kj}
+=\langle\phi_k|\hat f|\phi_k\rangle=\varepsilon_k.
+\end{align}
+两组求和分别来自原双重求和中的第 $k$ 行和第 $k$ 列，对称性将它们合并。因此
 \begin{equation}
 E_{N-1}^{\rm frozen}-E_N=-h_{kk}-\sum_j(J_{kj}-K_{kj})=-\varepsilon_k.
 \end{equation}
-这给出冻结轨道 HF 电离能。真实离子会重新优化轨道，而且有超出 HF 的关联；两者都不在该推导内。对虚轨道估计电子亲和能还受束缚态是否存在影响，不能把任意轨道本征值直接称为实验能级。
+这给出冻结轨道 HF 电离能。反过来，在原 HF 势的一条归一化虚自旋轨道 $a$ 中加入电子，原来的能量项保留，新增 $h_{aa}$ 与它和原电子的每对相互作用，所以
+\begin{equation}
+E_{N+1}^{\rm frozen}-E_N
+=h_{aa}+\sum_{j\in\mathcal O}B_{aj}+\frac12B_{aa}
+=\varepsilon_a.
+\end{equation}
+按 $I=E(N-1)-E(N)$、$A=E(N)-E(N+1)$ 的定义，冻结轨道时
+$I=-\varepsilon_H$、$A=-\varepsilon_L$，故 $I-A=\varepsilon_L-\varepsilon_H$。
+真实离子会重新优化轨道，而且有超出 HF 的关联；两者都不在这个推导内。虚轨道还可能不对应束缚的附加电子，电子亲和能也不保证为正。上述相等式属于冻结轨道 HF 的能量记账，不能直接移植给 KS 本征值或当作实验能级。

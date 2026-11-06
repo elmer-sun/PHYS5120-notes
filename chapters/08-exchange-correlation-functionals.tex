@@ -1,5 +1,3 @@
-% 避免本章目录标题孤悬在上一页末尾。
-\addtocontents{toc}{\protect\newpage}
 \chapter{交换关联近似：把未知泛函变成计算}
 KS 方程把未知部分集中在 $E_{xc}$，却没有给出它的具体形式。本章从一个问题出发：为了描述电子怎样共同分布，还需要在近似中加入什么物理信息？
 
@@ -25,12 +23,23 @@ v_{xc}^{\rm LDA}(n)=\frac{\dd[n\epsilon_{xc}(n)]}{\dd n}
 \end{equation}
 因此不能把每电子交换关联能直接当作势。磁性体系还需分别记录 $n_\uparrow$ 和 $n_\downarrow$；原因是交换效应区分自旋，只知道两者的和未必够用。
 
+Perdew--Zunger 参数化把均匀电子气相关能资料写成便于计算的函数，是具体的 LDA 输入。对自旋推广，令
+\begin{equation}
+E_{xc}^{\rm LSDA}=\int g(n_\uparrow,n_\downarrow)\dd\bm r.
+\end{equation}
+逐项变分得到
+\begin{equation}
+\delta E_{xc}=\int\left[\frac{\partial g}{\partial n_\uparrow}\delta n_\uparrow
++\frac{\partial g}{\partial n_\downarrow}\delta n_\downarrow\right]\dd\bm r.
+\end{equation}
+故两通道的势分别是 $v_{xc}^\sigma=\partial g/\partial n_\sigma$，与上一章的自旋 KS 方程衔接。
+
 \section{GGA 与 meta-GGA：附近的密度怎样变化}
 想象两处位置的密度恰好相同，但一处位于平坦的电子云内部，另一处靠近迅速衰减的边缘。LDA 给这两处相同的局部参照，而周围环境显然不同。广义梯度近似（GGA）因此把 $\nabla n$ 也作为输入，写成
 \begin{equation}
 E_{xc}^{\rm GGA}[n]=\int g(n,\nabla n)\dd\bm r.
 \end{equation}
-这里的 $g$ 是能量密度函数，不能只由“使用梯度”四个字确定。PBE 与 BLYP 就是不同的具体构造；它们都使用局部密度及其变化，却对这些信息赋予不同的能量。
+这里的 $g$ 是能量密度函数，不能只由“使用梯度”四个字确定。PBE 与 BLYP 就是不同的具体构造；BLYP 组合 B88 交换与 LYP 相关。它们都使用局部密度及其变化，却对这些信息赋予不同的能量。
 
 梯度如何进入有效势？对密度作小变化，有
 \begin{equation}
@@ -55,6 +64,19 @@ v_{xc}=\frac{\partial g}{\partial n}-\nabla\cdot\frac{\partial g}{\partial(\nabl
 \end{equation}
 meta-GGA 将这样的量也作为输入。即使两处有相同的 $n$ 和 $\nabla n$，组成它们的轨道仍可能具有不同的空间变化；$\tau$ 帮助近似辨别这种差别。它仍以每个位置附近的信息为主，并没有自动包含相隔很远的电子涨落关联。由于引入了轨道依赖，实际变分也可能得到比局域乘法势更一般的算符。
 
+另一种可用的局部信息是密度的 Laplacian $\nabla^2n$，它与 $\tau$ 有联系，但不是同一个量。把 $n=\sum_i f_i\phi_i^*\phi_i$ 逐项求两次导数，乘积法则给出
+\begin{align}
+\nabla^2n
+&=\sum_i f_i\left[(\nabla^2\phi_i^*)\phi_i
++2\nabla\phi_i^*\cdot\nabla\phi_i+\phi_i^*\nabla^2\phi_i\right]\notag\\
+&=4\tau+2\sum_i f_i\operatorname{Re}(\phi_i^*\nabla^2\phi_i).
+\end{align}
+若定义另一种动能密度 $\tau_L=-\tfrac12\sum_i f_i\operatorname{Re}(\phi_i^*\nabla^2\phi_i)$，则上式是
+\begin{equation}
+\tau_L=\tau-\frac14\nabla^2n.
+\end{equation}
+对全空间积分，$\int\nabla^2n\dd\bm r=\oint\nabla n\cdot\dd\bm S$；在前述边界条件下它为零，所以两种动能密度给出相同的总动能，却可以在局部不同。meta-GGA 可以使用 $\nabla^2n$、$\tau$ 或其中一种组合；不能把“更高一阶的局部信息”误读成 $\nabla^2n$ 与 $\tau$ 相等。
+
 \section{混合泛函：为什么借用一部分 HF 交换}
 再做一个最简单的物理检查：只有一个电子时，它不应与自己相互排斥。然而由密度构造的经典项 $E_H[n]$ 仍为正，因为电荷云的不同部分在公式中相互作用。精确理论必须用 $E_{xc}=-E_H$ 抵消它，此时 $T_s=T$，也没有真实的电子间关联。
 
@@ -64,9 +86,25 @@ HF 交换对占据轨道的自相互作用能够精确抵消，但一般的 LDA�
 \begin{equation}
 E_{xc}^{\rm PBE0}=\frac14E_x^{\rm exact}+\frac34E_x^{\rm PBE}+E_c^{\rm PBE}.
 \end{equation}
-这里的四分之一是 PBE0 模型构造中的比例选择，不能由上述代数或自相互作用抵消条件唯一确定；相关部分仍采用 PBE。B3LYP 采用另一种组合，含作为该模型参数的 $20\%$ Fock 型交换，并结合局域项、B88 梯度交换修正和 LYP 相关。
+这里的四分之一是 PBE0 模型构造中的比例选择，不能由上述代数或自相互作用抵消条件唯一确定；相关部分仍采用 PBE。
+
+B3LYP 的组合也可以逐项写清。从局域交换和局域相关出发，分别加入 Fock 交换替换、B88 梯度交换修正和 LYP 相关替换：
+\begin{align}
+E_{xc}^{\rm B3LYP}={}&E_x^{\rm LDA}
++a_0(E_x^{\rm exact}-E_x^{\rm LDA})
++a_x\Delta E_x^{\rm B88}\notag\\
+&+E_c^{\rm VWN}+a_c(E_c^{\rm LYP}-E_c^{\rm VWN}).
+\end{align}
+这里 $\Delta E_x^{\rm B88}=E_x^{\rm B88}-E_x^{\rm LDA}$ 表示梯度修正本身，VWN 是所选局域相关参数化。常用参数 $a_0=0.20$、$a_x=0.72$、$a_c=0.81$ 来自模型拟合；合并同类项得到
+\begin{equation}
+E_{xc}^{\rm B3LYP}=0.80E_x^{\rm LDA}+0.20E_x^{\rm exact}
++0.72\Delta E_x^{\rm B88}+0.19E_c^{\rm VWN}+0.81E_c^{\rm LYP}.
+\end{equation}
+其中 $0.80=1-0.20$、$0.19=1-0.81$。因此 $0.72$ 乘的是 B88 的\emph{修正量}，不是再加一份完整的 B88 交换。具体实现还应说明所用 VWN 版本；这些经验参数不由变分原理唯一导出。
 
 混合泛函通常只能部分改善自相互作用与相关误差。Fock 型交换的变分产生非局域算符，故这类计算通常称为广义 Kohn--Sham（广义 KS）计算。它与上一章的局域 KS 方程有相同的自洽思路，但有效算符的形式不同。
+
+增加轨道间交换也增加计算工作。第五章已经按指标数说明：对 $M$ 个基函数，朴素四中心交换积分处理涉及 $M^4$ 个指标组合，而稠密矩阵对角化约需 $M^3$ 的工作。这解释了为什么常把局域、半局域计算与混合泛函分别用三次、四次标度作粗略比较。不过积分筛选、辅助基、实空间局域性、平面波实现和要求的精度都会改变实际成本，不能把这两个幂次当作每种程序的固定运行时间定律。
 
 \section{范围分离与介电屏蔽：远处的电子怎样影响这里}
 固体中，电子引起的周围电荷重排会减弱它在远处产生的有效作用，这就是屏蔽。全局混合对所有距离使用相同交换比例；范围分离则分别处理短程和长程。
@@ -78,14 +116,25 @@ E_{xc}^{\rm PBE0}=\frac14E_x^{\rm exact}+\frac34E_x^{\rm PBE}+E_c^{\rm PBE}.
 \end{equation}
 这里 $r$ 是两点间距。对非负参数，$\operatorname{erf}$ 从零平滑增大并趋近一；因此当距离增大时，第一项迅速衰减，第二项趋近 $1/r$，分别用于构造短程和长程交换。$\omega$ 的量纲是长度的倒数，$1/\omega$ 给出两种处理之间的过渡尺度。
 
-HSE 的基本选择是只在短程混入 Fock 型交换。先按所选核分解将 PBE 交换写成 $E_x^{\rm PBE,SR}+E_x^{\rm PBE,LR}$，再加上替换项 $\tfrac14(E_x^{\rm exact,SR}-E_x^{\rm PBE,SR})$。将短程 PBE 的系数 $1-1/4$ 合并，并保留原相关项，得到
+更一般地，可以令长程、短程的 Fock 交换比例分别为 $\alpha,\beta$。从所选 GGA 的交换分解出发，加上两项替换
+$\alpha(E_x^{\rm exact,LR}-E_x^{\rm GGA,LR})$
+与 $\beta(E_x^{\rm exact,SR}-E_x^{\rm GGA,SR})$，合并后得到模型
+\begin{align}
+E_{xc}^{\rm RSH}={}&\alpha E_x^{\rm exact,LR}+\beta E_x^{\rm exact,SR}\notag\\
+&+(1-\alpha)E_x^{\rm GGA,LR}+(1-\beta)E_x^{\rm GGA,SR}+E_c^{\rm GGA}.
+\end{align}
+若 $\alpha=\beta$，两个距离范围使用同一比例，恢复全局混合；若不同，才区别处理两种距离。这个定义明确了比例，不应把不同文献中另有含义的 $\alpha,\beta$ 直接混用。
+
+HSE 的基本选择是只在短程混入 Fock 型交换，即在上述约定下取 $\alpha=0$、$\beta=1/4$，并采用 PBE 作为半局域部分。合并系数得到
 \begin{equation}
 E_{xc}^{\rm HSE}=\frac14E_x^{\rm exact,SR}
 +\frac34E_x^{\rm PBE,SR}+E_x^{\rm PBE,LR}+E_c^{\rm PBE}.
 \end{equation}
-SR、LR 分别表示按上述分解得到的短程、长程部分。它并没有删去长程交换，而是在长程保留 PBE 近似。作为检查，$\omega\to0$ 时短程核恢复整个 $1/r$，该式回到 PBE0；$\omega\to\infty$ 时短程部分消失，回到 PBE。改变范围参数是在改变交换近似，不只是改变计算精度。
+SR、LR 分别表示按上述分解得到的短程、长程部分。HSE06 常用范围参数约为 $0.11\,a_0^{-1}$，即约 $0.2\,\text{\AA}^{-1}$；数值须与长度单位一起给出。它并没有删去长程交换，而是在长程保留 PBE 近似。作为检查，$\omega\to0$ 时短程核恢复整个 $1/r$，该式回到 PBE0；$\omega\to\infty$ 时短程部分消失，回到 PBE。改变范围参数是在改变交换近似，不只是改变计算精度。
 
 另一条思路是让交换比例反映材料的电子屏蔽能力。在均匀、宏观的简化图像中，长程作用近似为 $1/(\epsilon_\infty r)$；若用比例 $\alpha$ 的裸交换模拟这一作用，就令 $\alpha/r\approx1/(\epsilon_\infty r)$。两边乘 $r$，得到介电依赖混合的启发式关系 $\alpha\approx1/\epsilon_\infty$。这里 $\epsilon_\infty$ 指固定离子位置时的电子介电响应，不包括离子移动的贡献。屏蔽强时采用较少的裸 Fock 型交换，屏蔽弱时采用较多。若介电常数也由同一计算求出，就需要让交换比例与算得的响应彼此一致。这是模型选择的物理依据，并不是对任意非均匀材料都严格成立的恒等式。
+
+具体地，先给一个 $\alpha^{(0)}$，在这个比例下把电子密度自洽收敛，再计算固定离子的电子介电常数 $\epsilon_\infty^{(0)}$。取下一轮 $\alpha^{(1)}=1/\epsilon_\infty^{(0)}$ 后重新求解，如此迭代，直到交换比例与介电响应也相互一致。密度的内层自洽与比例的外层更新解决不同的未知量；只收敛其中一层，还没有完成这一模型的全部自洽条件。
 
 \section{色散：平均密度不变，涨落仍能相互关联}
 两个相距很远的中性原子即使都没有永久偶极，也会相互吸引。关键是电子云存在瞬时涨落：一个原子的瞬时偶极影响另一个原子的电子分布，使两者的涨落发生关联。平均偶极为零，并不意味着偶极之间的关联为零。
@@ -118,6 +167,6 @@ E_{\rm disp}=-\sum_{A<B}d(R_{AB})\frac{C_{6,AB}}{R_{AB}^6}+\cdots.
 \end{equation}
 这里 $A,B$ 标记原子，$d(R)$ 是短程阻尼函数：远距离恢复色散尾部，短距离则避免把不适用的渐近形式一直延伸到成键区。
 
-D3 与 Tkatchenko--Scheffler（TS）都属于在基本泛函之外补充色散的常用思路。D3 让系数随原子的配位环境变化；TS 根据实际密度划分出的原子有效体积调整其极化率和色散系数。两者都试图回答“这个原子在当前环境中有多容易被极化”，但使用的环境信息不同。非局域相关泛函，如 vdW-DF，则直接联系两个不同位置的密度来构造相关能。这些方法的主要区别是怎样把远处涨落的联系补回来。
+D3 与 Tkatchenko--Scheffler（TS）都属于在基本泛函之外补充色散的常用思路。D3 让系数随原子的配位环境变化；TS 根据实际密度划分出的原子有效体积调整其极化率和色散系数。两者都试图回答“这个原子在当前环境中有多容易被极化”，但使用的环境信息不同。非局域相关泛函，如最初的 vdW-DF（常以作者首字母称 DRSLL），则直接联系两个不同位置的密度来构造相关能。这些方法的主要区别是怎样把远处涨落的联系补回来。
 
 还有用电子密度响应描述关联的方法，例如随机相位近似（RPA）。它把关注点转向电子云受到扰动后怎样响应；本章不展开其技术形式。

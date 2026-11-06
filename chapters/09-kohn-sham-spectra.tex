@@ -27,13 +27,44 @@ E_g=I-A=E(N+1)+E(N-1)-2E(N).
 \eta|\Psi_{N+1}\rangle\langle\Psi_{N+1}|,
 \qquad \langle\hat N\rangle=N+\eta.
 \end{equation}
-每次制备都有整数个电子，只有许多次制备的平均数可以非整数。这是经典概率混合，与第六章 CI 中不同行列式的相干叠加不同。混合密度也只是两个一体密度的加权和：$n_\eta=(1-\eta)n_N+\eta n_{N+1}$。
+每次制备都有整数个电子，只有许多次制备的平均数可以非整数。这是经典概率混合，与第六章 CI 中不同行列式的相干叠加不同。对数密度算符取迹，逐项得到
+\begin{align}
+n_\eta(\bm r)&=\Tr[\Gamma\hat n(\bm r)]\notag\\
+&=(1-\eta)\langle\Psi_N|\hat n(\bm r)|\Psi_N\rangle
++\eta\langle\Psi_{N+1}|\hat n(\bm r)|\Psi_{N+1}\rangle\notag\\
+&=(1-\eta)n_N(\bm r)+\eta n_{N+1}(\bm r).
+\end{align}
+这里的 $n_N(\bm r)$ 不是 $|\Psi_N(\bm r)|^2$。多电子波函数依赖所有电子坐标；必须先把其余坐标积分掉，再对自旋求和：
+\begin{equation}
+n_N(\bm r)=N\sum_s\int
+|\Psi_N(\bm r,s,x_2,\ldots,x_N)|^2\dd x_2\cdots\dd x_N.
+\end{equation}
+对 $\bm r$ 积分，波函数归一化给出 $\int n_N=N$；混合密度的积分因此是 $(1-\eta)N+\eta(N+1)=N+\eta$。不同粒子数的波函数甚至不在同一个固定粒子数空间里，不能把它们的多体模平方直接当成同一个三维函数相加。
 
 能量期望值同样按概率相加，所以这种制备的能量为
 \begin{equation}\label{spectra:linear}
 E(N+\eta)=(1-\eta)E(N)+\eta E(N+1).
 \end{equation}
-在相邻整数基态稳定、且不存在其他整数态的混合给出更低能量的通常情形，这就是给定平均粒子数下的最低能量。几何上，它是一条连接相邻整数能量点的直线；若上述稳定条件不满足，就必须比较其他整数态，不能直接沿用相邻两点连线。
+这个等号首先是上述两态制备的能量，为什么它还是最低能量？应把所有可能制备都纳入比较。定义平均粒子数为 $\nu$ 时的能量为
+\begin{equation}
+E(\nu)=\inf_{\Gamma\ge0,\ \Tr\Gamma=1,\ \Tr\Gamma\hat N=\nu}\Tr(\Gamma H).
+\end{equation}
+Hamilton 算符守恒电子数，不同粒子数之间的非对角元不贡献能量、密度或粒子数。在每个整数 $M$ 的扇区内，变分原理又说明激发态可用基态替换而不升高能量。因此问题化为
+\begin{equation}\label{spectra:convex-search}
+E(\nu)=\inf_{\{p_M\}}\sum_M p_ME(M),\qquad
+p_M\ge0,\quad\sum_Mp_M=1,\quad\sum_MMp_M=\nu.
+\end{equation}
+这就是整数能量点的下凸包问题。
+
+若相邻整数态稳定，且整数能量的差分斜率 $d_M=E(M)-E(M-1)$ 不随 $M$ 减小，取 $\mu=d_{N+1}$。对 $M>N+1$，将差分相加得到
+$E(M)-E(N)=\sum_{k=N+1}^M d_k\ge(M-N)\mu$；
+对 $M<N$，则有
+$E(N)-E(M)=\sum_{k=M+1}^N d_k\le(N-M)\mu$。
+两边连同 $M=N,N+1$ 合起来，都满足
+\begin{equation}
+E(M)\ge E(N)+(M-N)\mu.
+\end{equation}
+将它乘 $p_M$ 后求和，并使用式\eqref{spectra:convex-search}的两个约束，得到任何制备的能量都不低于 $E(N)+(\nu-N)\mu$。令 $\nu=N+\eta$，而只取 $p_N=1-\eta,p_{N+1}=\eta$ 正好达到这个下界，才证明了式\eqref{spectra:linear}。若相邻两点不是下凸包上的相邻顶点，就必须比较其他整数态；不能仅凭写出一个混合态就宣布它已最优。
 
 将右侧区间的直线写成 $E(N+\eta)=E(N)+\eta[E(N+1)-E(N)]$，对平均电子数 $N+\eta$ 求导，斜率就是方括号。左侧同理，将 $E(N-1+\eta)=E(N-1)+\eta[E(N)-E(N-1)]$ 对 $\eta$ 求导，再令 $\eta\to1$。代入电离能与亲和能的定义，得到
 \begin{equation}\label{spectra:slopes}
@@ -51,8 +82,33 @@ E(N+\eta)=(1-\eta)E(N)+\eta E(N+1).
 \label{spectra:piecewise-figure}
 \end{figure}
 
+\section{化学势为何等于能量曲线的斜率}
+上面由分段直线读出了斜率，下面把它与密度变分中的乘子联系起来。对固定外势，令 $n_\nu$ 是平均电子数为 $\nu$ 时的最优密度。若该侧的泛函导数存在，对
+$\mathcal L=E[n]-\mu(\int n\dd\bm r-\nu)$ 变分，得到
+\begin{equation}
+\left.\frac{\delta E}{\delta n(\bm r)}\right|_{n_\nu}=\mu.
+\end{equation}
+现在只沿最优密度的分支改变 $\nu$。由泛函导数的定义，
+$\delta E=\int(\delta E/\delta n)\delta n\dd\bm r$，而
+$\delta n=(\partial n_\nu/\partial\nu)\delta\nu+o(\delta\nu)$。
+除以 $\delta\nu$ 再取极限，得到链式法则，并代入驻值条件：
+\begin{equation}\label{spectra:chemical-potential}
+\frac{\dd E}{\dd\nu}
+=\int\frac{\delta E}{\delta n}\frac{\partial n_\nu}{\partial\nu}\dd\bm r
+=\mu\frac{\dd}{\dd\nu}\int n_\nu\dd\bm r
+=\mu\frac{\dd\nu}{\dd\nu}=\mu.
+\end{equation}
+所以化学势是约束电子数的乘子，也是沿平衡态增加平均电子数的能量代价。整数处一般没有单一的双侧导数，只能分别取 $\mu^-$ 与 $\mu^+$；不能在有拐角的地方仍假定一个光滑导数。
+
 \section{Janak 关系：轨道本征值首先是能量导数}
-现在回到 KS 能量表达式，让某条自旋轨道的占据 $f_i$ 连续变化，密度为 $n=\sum_i f_i|\phi_i|^2$。先把轨道固定，则 $\partial n/\partial f_i=|\phi_i|^2$。动能对占据的导数是该轨道的动能期望值，其他能量项通过密度变化给出对应势，因此
+现在回到 KS 能量表达式，让某条自旋轨道的占据 $f_i$ 连续变化，密度为 $n=\sum_i f_i|\phi_i|^2$，仍沿用第七章自旋求和后的空间因子记法。先把轨道固定，则 $\partial n/\partial f_i=|\phi_i|^2$。上一节的链式法则也适用于任意参数：令 $n=n(\bm r,\xi)$，便有 $\partial F/\partial\xi=\int(\delta F/\delta n)(\partial n/\partial\xi)\dd\bm r$。取 $\xi=f_i$，对每个能量项分别计算：
+\begin{align}
+\frac{\partial T_s}{\partial f_i}&=\langle\phi_i|-\nabla^2/2|\phi_i\rangle,\\
+\frac{\partial}{\partial f_i}\int vn\dd\bm r&=\int v|\phi_i|^2\dd\bm r,\\
+\frac{\partial E_H}{\partial f_i}&=\int v_H|\phi_i|^2\dd\bm r,\qquad
+\frac{\partial E_{xc}}{\partial f_i}=\int v_{xc}|\phi_i|^2\dd\bm r.
+\end{align}
+固定核排斥的导数为零。将这些项相加，得到
 \begin{align}
 \frac{\partial E}{\partial f_i}
 &=\left\langle\phi_i\left|-\frac12\nabla^2\right|\phi_i\right\rangle
@@ -67,7 +123,47 @@ E(f_i=1)-E(f_i=0)=\int_0^1\varepsilon_i(f_i)\dd f_i.
 \end{equation}
 一般近似中，本征值会随占据变化，故不能随意把积分换成某个端点的本征值。
 
+例如把第 $N$ 个电子的占据从一降到零，积分方向必须反过来；加入第 $N+1$ 个电子时则从零升到一。将本征值所对应的平均电子数写出，得
+\begin{align}\label{spectra:occupation-integrals}
+I&=-\int_0^1\varepsilon_N(N-1+f)\dd f,\\
+A&=-\int_0^1\varepsilon_{N+1}(N+f)\dd f.
+\end{align}
+若被积函数连续，积分中值定理只保证存在某个 $f_*,g_*\in(0,1)$，使 $I=-\varepsilon_N(N-1+f_*)$、$A=-\varepsilon_{N+1}(N+g_*)$。它\emph{不}保证这些点紧贴整数，也不能据此令相应偏移趋于零。只有额外证明分段线性、从而前沿导数在每段恒定，才能把积分换成单侧端点极限。
+
 对精确泛函，在整数左侧只改变前沿最高占据轨道的占据，其他占据固定，便有 $\dd N=\dd f_H$。Janak 关系给出 $\dd E/\dd N=\partial E/\partial f_H=\varepsilon_H$，而分段线性给出同一个导数为 $-I$。因此在有限束缚体系中，把精确 KS 势在无穷远取为零，并从下方接近整数电子数，就得到 $\varepsilon_H^-=-I$。前沿若简并，可对简并轨道分配占据，公共本征值给出相同导数。这里并不能据此断言其他本征值都等于真实激发能。
+
+\section{有限体系的密度尾部为何也给出电离能}
+对有限束缚体系，还能从空间上的衰减理解 HOMO 的特殊地位。把局域 KS 势在无穷远取为零；远处 $v_s$ 的 $1/r$ 等尾项相对于负的常数本征值只改变渐近幂次，不改变主要指数。先看径向的主导方程，写 $\phi_i(r)=u_i(r)/r$，则
+\begin{equation}
+\nabla^2\frac{u_i(r)}r=\frac{u_i''(r)}r,
+\qquad -\frac12u_i''\simeq\varepsilon_i u_i.
+\end{equation}
+第一个等号可由 $r^{-2}\partial_r[r^2\partial_r(u/r)]$ 逐次求导验证。对 $\varepsilon_i<0$，令 $\kappa_i=\sqrt{-2\varepsilon_i}$，方程变为 $u_i''=\kappa_i^2u_i$，故通解为
+$u_i=A_i e^{\kappa_i r}+B_i e^{-\kappa_i r}$。
+归一化排除增长项，剩下衰减指数 $e^{-\sqrt{-2\varepsilon_i}r}$。角动量与 Coulomb 尾项会修正前面的幂函数；对于一般方向上的主要指数，结论相同。
+
+密度是占据轨道模平方的和。最高占据本征值最接近零，其 $\kappa_i$ 最小，因而通常衰减最慢，在远处主导密度：
+\begin{equation}
+n(r)\ \text{的主导指数为}\ e^{-2\sqrt{-2\varepsilon_H}\,r}.
+\end{equation}
+真实多电子密度的衰减率又由移走一个电子所需的能量决定。为说明这句话，把 $N$ 电子基态投影到剩余 $N-1$ 个电子的一组完备本征态 $\Psi_a^{N-1}$ 上，定义移除振幅
+\begin{equation}
+d_a(x)=\sqrt N\int\Psi_a^{N-1*}(x_2,\ldots,x_N)
+\Psi_N(x,x_2,\ldots,x_N)\dd x_2\cdots\dd x_N.
+\end{equation}
+这也称 Dyson 轨道，但它一般不是归一化的 KS 轨道。将 $\Psi_N$ 在这组离子态中展开，再利用正交性消去交叉项，就有 $n(\bm r)=\sum_{a,s}|d_a(\bm r,s)|^2$；连续谱通道还需相应积分。
+
+当被投影的电子远离其余粒子时，Hamilton 算符分为它的动能、剩余离子的 Hamilton 算符，以及随距离衰减的 Coulomb 作用。把 $H_N\Psi_N=E(N)\Psi_N$ 投影到离子态 $a$，得到耦合通道方程
+\begin{equation}
+\left[-\frac12\nabla^2+E_a(N-1)-E(N)\right]d_a
++\sum_b V_{ab}(\bm r)d_b=0,
+\end{equation}
+其中 $V_{ab}$ 是远处电子与离子的 Coulomb 作用在离子态间的矩阵元，均随 $r$ 增大而衰减。若最低电离通道的投影非零，记它为 $a=0$，则最小常数能差为 $I=E_0(N-1)-E(N)$。对这个最低阈值的主导渐近方程保留常数项，得
+$-\tfrac12\nabla^2d_0\simeq-I d_0$；重复径向解法，衰减率为 $\sqrt{2I}$，密度主要指数为 $e^{-2\sqrt{2I}\,r}$。衰减的通道耦合会改变幂次并把慢尾部传递到其他通道，因此不能进一步断言每一条 Dyson 轨道都只按自身的电离能衰减。对最低阈值主导的通常方向，精确 KS 密度与真实密度相同，比较指数得
+\begin{equation}
+\sqrt{-2\varepsilon_H}=\sqrt{2I},\qquad \varepsilon_H=-I.
+\end{equation}
+这段论证针对具有相应束缚态和非零最低通道振幅的通常有限体系；特殊节点方向不能直接用一个标量尾部指数概括。它说明的是最高占据轨道为何与\emph{最低移除阈值}相联系，不是把所有 KS 轨道都解释成各个真实离子激发态。周期固体没有这种孤立体系的真空尾部，不能原样套用这个空间论证。
 
 \section{为什么精确 KS 轨道隙仍可能不等于基本带隙}
 越过整数 $N$ 后，下一个电子开始进入最低未占据轨道。若有效势完全不变，右侧导数就应等于原来的 $\varepsilon_L^-$。但精确能量要求右侧斜率为 $-A$；这两者一般不同。缺少的部分如何进入 KS 描述？
@@ -85,6 +181,26 @@ E_g=(\varepsilon_L^--\varepsilon_H^-)+\Delta_{xc}.
 \end{equation}
 这就是交换关联导数不连续对带隙的贡献。它不是在轨道隙之外任意拟合的一项，而是精确的加、减电子能量与辅助体系轨道能量之间所需的差额。
 
+还可以对照密度 Euler 方程，检查有没有遗漏动能的作用。在整数的两侧分别写
+\begin{equation}
+\mu^\pm=\left.\frac{\delta T_s}{\delta n}\right|_\pm
++v+v_H+v_{xc}^\pm.
+\end{equation}
+相减时外势相消，Hartree 势在适当收敛的密度极限下连续，故
+\begin{equation}
+E_g=\left.\frac{\delta T_s}{\delta n}\right|_+
+-\left.\frac{\delta T_s}{\delta n}\right|_-+\Delta_{xc}.
+\end{equation}
+这里应比较的是 $T_s$ 的\emph{泛函导数}，不是 $T_s$ 的数值；密度连续、动能连续都不能使这一导数差自动为零。为了识别它，固定整数左侧的辅助势 $v_s^-$，在这个独立粒子体系中增减平均电子数。左侧移除 HOMO、右侧填入 LUMO，能量分别按 $\varepsilon_H^-$ 与 $\varepsilon_L^-$ 线性变化；其 Euler 方程是
+$\delta T_s/\delta n+v_s^-=\mu_s^\pm$。
+两式相减后固定的 $v_s^-$ 抵消，留下
+\begin{equation}
+\left.\frac{\delta T_s}{\delta n}\right|_+
+-\left.\frac{\delta T_s}{\delta n}\right|_-
+=\varepsilon_L^--\varepsilon_H^-.
+\end{equation}
+这里同样使用支持非相互作用系综的单侧导数或相应次梯度。由此再次得到式\eqref{spectra:discontinuity}，并明确了辅助轨道隙与交换关联跳变各占哪一部分。
+
 继续使用本章开头的模型数值。若精确局域 KS 体系给出 $\varepsilon_H^-=-0.5$、$\varepsilon_L^-=-0.3$ Hartree，轨道隙只有 $0.2$ Hartree。要与总能量定义的 $E_g=0.3$ 一致，就需 $\Delta_{xc}=0.1$ Hartree；右侧导数于是为 $-0.3+0.1=-0.2=-A$。这个算例展示了同一物理条件怎样约束几个看似不同的能量。
 
 实际 LDA、GGA 等近似还可能使 $E(N+\eta)$ 弯曲，偏离分段直线。因此它们的带隙误差既涉及所用近似，也涉及轨道隙与基本带隙本来就不同的定义。混合泛函通常使用非局域的广义 KS 算符，不能把式 \eqref{spectra:discontinuity} 中局域 KS 的分配方式原封不动地套用过去。
@@ -92,4 +208,6 @@ E_g=(\varepsilon_L^--\varepsilon_H^-)+\Delta_{xc}.
 \section{怎样让计算结果回答最初的物理问题}
 若关心移走或加入电子的能量，可以直接计算 $N,N\pm1$ 的自洽总能量，再取差；这通常称为 $\Delta$SCF。它允许电荷变化后其他电子重新分布，但仍保留所用泛函的近似误差。周期体系的带电计算还需处理额外电荷的静电边界问题。
 
-若只报告本征值差，就应说明它是局域 KS 还是广义 KS 轨道隙；若讨论实验吸收，则还需考虑固定电子数下的激发过程。先明确物理过程，再选择对应能量，才能知道一个计算结果究竟解释了什么。
+若只报告本征值差，就应说明它是局域 KS 还是广义 KS 轨道隙；若讨论实验吸收，则还需考虑固定电子数下的激发过程。
+
+课堂上把 KS 辅助“Fermi 气体”与 Landau 的 Fermi 液体并列，有助于辨认两个不同对象。前者按构造是没有显式粒子间相互作用的辅助体系，其轨道被要求再现基态密度；后者是描述某些相互作用费米体系低能激发的有效理论，准粒子是带着周围体系响应的激发。两者都能用占据变化讨论能量，但基态密度的映射本身不保证真实准粒子的色散、谱权重或寿命等于 KS 轨道的相应量。因此，不能只因 Janak 关系是一个占据导数，就把全部 KS 本征值解释为 Landau 准粒子能量。先明确物理过程，再选择对应能量，才能知道计算结果解释了什么。

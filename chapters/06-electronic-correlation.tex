@@ -31,6 +31,57 @@ H_{IJ}=\langle\Phi_I|\hat H|\Phi_J\rangle.
 
 这里要区分两种优化：普通 CI 保持轨道不变，优化的是行列式\emph{之间}的系数；HF 优化轨道，却保持整个态只有一个行列式。CI 因此增加了 HF 轨道调整本身没有的自由度。
 
+\section{用占据数和产生、湮灭算符记账}\label{corr:second-quantization}
+CI 中的 $\Phi_i^a$ 可以用更简洁的算符记号表示，但应先说明这些符号做什么。固定 $M$ 条正交自旋轨道及其排列顺序，以
+$|n_1,\ldots,n_M\rangle$ 表示对应的归一化行列式，其中 $n_p=0,1$，且 $\sum_p n_p=N$。完整的可区分粒子空间是单粒子空间的张量积；电子只能取其中的反对称子空间。占据数态是该子空间的一组基，而不是给电子贴上可区分标签。
+
+允许不同 $N$ 的这些空间合在一起，便可以定义改变粒子数的算符。令 $L_p=\sum_{q<p}n_q$；产生算符与湮灭算符的作用定义为
+\begin{align}
+a_p^\dagger|\ldots,n_p,\ldots\rangle
+&=(-1)^{L_p}(1-n_p)|\ldots,1,\ldots\rangle,\\
+a_p|\ldots,n_p,\ldots\rangle
+&=(-1)^{L_p}n_p|\ldots,0,\ldots\rangle.
+\end{align}
+符号 $(-1)^{L_p}$ 来自把轨道 $p$ 放回规定顺序时跨过的已占据轨道数；每次交换都带来负号。占据态不能再放入一个相同自旋轨道的电子，空态也不能再移走电子，前面的 $1-n_p$ 与 $n_p$ 正好执行这两个限制。
+
+对同一轨道，$a_p^\dagger a_p$ 在占据态上给一、空态上给零，$a_pa_p^\dagger$ 刚好相反，两者之和为恒等算符。对不同轨道，交换两个操作的顺序会多跨过一次占据位置，符号相反。因此，以 $\{A,B\}=AB+BA$ 定义反对易子，有
+\begin{equation}
+\{a_p,a_q^\dagger\}=\delta_{pq},\qquad
+\{a_p,a_q\}=\{a_p^\dagger,a_q^\dagger\}=0,
+\qquad \hat n_p=a_p^\dagger a_p.
+\end{equation}
+右侧的 $\delta_{pq}$ 乘以恒等算符。现在先移走占据电子，再放入虚轨道，就定义了激发行列式及其符号约定：
+\begin{equation}\label{corr:excitation-operators}
+|\Phi_i^a\rangle=a_a^\dagger a_i|\Phi_0\rangle,\qquad
+|\Phi_{ij}^{ab}\rangle=a_a^\dagger a_b^\dagger a_j a_i|\Phi_0\rangle
+\quad(i<j,\ a<b).
+\end{equation}
+这些操作保持总电子数不变。式\eqref{ci:expansion}仍是原来的多体态展开，“二次量子化”在这里是同一个问题的占据数表达，并未再加入一层物理近似。
+
+一体算符把轨道 $q$ 变成 $p$，其振幅是 $h_{pq}$，因此对应 $h_{pq}a_p^\dagger a_q$。两体算符先移走 $r,s$，再放入 $p,q$。定义
+\begin{equation}
+\langle pq|rs\rangle=\iint\phi_p^*(x)\phi_q^*(x')
+\frac{\phi_r(x)\phi_s(x')}{|\bm r-\bm r'|}\dd x\dd x',
+\end{equation}
+就能把固定核电子 Hamilton 算符写为
+\begin{equation}\label{corr:hamiltonian-occupation}
+\hat H=\sum_{pq}h_{pq}a_p^\dagger a_q
++\frac12\sum_{pqrs}\langle pq|rs\rangle a_p^\dagger a_q^\dagger a_s a_r.
+\end{equation}
+这里 $\langle pq|rs\rangle$ 的前两个标签属于 bra，后两个属于 ket，区别于上一章按积分坐标分组的圆括号记号。交换两次操作所产生的负号由算符负责；两体项的 $1/2$ 仍然是有序粒子对重复计数的修正。
+
+可以在两个电子上直接核对这一系数。对 $|ij\rangle=a_i^\dagger a_j^\dagger|0\rangle$ 与 $|ab\rangle$，能留下非零结果的湮灭次序有 $(i,j)$ 与 $(j,i)$，产生次序有 $(a,b)$ 与 $(b,a)$。四项之和是
+\begin{align}
+\langle ab|\hat W|ij\rangle
+&=\tfrac12\bigl[\langle ab|ij\rangle-\langle ab|ji\rangle
+-\langle ba|ij\rangle+\langle ba|ji\rangle\bigr]\notag\\
+&=\langle ab|ij\rangle-\langle ab|ji\rangle
+\equiv\langle ab\Vert ij\rangle.
+\end{align}
+最后一步交换两电子积分坐标，用了
+$\langle ba|ji\rangle=\langle ab|ij\rangle$、
+$\langle ba|ij\rangle=\langle ab|ji\rangle$。其余电子作为相同的旁观轨道时，正交积分给一，双激发耦合仍由这个反对称化积分决定。这与上一章直接展开行列式得到的“直接减交换”完全一致。
+
 \section{一个双构型例子：能量为什么降低}
 保留参考构型 $\Phi_0$ 和另一个与它耦合的构型 $\Phi_1$。将两个对角能量记为 $E_0$、$E_0+\Delta$，其中 $\Delta>0$；取实的耦合矩阵元 $V$，则
 \begin{equation}\label{ci:two}
@@ -81,7 +132,14 @@ w_1=\frac{t^2}{1+t^2}
 \hat H=\hat H_0+\lambda\hat V,\qquad
 \hat H_0=\sum_i\hat f(i),\qquad \hat V=\hat H-\hat H_0.
 \end{equation}
-$\lambda$ 只是组织展开的参数，最后取一。注意 $\hat H_0$ 的参考能量为占据轨道能量之和，而不是 HF 总能量；零阶加一阶才恢复 $E_{\rm HF}$。
+$\lambda$ 只是组织展开的参数，最后取一，$\hat f$ 固定为参考 HF 解的算符。正则轨道使 $H_0=\sum_p\varepsilon_p\hat n_p$，所以每个占据数态都是它的本征态；对参考行列式明确有
+\begin{align}
+E_0^{(0)}&=\sum_{i\,\mathrm{occ}}\varepsilon_i,\\
+E^{(1)}&=\langle\Phi_0|H-H_0|\Phi_0\rangle
+=E_{\rm HF}-\sum_{i\,\mathrm{occ}}\varepsilon_i,\\
+E_0^{(0)}+E^{(1)}&=E_{\rm HF}.
+\end{align}
+因此未扰动参考能量不是 HF 总能量；HF 已包含在零阶与一阶的和中。二阶分母必须使用 $H_0$ 的本征能之差，不能把其中一项单独换成 $E_{\rm HF}$。
 
 为说明二阶修正的来源，展开 $|\Psi\rangle=|0\rangle+\lambda|\Psi^{(1)}\rangle+\cdots$ 与 $E=E_0^{(0)}+\lambda E^{(1)}+\cdots$，并取 $\langle0|\Psi^{(1)}\rangle=0$。本征方程的一阶部分为
 \begin{equation}
@@ -105,23 +163,46 @@ E_{\rm MP2}=E_{\rm HF}+\sum_{i<j,a<b}
 \frac{|\langle\Phi_{ij}^{ab}|\hat V|\Phi_0\rangle|^2}
 {\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b}.
 \end{equation}
-这里 $i,j$ 为占据轨道，$a,b$ 为未占据轨道。分母很小时，小修正的前提受到破坏，MP2 可能失效。它也不是对归一化试探态直接最小化的结果，所以没有变分上界保证；不能认为它必然处在 HF 与精确能量之间。
+这里 $i,j$ 为占据轨道，$a,b$ 为未占据轨道。$H_0$ 不连接不同行列式，因此双激发的 $V$ 矩阵元等于 $H$ 的矩阵元。用式\eqref{corr:hamiltonian-occupation}的两体展开，便得到可由轨道积分直接计算的形式
+\begin{equation}\label{corr:mp2-integrals}
+E^{(2)}=\sum_{i<j,a<b}\frac{|\langle ab\Vert ij\rangle|^2}
+{\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b}
+=\frac14\sum_{ijab}\frac{|\langle ab\Vert ij\rangle|^2}
+{\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b}.
+\end{equation}
+最后一个求和不限制各对指标的大小。交换 $i,j$ 或 $a,b$ 使分子中的振幅变号，模平方不变；同一对双激发被数了四次，所以需 $1/4$。若两个占据或两个虚指标相同，反对称化积分为零。
+
+对通常的有隙 Aufbau 参考，虚轨道高于占据轨道，分母为负，所以这一阶修正降低能量。分母很小时，小修正的前提受到破坏，MP2 可能失效。它也不是对归一化试探态直接最小化的结果，所以没有变分上界保证；不能认为它必然处在 HF 与精确能量之间。所谓恢复某个固定百分比的关联能只能是选定体系的经验表现，不能作为 MP2 的一般定理。
 
 \section{耦合簇：保留独立激发的乘积}
 CI 截断的尺寸一致性问题提示我们：独立片段上的激发应该能够自动同时出现。耦合簇用
 \begin{equation}
 |\Psi\rangle=e^{\hat T}|\Phi_0\rangle,\qquad \hat T=\hat T_1+\hat T_2+\cdots
 \end{equation}
-组织波函数，其中 $\hat T_1$ 产生单激发，$\hat T_2$ 产生双激发。即使只保留 $T_1,T_2$，指数展开 $1+T+T^2/2+\cdots$ 仍含 $T_2^2/2$，因而包含两个独立双激发同时发生的贡献。这里不是把所有四激发都当作独立参数求解，而是保留由已有激发组成的乘积。
+组织波函数。用刚定义的激发算符，可明确写出
+\begin{equation}
+\hat T_1=\sum_{ia}t_i^a a_a^\dagger a_i,\qquad
+\hat T_2=\sum_{i<j,a<b}t_{ij}^{ab}a_a^\dagger a_b^\dagger a_j a_i.
+\end{equation}
+参数 $t$ 称为簇振幅；$T_1\Phi_0$ 产生单激发，$T_2\Phi_0$ 产生双激发。按\emph{激发阶数}而非 $T$ 的幂来重排指数，零激发来自 $1$，一激发来自 $T_1$，二激发来自 $T_2$ 与 $T_1^2/2$。三激发来自 $T_3$、$(T_1T_2+T_2T_1)/2$ 和 $T_1^3/6$。纯占据到虚轨道的激发算符彼此可交换：指标互不相交时，交换两个偶数个费米算符的乘积给正号；重复移走或放入同一轨道时，相应乘积为零。因此
+\begin{equation}
+e^T=1+T_1+\left(T_2+\frac12T_1^2\right)
++\left(T_3+T_1T_2+\frac16T_1^3\right)+\cdots.
+\end{equation}
+即使只保留独立参数 $T_1,T_2$，指数仍产生三激发以及 $T_2^2/2$ 等四激发项。这里不是把所有高阶 CI 系数都当成独立参数，而是保留由低阶激发组成的乘积。
 
 对不相互作用的片段，若 $T=T_A+T_B$ 且两算符可交换，二项式展开给出 $(T_A+T_B)^n=\sum_{k=0}^n\binom nkT_A^kT_B^{n-k}$。代入指数级数，令 $l=n-k$，系数 $\binom nk/n!=1/(k!l!)$，所以 $e^T=\sum_{k,l}T_A^kT_B^l/(k!l!)=e^{T_A}e^{T_B}$。这自然得到片段波函数的乘积，也解释了指数形式为何有用。
 
-求系数时，把指数形式代入 Schrödinger 方程，再左乘 $e^{-T}$。对参考态和激发态分别投影得
+求系数时，先代入 $He^T|\Phi_0\rangle=Ee^T|\Phi_0\rangle$；指数算符可逆，左乘 $e^{-T}$ 后得到
+$e^{-T}He^T|\Phi_0\rangle=E|\Phi_0\rangle$。
+对参考态和激发态分别投影得
 \begin{equation}
 E=\langle\Phi_0|e^{-T}He^T|\Phi_0\rangle,\qquad
 \langle\Phi_\mu|e^{-T}He^T|\Phi_0\rangle=0.
 \end{equation}
-第二式来自 $\langle\Phi_\mu|\Phi_0\rangle=0$，用于确定激发振幅。CCSD 保留独立的单、双激发振幅；CCSD(T) 再加入三激发的微扰修正。它们仍依赖参考行列式是否合适，并不是所有强关联问题的通用答案。普通投影耦合簇也不保证变分上界。
+第二式来自 $\langle\Phi_\mu|\Phi_0\rangle=0$，用于确定激发振幅。CCSD 令 $T=T_1+T_2$，并分别对所有单激发 $\Phi_i^a$ 和双激发 $\Phi_{ij}^{ab}$ 令残差为零；截断后不要求其他激发上的残差也为零。CCSD(T) 再加入三激发的微扰修正。常规稠密实现中，CCSD 的主要收缩可含两个占据与四个虚指标，按 $n_o^2n_v^4$ 计数；三激发修正的主要工作按 $n_o^3n_v^4$ 计数。当 $n_o,n_v$ 同按基组规模 $M$ 增长时，分别记为 $O(M^6)$ 与 $O(M^7)$。
+
+CCSD(T) 常被用作单参考分子问题的高精度基准，但它仍依赖参考行列式是否合适，尤其不能由这一称谓保证断键或强关联问题的精度。普通投影耦合簇的左侧是 $\langle\Phi_0|e^{-T}$，并非归一化右态的 Hermitian 共轭，故它不是普通 Rayleigh 商最小化，也不保证变分上界。
 
 \section{量子 Monte Carlo：换一种方式做多电子积分}
 前面的方法都以轨道和行列式组织计算。另一种思路是直接对电子坐标采样。给定带参数 $\theta$ 的试探波函数 $\Psi_\theta(X)$，其中 $X$ 表示全部电子坐标，其能量写为
@@ -131,12 +212,36 @@ E(\theta)=\frac{\int\Psi_\theta^*\hat H\Psi_\theta\dd X}{\int|\Psi_\theta|^2\dd 
 \end{equation}
 其中 $p_\theta=|\Psi_\theta|^2/\int|\Psi_\theta|^2$ 是采样概率，$E_L=(\hat H\Psi_\theta)/\Psi_\theta$ 称局部能量。第二个等号只是把被积函数乘除同一个波函数，却把高维积分变成了第三章所学的概率平均。
 
-这称为变分 Monte Carlo。先按 $p_\theta$ 采样并估计能量，再调整参数降低它。精确本征态处处满足 $\hat H\Psi=E\Psi$，故局部能量是常数，采样方差为零；一般试探态的局部能量会随构型涨落。优化和增加样本分别改善试探态与统计误差，二者不能互相替代。
+这称为变分 Monte Carlo（VMC）。按 $p_\theta$ 采样 $L$ 个构型 $X_\ell$ 后，用
+$\widehat E=L^{-1}\sum_{\ell=1}^L E_L(X_\ell)$ 估计积分；相关样本的误差仍需按第三章处理。节点处的比值没有通常定义，节点附近还可能发散，不能假定总有有限的极限；概率积分使用非节点处的表达式，并需检查期望及方差是否收敛。精确本征态在非节点处满足 $\hat H\Psi=E\Psi$，故局部能量是常数，理想采样方差为零；一般试探态的局部能量会随构型涨落。
 
-扩散 Monte Carlo 则利用虚时投影。在原子单位下，以 $t=-\ii\tau$ 将含时方程改写为 $-\partial_\tau\Psi=H\Psi$，再减去只控制整体幅度的常数 $E_T$，得到 $-\partial_\tau\Psi=(H-E_T)\Psi$。这已是辅助投影方程，不是真实时间演化。写 $\Psi(\tau)=\sum_n a_n(\tau)\Phi_n$ 并逐个投影，得到 $\dot a_n=-(E_n-E_T)a_n$。分离变量积分得 $a_n(\tau)=a_n(0)e^{-(E_n-E_T)\tau}$，令 $c_n=a_n(0)$，便有
+调整参数是在合法试探族内求最小值，变分原理只保证
+\begin{equation}
+\inf_\theta E(\theta)\ge E_0.
+\end{equation}
+等号还要求这个函数族能逼近精确基态，并且优化确实到达相应极限。有限样本的随机估计值可能波动到 $E_0$ 以下，这不推翻精确期望值的上界性质。优化和增加样本分别改善试探态与统计误差，二者不能互相替代。
+
+\subsection{FermiNet 改变的是试探波函数}
+FermiNet 用神经网络构造依赖全部电子坐标的行列式元素，再用同一个 VMC 能量原则优化参数。这里把电子坐标作为矩阵的行指标，即将第五章的行列式矩阵转置；转置不改变行列式。普通 HF 的第 $i$ 行只依赖电子 $i$ 的坐标；这里可写成矩阵 $A_\theta(X)$，每行还读取其他电子的位置。关键约束是交换两个同自旋电子时，矩阵的对应两行也随之交换。若 $P$ 是这次交换的排列矩阵，则要求
+\begin{equation}
+A_\theta(PX)=P A_\theta(X),\qquad
+\det A_\theta(PX)=\det P\det A_\theta(X)=-\det A_\theta(X).
+\end{equation}
+第一式称为对排列的等变性，第二式由行列式乘法规则给出所需反对称性。固定向上、向下自旋电子数的实现可分别使用两个自旋块，并对若干行列式乘积作线性组合。各元素依赖其他电子的位置，使联合分布能表达超出固定单粒子轨道行列式的关联；行列式结构则保持粒子交换约束。网络增加了试探族的表达能力，但并不改变变分上界的条件，也不自动消除优化误差。这是多体波函数方法，并非用神经网络替换 KS 交换关联势。
+
+\subsection{虚时为什么产生扩散和投影}
+
+扩散 Monte Carlo（DMC）则利用虚时投影。在原子单位下，令 $t=-\ii\tau$，即 $\tau=\ii t$，链式法则给出 $\partial_t=\ii\partial_\tau$。含时方程左侧的 $\ii\partial_t$ 因而变为 $-\partial_\tau$。再减去只控制整体幅度的常数 $E_T$，得到
+$-\partial_\tau\Psi=(H-E_T)\Psi$。对局域势 $V(X)$，代入 $H=-\tfrac12\nabla_X^2+V(X)$ 并移项：
+\begin{equation}
+\partial_\tau\Psi=\frac12\nabla_X^2\Psi-[V(X)-E_T]\Psi.
+\end{equation}
+第一项与扩散方程相同，第二项使各处的权重增长或衰减；“扩散”一词来自这个结构。这已是辅助投影方程，不是真实时间演化。写 $\Psi(\tau)=\sum_n a_n(\tau)\Phi_n$ 并逐个投影，得到 $\dot a_n=-(E_n-E_T)a_n$。分离变量积分得 $a_n(\tau)=a_n(0)e^{-(E_n-E_T)\tau}$，令 $c_n=a_n(0)$，便有
 \begin{equation}
 \Psi(\tau)=\sum_n c_n e^{-(E_n-E_T)\tau}\Phi_n.
 \end{equation}
 若初态含基态分量，其他分量与它的比值按 $e^{-(E_n-E_0)\tau}$ 衰减，归一化后便趋向基态。$E_T$ 只调节总体权重，不改变这一相对衰减机制。
 
-困难在于费米波函数有正负号，不能直接当作正概率。常用固定节点近似把波函数为零的面固定为试探波函数的节点，在各节点区域内进行投影。这避免了部分符号处理困难，也留下节点误差；样本再多也不能自动修正错误的节点。对局域 Hamilton 算符和理想投影，固定节点能量具有上界性质。这样，QMC 与 CI 一样，都要区分“计算这个近似做得够准”与“近似本身是否足够准确”。
+困难在于费米波函数有正负号，不能直接当作正概率。常用固定节点近似把波函数为零的面固定为实试探波函数的节点，在每个节点区域的边界施加 $\Psi=0$，再在区域内部投影。它限制了允许波函数的集合；对局域 Hamilton 算符及理想投影，在这个更小集合中找到的最低能量不能低于完整费米态空间的最低能量，因此具有变分上界。节点精确时才可能去掉这一限制带来的能量偏差。固定节点不是声称整个费米波函数处处同号，也不是让每个电子永远保持某个“符号”。它固定的是多电子构型空间中的零点边界；有限时间步和有限采样还会另有数值误差。
+
+高维困难仍需牢记：若在每个笛卡尔坐标方向只放十个网格点，一个电子已有 $10^3$ 个位置组合，$N$ 电子波函数的直接网格表需 $10^{3N}$ 个数；$N=30$ 时就是 $10^{90}$。Monte Carlo 不必存储这张完整表，但仍要选择能够求值的试探函数并控制采样误差。它改变了高维积分的做法，并没有证明任意多电子问题都容易求解。

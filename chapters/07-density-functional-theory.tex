@@ -31,11 +31,28 @@ E_{v'}<E_v+\int[v'(\bm r)-v(\bm r)]n(\bm r)\dd\bm r.
 \end{equation}
 若密度相同，两式相加后积分正好抵消，得到 $E_v+E_{v'}<E_v+E_{v'}$，矛盾。
 
-这就是 Hohenberg--Kohn 定理的核心反证。对通常的连续空间 Coulomb 体系，在所需正则性条件下，基态密度确定标量外势，允许相差一个常数。常数不能被密度辨认，因为给每个电子的势都加 $C$，只会把总能量加 $NC$，不会改变波函数。上述简短反证使用了非简并且不同的基态；共享基态与简并情形需更一般的论证，不能把严格不等式直接照搬过去。
+这就是 Hohenberg--Kohn 第一条定理的核心反证，但还应解释为什么排除“两个势不同却共享同一波函数”的漏洞。若同一个非零 $\Psi$ 同时满足两个本征方程，相减得
+\begin{equation}
+\left\{\sum_i[v(\bm r_i)-v'(\bm r_i)]-(E_v-E_{v'})\right\}\Psi=0.
+\end{equation}
+在波函数非零的构型区域内，括号必须为零。保持其余坐标不变，只改变 $\bm r_1$，便知 $v(\bm r_1)-v'(\bm r_1)$ 在该区域不能变化。对通常的连续空间 Coulomb 势，在相应正则性与唯一延拓条件下，这一关系可延伸到几乎处处，故两势至多相差常数。不能在波函数节点上直接除以 $\Psi$。
+
+常数确实不能被密度辨认：给每个电子的势加 $C$，Hamilton 算符增加 $NC$，本征函数不变，能量整体增加 $NC$。在上述通常条件下，非简并基态的关系因而是 $n_0\to v\ \text{（差一个常数）}\to H_v\to\Psi_0$。简并情形不能直接套用严格变分不等式，也不能把密度说成唯一指定某一个纯态波函数。
 
 这条定理首先是一个\emph{存在性与唯一性结论}：基态密度中包含辨认电子问题所需的信息。它没有给出从密度直接算出能量的简单公式，也不表示所有具有相同密度的非基态都有相同能量。真正的计算困难仍然存在，只是可以换一种方式表述。
 
-\section{约束搜索：把看不见的多体信息放进泛函}
+\section{密度变分与约束搜索}\label{dft:constrained-search}
+首先在可以由某个外势产生的非简并基态密度中讨论变分。这样的密度称为基态 $v$ 可表象密度。设试探密度 $n'$ 是另一个势 $v'$ 的基态 $\Psi'$ 所产生的，定义该密度的内部能量为 $F_{\rm HK}[n']=\langle\Psi'|T+W|\Psi'\rangle$。在\emph{固定的目标外势 $v$}中评价它，逐项有
+\begin{align}
+E_v[n']&=F_{\rm HK}[n']+\int v(\bm r)n'(\bm r)\dd\bm r\notag\\
+&=\langle\Psi'|T+W|\Psi'\rangle
++\langle\Psi'|\sum_i v(\bm r_i)|\Psi'\rangle\notag\\
+&=\langle\Psi'|H_v|\Psi'\rangle\ge E_0[v].
+\end{align}
+真实基态密度 $n_0$ 使等号成立。这是密度变分原理，即 HK 第二条定理；比较试探密度时不能同时把目标外势也换掉。固定核排斥是相同常数，加回后不改变这个不等式。
+
+不过，任意猜出的非负密度未必已知是哪个外势的基态。较宽的 $N$ 可表象要求只是：存在一个合法的、归一化 $N$ 电子反对称态产生该密度。两种要求不同。下面的约束搜索把变分定义在后一类密度上，避免先为每个试探密度找到相应外势。
+
 用第一个例子的话说，同一个密度可以对应不同的电子共同排布。现在固定这个密度，在所有产生它的合法多电子波函数中，寻找内部能量最低的那个，定义
 \begin{equation}\label{dft:search}
 F[n]=\inf_{\Psi\to n}\langle\Psi|\hat T+\hat W|\Psi\rangle.
@@ -51,9 +68,22 @@ E_0[v]=\inf_{n\to N}\left\{F[n]+\int v(\bm r)n(\bm r)\dd\bm r\right\}.
 这里的“密度泛函”就是一种以\emph{整个密度函数}为输入、输出一个数的规则。它不必只看每一点的局部密度，也可以联系不同位置。两电子如何避开、波函数如何弯曲产生动能，这些信息并未被宣布无关，而是被式 \eqref{dft:search} 的内部最小化包含进去了。问题在于，精确 $F[n]$ 通常不知道。
 
 \section{先试最直接的办法：局域近似动能}
-既然想用密度，最直接的尝试是把动能也写成密度的简单函数。均匀、无相互作用的电子气提供了一个可以算清的参考。电子在体积 $\Omega$ 的盒子中取平面波，每个空间波矢可容纳自旋相反的两个电子。零温时从低能向高能填充，直到半径为 $k_F$ 的球。
+既然想用密度，最直接的尝试是把动能也写成密度的简单函数。均匀、无相互作用的电子气提供了一个可以算清的参考。电子在体积 $\Omega$ 的盒子中取平面波
+\begin{equation}
+u_{\bm k}(\bm r)=\Omega^{-1/2}e^{\ii\bm k\cdot\bm r},\qquad
+-\tfrac12\nabla^2u_{\bm k}=\tfrac{k^2}{2}u_{\bm k}.
+\end{equation}
+模平方为 $1/\Omega$，故全盒积分为一；每次空间求导产生一个 $\ii k_\alpha$，两次求导后为 $-k_\alpha^2$，从而本征能量是 $k^2/2$。本节仍用原子单位，恢复普通单位时这个能量应乘相应的 $\hbar^2/m_e$。每个空间波矢可容纳自旋相反的两个电子。零温时从低能向高能填充，自旋通道 $\sigma$ 各有一个半径为 $k_F^\sigma$ 的占据球。
 
-为数出允许的波矢，先在边长 $L$ 的立方盒内使用周期边界。平面波 $e^{\ii k_xx}$ 满足 $e^{\ii k_xL}=1$，所以 $k_x=2\pi m_x/L$，另外两个方向同理。相邻波矢间隔均为 $2\pi/L$，故每个允许波矢在 $k$ 空间占体积 $(2\pi/L)^3=(2\pi)^3/\Omega$。将离散求和在大体积极限下换成球内积分，并乘两种自旋的因子二，数电子数和求动能分别给出
+为数出允许的波矢，先在边长 $L$ 的立方盒内使用周期边界。平面波 $e^{\ii k_xx}$ 满足 $e^{\ii k_xL}=1$，所以 $k_x=2\pi m_x/L$，另外两个方向同理。相邻波矢间隔均为 $2\pi/L$，故每个允许波矢在 $k$ 空间占体积 $(2\pi/L)^3=(2\pi)^3/\Omega$。下面取固定密度的大体积极限，以这个状态密度把离散求和换成积分；有限盒子仍有离散能级修正。先\emph{不乘}自旋因子，单个自旋通道有
+\begin{align}
+N_\sigma&=\frac{\Omega}{(2\pi)^3}\frac{4\pi}{3}(k_F^\sigma)^3,
+\qquad n_\sigma=\frac{(k_F^\sigma)^3}{6\pi^2},\\
+T_\sigma&=\frac{\Omega}{(2\pi)^3}\int_0^{k_F^\sigma}\frac{k^2}{2}\,4\pi k^2\dd k
+=\frac{\Omega}{4\pi^2}\left[\frac{k^5}{5}\right]_0^{k_F^\sigma}
+=\frac{\Omega(k_F^\sigma)^5}{20\pi^2}.
+\end{align}
+四次幂的被积函数来自能量的 $k^2$ 乘球壳体积的 $k^2$。非自旋极化时 $n_\uparrow=n_\downarrow=n/2$，两球半径同为 $k_F$，将两通道相加才得到
 \begin{align}
 n&=\frac{2\cdot4\pi}{(2\pi)^3}\int_0^{k_F}k^2\dd k
 =\frac{k_F^3}{3\pi^2},\\
@@ -66,6 +96,28 @@ T_{\rm TF}[n]=\frac3{10}(3\pi^2)^{2/3}\int n(\bm r)^{5/3}\dd\bm r.
 \end{equation}
 它的物理图像是把每个小区域当作均匀电子气。密度越高，Pauli 原理要求填充到越高的动量，平均动能也越大。
 
+若两个自旋通道不等，分别使用
+$k_F^\sigma=(6\pi^2n_\sigma)^{1/3}$，再将各自的 $T_\sigma/\Omega$ 作局域积分，有
+\begin{equation}
+T_{\rm TF}[n_\uparrow,n_\downarrow]
+=\frac3{10}(6\pi^2)^{2/3}\int
+\bigl(n_\uparrow^{5/3}+n_\downarrow^{5/3}\bigr)\dd\bm r.
+\end{equation}
+令两密度都为 $n/2$，括号变成 $2(n/2)^{5/3}=2^{-2/3}n^{5/3}$，便恢复前面的系数；这也是防止自旋因子数错的检查。
+
+这个近似怎样变成一个无需轨道的方程？先取最简单的
+$E_{\rm TF}=T_{\rm TF}+\int vn+E_H[n]$，暂不加入交换关联模型。令 $C_F=\tfrac3{10}(3\pi^2)^{2/3}$，对 $n\ge0$ 且 $\int n=N$ 作约束变分。在 $n>0$ 的区域有
+\begin{equation}
+\frac53 C_F n^{2/3}+v+v_H=\mu,
+\qquad \frac12(3\pi^2n)^{2/3}=\mu-v-v_H.
+\end{equation}
+第一项的系数来自 $\dd n^{5/3}/\dd n=(5/3)n^{2/3}$；$E_H$ 的导数将在后面逐项推导。左侧非负，故当右侧为负时应取边界解 $n=0$，而不是继续取负数的分数次幂。解出正密度部分，得到
+\begin{equation}
+n(\bm r)=\frac1{3\pi^2}
+\bigl[2\max\{\mu-v(\bm r)-v_H(\bm r),0\}\bigr]^{3/2}.
+\end{equation}
+调整 $\mu$ 使积分为 $N$，同时用所得密度更新 $v_H$，便得到一个直接对密度求解的自洽问题。这就是轨道无关 DFT 的简单例子；它把动能也近似为密度的显式函数。
+
 这个近似能描述一部分平滑的密度变化，却很难准确描述原子的壳层、轨道节点和化学键中的量子结构。困难因此不只在电子排斥，\emph{动能本身}也需要足够精细的描述。Kohn--Sham 方法的关键选择是：不必为了“只谈密度”而放弃一切轨道；可以引入一个简单辅助体系，用它准确计算辅助动能。
 
 \section{Kohn--Sham：用辅助轨道再现真实密度}
@@ -76,7 +128,9 @@ T_s=\sum_i f_i\langle\phi_i|-\nabla^2/2|\phi_i\rangle.
 \end{equation}
 以下先讨论自旋可分离的情形，写 $\phi_i(\bm r,s)=\varphi_i(\bm r)\chi_i(s)$，其中自旋函数满足 $\sum_s|\chi_i(s)|^2=1$。自旋求和后便有 $n=\sum_i f_i|\varphi_i|^2$。为简化后续公式，下面将空间因子 $\varphi_i(\bm r)$ 简记为 $\phi_i(\bm r)$，但指标 $i$ 仍区分自旋标签：两条自旋相反的轨道可以有相同空间因子。正交约束始终作用于完整自旋轨道；两条轨道的自旋函数若正交，空间因子相同也不妨碍这一约束成立。
 
-若进一步合并成闭壳层空间轨道求和，才改写为 $n=2\sum_{a\,\mathrm{occ}}|\varphi_a|^2$。这个因子二来自两种自旋占据，不是额外的归一化因子。辅助体系能再现所需密度是 KS 构造的重要前提；以下在这种表示适用的范围内讨论。
+若进一步合并成闭壳层空间轨道求和，才改写为 $n=2\sum_{a\,\mathrm{occ}}|\varphi_a|^2$。这个因子二来自两种自旋占据，不是额外的归一化因子。一体密度与动能的轨道和由第\ref{hf:exchange}节的行列式一体约化得到；这里把该结果用于辅助体系。
+
+需要区别两个层次。给定密度时，可先将 $T_s[n]$ 定义为产生该密度的非相互作用行列式中动能的下确界；允许简并或分数占据时，相应扩展到非相互作用系综。要把最优轨道实现为某个\emph{局域势}的基态，还需非相互作用 $v$ 可表象性。这比存在任意反对称态产生密度更强，也不由相互作用体系的 HK 定理自动保证。以下在所需辅助表示存在的范围内讨论。
 
 “没有显式相互作用”不等于忽略真实排斥。我们先把真实能量中容易计算的部分单列出来。外势能为 $\int vn$，把密度当作连续电荷云的经典排斥能为
 \begin{equation}
@@ -132,7 +186,31 @@ n_{\rm next}=(1-\alpha)n_{\rm in}+\alpha n_{\rm out},\qquad 0<\alpha\le1
 \begin{equation}
 E=\sum_i f_i\varepsilon_i-E_H+E_{xc}-\int nv_{xc}+E_{NN}.
 \end{equation}
-每个扣除或补回的项都有目的：扣除重复的经典排斥，把交换关联势的期望值换成交换关联能本身，再加上核间排斥。未自洽时建势所用密度与轨道输出密度不同，应从原能量表达式计算，不能混用这条自洽后的简式。
+每个扣除或补回的项都有目的：扣除重复的经典排斥，把交换关联势的期望值换成交换关联能本身，再加上核间排斥。
+
+未自洽时还须区分输入与输出。若轨道由 $v_s[n_{\rm in}]$ 求得，其本征方程只保证
+\begin{equation}
+T_s[\{\phi_i,f_i\}]=\sum_i f_i\varepsilon_i
+-\int v_s[n_{\rm in}](\bm r)n_{\rm out}(\bm r)\dd\bm r.
+\end{equation}
+这里动能是当前轨道的动能，并不额外声称它已是固定 $n_{\rm out}$ 下的约束最小值。代入原能量表达式，当前轨道给出的能量为
+\begin{align}
+E_{\rm out}={}&\sum_i f_i\varepsilon_i
+-\int v_s[n_{\rm in}]n_{\rm out}\dd\bm r
++\int vn_{\rm out}\dd\bm r\notag\\
+&+E_H[n_{\rm out}]+E_{xc}[n_{\rm out}]+E_{NN}.
+\end{align}
+只有当 $n_{\rm in}=n_{\rm out}$ 时，才可把两个密度合并并使用前面的自洽简式。混用输入势与输出密度，会产生与理论近似不同的记账错误。
+
+磁性或开壳层的共线自旋计算需同时迭代 $n_\uparrow,n_\downarrow$。此时写
+$E_{xc}[n_\uparrow,n_\downarrow]$，对两个密度分别变分得
+$v_{xc}^\sigma=\delta E_{xc}/\delta n_\sigma$。由于 $E_H$ 只依赖 $n_\uparrow+n_\downarrow$，对任一通道求导都给同一个 $v_H$；轨道方程因此是
+\begin{equation}
+[-\nabla^2/2+v+v_H+v_{xc}^\sigma]\phi_{i\sigma}
+=\varepsilon_{i\sigma}\phi_{i\sigma},\qquad
+n_\sigma=\sum_i f_{i\sigma}|\phi_{i\sigma}|^2.
+\end{equation}
+闭壳层是两通道相同的特例，不能在已经按自旋分别求和之后再乘一次二。
 
 \section{有限温度改变的是平衡判据}
 零温基态选择最低能量；有限电子温度下，一些较高能量状态也会被占据，因为可访问的状态数同样影响平衡。这时应比较自由能 $\mathcal A=E-TS$，其中熵 $S$ 描述热混合的不确定性。能量较高但熵更大的状态，也可能具有较低自由能。
@@ -141,7 +219,43 @@ E=\sum_i f_i\varepsilon_i-E_H+E_{xc}-\int nv_{xc}+E_{NN}.
 \begin{equation}
 F_T[n]=\inf_{\Gamma\to n}\left\{\Tr[\Gamma(\hat T+\hat W)]+\kb T\Tr(\Gamma\ln\Gamma)\right\}.
 \end{equation}
-再加外势项并对密度最小化，便得到有限温度 DFT 的自由能原则。它与零温的结构相同，只是内部能量换成了内部自由能。
+这里首先把 $\Gamma$ 限制在固定 $N$ 的态空间内，$\Gamma\to n$ 指
+$\Tr[\Gamma\hat n(\bm r)]=n(\bm r)$，且 $\Tr\Gamma=1$。加上外势，定义
+$\mathcal A_v[n]=F_T[n]+\int vn$，再在允许密度中最小化，得到平衡 Helmholtz 自由能。$F_T$ 不含具体外势，才是普适内部自由能泛函。固定核排斥可在最后加回。
+
+\subsection{平衡的密度算符如何得到}
+先在固定粒子数的多体能量本征基 $H_v|a\rangle=E_a|a\rangle$ 中考虑概率 $p_a$。这并非忽略量子相干：把任意 $\Gamma$ 去掉能量基中的非对角元不改变能量，而不会降低熵。具体地，若 $\Gamma$ 的本征值是 $r_b$，能量基中的对角元是 $p_a=\sum_b|\langle a|b\rangle|^2r_b$，每行、每列的重叠模平方之和都为一。对凸函数 $g(x)=x\ln x$ 使用 Jensen 不等式，逐行求和得到
+$\sum_a p_a\ln p_a\le\sum_b r_b\ln r_b$，所以去相干后的自由能不更高。
+
+因此可对
+$\mathcal A[p]=\sum_a p_aE_a+\kb T\sum_a p_a\ln p_a$
+直接作受约束变分。引入 $\lambda(\sum_a p_a-1)$，每个 $p_a$ 的驻值条件为
+\begin{equation}
+E_a+\kb T(\ln p_a+1)+\lambda=0.
+\end{equation}
+取指数后 $p_a$ 正比于 $e^{-\beta E_a}$，归一化决定比例系数。定义 $Z_N=\sum_a e^{-\beta E_a}$，得
+\begin{equation}\label{dft:gibbs}
+p_a=\frac{e^{-\beta E_a}}{Z_N},\qquad
+\Gamma_{\rm eq}=\frac{e^{-\beta H_v}}{Z_N},\qquad
+\beta=(\kb T)^{-1}.
+\end{equation}
+由于 $\dd^2(p\ln p)/\dd p^2=1/p>0$，这个驻值是概率单纯形上的最小值。用 $\ln p_a=-\beta E_a-\ln Z_N$ 代回自由能，能量项彼此抵消：
+\begin{equation}
+\mathcal A_0=\sum_a p_aE_a+\kb T\sum_a p_a(-\beta E_a-\ln Z_N)
+=-\kb T\ln Z_N.
+\end{equation}
+于是 $\ln\Gamma_{\rm eq}=-\beta H_v+\beta\mathcal A_0$，可反解为
+$H_v=\mathcal A_0-\beta^{-1}\ln\Gamma_{\rm eq}$。这解释了平衡\emph{密度算符}如何记录 Hamilton 算符，同时也提醒我们：$\Gamma$ 与只依赖空间位置的电子数密度 $n$ 是不同的对象。
+
+有限温度的密度唯一性也可从自由能变分证明。若两个不只差常数的外势给出同一平衡密度而给出不同 Gibbs 态，严格自由能最小化分别给出
+\begin{align}
+\mathcal A_v&<\mathcal A_{v'}+\int(v-v')n\dd\bm r,\\
+\mathcal A_{v'}&<\mathcal A_v+\int(v'-v)n\dd\bm r.
+\end{align}
+同一试探态的熵在比较两个 Hamilton 算符时相同，故差别仍仅是外势项；两式相加矛盾。若 Gibbs 态相同，上面的对数反解式又要求两 Hamilton 算符只差常数。由此得到有限温度的相应结论。这里默认所选盒子与边界条件使 $Z_N$ 有限，避免把可无限蒸发的孤立体系直接当作已归一化热平衡态。
+
+若允许粒子数涨落，则固定化学势 $\mu$，改为最小化 $\mathcal A-\mu\langle\hat N\rangle$。相同计算给出
+$\Gamma=\Xi^{-1}e^{-\beta(H_v-\mu\hat N)}$，其中 $\Xi$ 对所有允许粒子数的态求和。这时 $v$ 的常数平移需与 $\mu$ 的同样平移一起考虑。下面的辅助轨道占据采用这种以平均电子数为约束的描述。
 
 在常用的独立粒子辅助描述中，以化学势 $\mu$ 调节平均电子数。单个自旋轨道只有空着和被占据两种结果，概率分别为 $1-f_i$ 与 $f_i$；代入统计熵的定义 $-\kb\sum_a p_a\ln p_a$，得 $S_i=-\kb[f_i\ln f_i+(1-f_i)\ln(1-f_i)]$。求导时，$\dd(f\ln f)/\dd f=\ln f+1$，$\dd[(1-f)\ln(1-f)]/\dd f=-\ln(1-f)-1$，因此 $\partial S_i/\partial f_i=-\kb\ln[f_i/(1-f_i)]$。
 

@@ -130,14 +130,51 @@ Z_1=\frac{V}{h_{\rm P}^3}\int e^{-\beta P^2/(2M)}\dd^3P
 \end{equation}
 由最后一个等号解得 $\lambda_{\rm th}=h_{\rm P}/\sqrt{2\pi M\kb T}$。它变小有利于经典极限，但还应与粒子间距和势能变化尺度比较。对相邻能级间隔为 $\hbar\omega$ 的振动模，$\hbar\omega\ll\kb T$ 使相邻能级 Boltzmann 权重比 $e^{-\beta\hbar\omega}$ 接近一，大量能级参与；第十一章将由能级求和验证此时的经典能量极限。轻核的零点运动和隧穿仍可能重要。
 
-\section{Hellmann--Feynman 力为什么成立}
+\section{Hellmann--Feynman 力为什么成立}\label{bo:hellmann-feynman}
 设归一化电子态是精确本征态。对 $E_n=\langle\phi_n|\hat H_e|\phi_n\rangle$ 求导，得到三项：
 \begin{equation}
 \partial_I E_n=\langle\partial_I\phi_n|\hat H_e|\phi_n\rangle+
 \langle\phi_n|\partial_I\hat H_e|\phi_n\rangle+
 \langle\phi_n|\hat H_e|\partial_I\phi_n\rangle.
 \end{equation}
-第一与第三项之和等于 $E_n\partial_I\langle\phi_n|\phi_n\rangle=0$，于是 $\bm F_I=-\langle\phi_n|\nabla_I\hat H_e|\phi_n\rangle$。电子波函数的导数没有凭空消失，而是被本征方程与归一化抵消了。
+这里 $\partial_I$ 暂指某个核坐标分量的导数。第一项可用右侧本征方程化简，第三项则必须先用 Hermitian 性，把 $\hat H_e$ 移向左侧：
+\begin{align}
+\langle\partial_I\phi_n|\hat H_e|\phi_n\rangle
+&=E_n\langle\partial_I\phi_n|\phi_n\rangle,\\
+\langle\phi_n|\hat H_e|\partial_I\phi_n\rangle
+&=\langle\hat H_e\phi_n|\partial_I\phi_n\rangle
+=E_n\langle\phi_n|\partial_I\phi_n\rangle.
+\end{align}
+两项相加后才可以使用归一化：
+\begin{equation}
+E_n\bigl(\langle\partial_I\phi_n|\phi_n\rangle+
+\langle\phi_n|\partial_I\phi_n\rangle\bigr)
+=E_n\partial_I\int|\phi_n(r;R)|^2\dd r
+=E_n\partial_I1=0.
+\end{equation}
+注意这不是说两项各自为零，也没有要求电子态不随核移动。恢复三个坐标分量，核的经典运动方程因而是
+\begin{equation}\label{bo:force}
+M_I\ddot{\bm R}_I=\bm F_I=-\nabla_I E_n
+=-\langle\phi_n|\nabla_I\hat H_e|\phi_n\rangle.
+\end{equation}
+
+为看清力的方向，在本节仍保留 SI 常数。定义该电子态的数密度
+$n_n(\bm r)=\langle\phi_n|\sum_i\delta(\bm r-\bm r_i)|\phi_n\rangle$，其积分为 $N_e$。只有电子--核吸引与核间排斥显含 $\bm R_I$；电子动能和电子间排斥对这个参数的偏导为零。由
+$\nabla_{\bm R}|\bm R-\bm r|^{-1}=-(\bm R-\bm r)/|\bm R-\bm r|^3$，将这两项分别求导再取负号，得
+\begin{align}
+\bm F_I={}&\frac{Z_Ie^2}{4\pi\epsilon_0}
+\int n_n(\bm r)\frac{\bm r-\bm R_I}{|\bm r-\bm R_I|^3}\dd\bm r\notag\\
+&+\sum_{J\ne I}\frac{Z_IZ_Je^2}{4\pi\epsilon_0}
+\frac{\bm R_I-\bm R_J}{|\bm R_I-\bm R_J|^3}.
+\end{align}
+第一项把核拉向电子云，第二项使同号的核彼此远离。本章的 $\hat H_e$ 已包含 $E_{NN}$，故第二项已包含在式\eqref{bo:force}中；若用不含核排斥的 $\hat H_{\rm el}$，才需另加 $-\nabla_I E_{NN}$。
+
+对一般归一化近似态 $\phi$，令 $E=\langle\phi|H|\phi\rangle$。在三项求导式的第一、第三项中分别写 $H=E+(H-E)$；含 $E$ 的部分仍由归一化抵消，其余两项互为共轭，得到
+\begin{equation}
+\partial_I E=\langle\phi|\partial_IH|\phi\rangle
++2\operatorname{Re}\langle\partial_I\phi|(H-E)|\phi\rangle.
+\end{equation}
+精确本征态的残差 $(H-E)\phi$ 为零；变分近似则要求残差与允许的态变化正交，才能消去相应贡献。这说明 Hellmann--Feynman 化简依靠本征方程或充分的驻值条件。
 
 有限、随核位置移动的基组会产生额外基组导数，即 Pulay 力；自洽未收敛也会破坏驻值条件。第一性原理分子动力学因此不仅要积分核运动，还要使每一步电子能量和力在所需精度内一致。
 
