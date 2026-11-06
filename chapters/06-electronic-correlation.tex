@@ -31,57 +31,6 @@ H_{IJ}=\langle\Phi_I|\hat H|\Phi_J\rangle.
 
 这里要区分两种优化：普通 CI 保持轨道不变，优化的是行列式\emph{之间}的系数；HF 优化轨道，却保持整个态只有一个行列式。CI 因此增加了 HF 轨道调整本身没有的自由度。
 
-\section{用占据数和产生、湮灭算符记账}\label{corr:second-quantization}
-CI 中的 $\Phi_i^a$ 可以用更简洁的算符记号表示，但应先说明这些符号做什么。固定 $M$ 条正交自旋轨道及其排列顺序，以
-$|n_1,\ldots,n_M\rangle$ 表示对应的归一化行列式，其中 $n_p=0,1$，且 $\sum_p n_p=N$。完整的可区分粒子空间是单粒子空间的张量积；电子只能取其中的反对称子空间。占据数态是该子空间的一组基，而不是给电子贴上可区分标签。
-
-允许不同 $N$ 的这些空间合在一起，便可以定义改变粒子数的算符。令 $L_p=\sum_{q<p}n_q$；产生算符与湮灭算符的作用定义为
-\begin{align}
-a_p^\dagger|\ldots,n_p,\ldots\rangle
-&=(-1)^{L_p}(1-n_p)|\ldots,1,\ldots\rangle,\\
-a_p|\ldots,n_p,\ldots\rangle
-&=(-1)^{L_p}n_p|\ldots,0,\ldots\rangle.
-\end{align}
-符号 $(-1)^{L_p}$ 来自把轨道 $p$ 放回规定顺序时跨过的已占据轨道数；每次交换都带来负号。占据态不能再放入一个相同自旋轨道的电子，空态也不能再移走电子，前面的 $1-n_p$ 与 $n_p$ 正好执行这两个限制。
-
-对同一轨道，$a_p^\dagger a_p$ 在占据态上给一、空态上给零，$a_pa_p^\dagger$ 刚好相反，两者之和为恒等算符。对不同轨道，交换两个操作的顺序会多跨过一次占据位置，符号相反。因此，以 $\{A,B\}=AB+BA$ 定义反对易子，有
-\begin{equation}
-\{a_p,a_q^\dagger\}=\delta_{pq},\qquad
-\{a_p,a_q\}=\{a_p^\dagger,a_q^\dagger\}=0,
-\qquad \hat n_p=a_p^\dagger a_p.
-\end{equation}
-右侧的 $\delta_{pq}$ 乘以恒等算符。现在先移走占据电子，再放入虚轨道，就定义了激发行列式及其符号约定：
-\begin{equation}\label{corr:excitation-operators}
-|\Phi_i^a\rangle=a_a^\dagger a_i|\Phi_0\rangle,\qquad
-|\Phi_{ij}^{ab}\rangle=a_a^\dagger a_b^\dagger a_j a_i|\Phi_0\rangle
-\quad(i<j,\ a<b).
-\end{equation}
-这些操作保持总电子数不变。式\eqref{ci:expansion}仍是原来的多体态展开，“二次量子化”在这里是同一个问题的占据数表达，并未再加入一层物理近似。
-
-一体算符把轨道 $q$ 变成 $p$，其振幅是 $h_{pq}$，因此对应 $h_{pq}a_p^\dagger a_q$。两体算符先移走 $r,s$，再放入 $p,q$。定义
-\begin{equation}
-\langle pq|rs\rangle=\iint\phi_p^*(x)\phi_q^*(x')
-\frac{\phi_r(x)\phi_s(x')}{|\bm r-\bm r'|}\dd x\dd x',
-\end{equation}
-就能把固定核电子 Hamilton 算符写为
-\begin{equation}\label{corr:hamiltonian-occupation}
-\hat H=\sum_{pq}h_{pq}a_p^\dagger a_q
-+\frac12\sum_{pqrs}\langle pq|rs\rangle a_p^\dagger a_q^\dagger a_s a_r.
-\end{equation}
-这里 $\langle pq|rs\rangle$ 的前两个标签属于 bra，后两个属于 ket，区别于上一章按积分坐标分组的圆括号记号。交换两次操作所产生的负号由算符负责；两体项的 $1/2$ 仍然是有序粒子对重复计数的修正。
-
-可以在两个电子上直接核对这一系数。对 $|ij\rangle=a_i^\dagger a_j^\dagger|0\rangle$ 与 $|ab\rangle$，能留下非零结果的湮灭次序有 $(i,j)$ 与 $(j,i)$，产生次序有 $(a,b)$ 与 $(b,a)$。四项之和是
-\begin{align}
-\langle ab|\hat W|ij\rangle
-&=\tfrac12\bigl[\langle ab|ij\rangle-\langle ab|ji\rangle
--\langle ba|ij\rangle+\langle ba|ji\rangle\bigr]\notag\\
-&=\langle ab|ij\rangle-\langle ab|ji\rangle
-\equiv\langle ab\Vert ij\rangle.
-\end{align}
-最后一步交换两电子积分坐标，用了
-$\langle ba|ji\rangle=\langle ab|ij\rangle$、
-$\langle ba|ij\rangle=\langle ab|ji\rangle$。其余电子作为相同的旁观轨道时，正交积分给一，双激发耦合仍由这个反对称化积分决定。这与上一章直接展开行列式得到的“直接减交换”完全一致。
-
 \section{一个双构型例子：能量为什么降低}
 保留参考构型 $\Phi_0$ 和另一个与它耦合的构型 $\Phi_1$。将两个对角能量记为 $E_0$、$E_0+\Delta$，其中 $\Delta>0$；取实的耦合矩阵元 $V$，则
 \begin{equation}\label{ci:two}
@@ -126,13 +75,37 @@ w_1=\frac{t^2}{1+t^2}
 
 设片段 A 和 B 的改进波函数各含参考与双激发，即 $\Psi_A=c_A\Phi_A+d_A\Phi_A^D$，$\Psi_B=c_B\Phi_B+d_B\Phi_B^D$。不相互作用时总态应具有乘积结构。乘积的四项中，有一项是 $d_Ad_B\Phi_A^D\Phi_B^D$：它在 A 和 B 上各激发两个电子，对整体参考态而言是\emph{四激发}。整体 CISD 恰好把它丢掉，因此不能一般保证总能量可加。这不是分子间残留了某种新相互作用，而是截断空间无法容纳两个独立片段各自需要的波函数。
 
+\section{用激发算符计算构型间耦合}\label{corr:second-quantization}
+第五章第\ref{hf:occupation-representation}节已定义产生、湮灭算符，并用它们重算了 HF 能量。这里复用相同的轨道顺序与反对易约定。以 $\Phi_0$ 为参考，$i,j$ 表示占据轨道，$a,b$ 表示未占据的虚轨道。
+
+现在先移走占据电子，再放入虚轨道，就定义了激发行列式及其符号约定：
+\begin{equation}\label{corr:excitation-operators}
+|\Phi_i^a\rangle=a_a^\dagger a_i|\Phi_0\rangle,\qquad
+|\Phi_{ij}^{ab}\rangle=a_a^\dagger a_b^\dagger a_j a_i|\Phi_0\rangle
+\quad(i<j,\ a<b).
+\end{equation}
+这些操作保持总电子数不变，也把式\eqref{ci:expansion}中的每个激发行列式写成了明确的算符作用。
+
+双激发耦合先在两个电子上计算，其余占据轨道随后作为旁观者保留。使用式\eqref{hf:hamiltonian-occupation}中的两体算符，对 $|ij\rangle=a_i^\dagger a_j^\dagger|\mathrm{vac}\rangle$ 与 $|ab\rangle$，能留下非零结果的湮灭次序有 $(i,j)$ 与 $(j,i)$，产生次序有 $(a,b)$ 与 $(b,a)$。四项之和是
+\begin{align}
+\langle ab|\hat W|ij\rangle
+&=\tfrac12\bigl[\langle ab|ij\rangle-\langle ab|ji\rangle
+-\langle ba|ij\rangle+\langle ba|ji\rangle\bigr]\notag\\
+&=\langle ab|ij\rangle-\langle ab|ji\rangle
+\equiv\langle ab\Vert ij\rangle.
+\end{align}
+最后一步交换两电子积分坐标，用了
+$\langle ba|ji\rangle=\langle ab|ij\rangle$、
+$\langle ba|ij\rangle=\langle ab|ji\rangle$。其余电子作为相同的旁观轨道时，正交积分给一，双激发耦合仍由这个反对称化积分决定。这与上一章直接展开行列式得到的“直接减交换”完全一致。
+
 \section{MP2：什么时候可以把关联当作小修正}
 双构型例子中的 $-V^2/\Delta$ 提示：若 HF 参考已经占主导，可以利用它与其他构型之间的耦合计算能量修正，而不对角化完整 CI 矩阵。Møller--Plesset 二阶微扰（MP2）采用的未扰动 Hamilton 算符是正则 HF 的 Fock 算符之和：
 \begin{equation}
 \hat H=\hat H_0+\lambda\hat V,\qquad
-\hat H_0=\sum_i\hat f(i),\qquad \hat V=\hat H-\hat H_0.
+\hat H_0=\sum_{k=1}^N\hat f(k)
+=\sum_p\varepsilon_p a_p^\dagger a_p,\qquad \hat V=\hat H-\hat H_0.
 \end{equation}
-$\lambda$ 只是组织展开的参数，最后取一，$\hat f$ 固定为参考 HF 解的算符。正则轨道使 $H_0=\sum_p\varepsilon_p\hat n_p$，所以每个占据数态都是它的本征态；对参考行列式明确有
+$\lambda$ 只是组织展开的参数，最后取一，$\hat f$ 固定为参考 HF 解的算符。第一个求和遍历电子坐标，第二个遍历正则自旋轨道；两种写法相等，是因为 $f_{pq}=\varepsilon_q\delta_{pq}$。由 $a_p^\dagger a_p=\hat n_p$，每个占据数态都是 $H_0$ 的本征态；对参考行列式明确有
 \begin{align}
 E_0^{(0)}&=\sum_{i\,\mathrm{occ}}\varepsilon_i,\\
 E^{(1)}&=\langle\Phi_0|H-H_0|\Phi_0\rangle
@@ -141,29 +114,53 @@ E_0^{(0)}+E^{(1)}&=E_{\rm HF}.
 \end{align}
 因此未扰动参考能量不是 HF 总能量；HF 已包含在零阶与一阶的和中。二阶分母必须使用 $H_0$ 的本征能之差，不能把其中一项单独换成 $E_{\rm HF}$。
 
-为说明二阶修正的来源，展开 $|\Psi\rangle=|0\rangle+\lambda|\Psi^{(1)}\rangle+\cdots$ 与 $E=E_0^{(0)}+\lambda E^{(1)}+\cdots$，并取 $\langle0|\Psi^{(1)}\rangle=0$。本征方程的一阶部分为
+为说明二阶修正的来源，展开 $|\Psi\rangle=|\Phi_0\rangle+\lambda|\Psi^{(1)}\rangle+\cdots$ 与 $E=E_0^{(0)}+\lambda E^{(1)}+\cdots$，并取 $\langle\Phi_0|\Psi^{(1)}\rangle=0$。本征方程的一阶部分为
 \begin{equation}
 (\hat H_0-E_0^{(0)})|\Psi^{(1)}\rangle
-=-(\hat V-E^{(1)})|0\rangle.
+=-(\hat V-E^{(1)})|\Phi_0\rangle.
 \end{equation}
-投影到参考态给出 $E^{(1)}=\langle0|\hat V|0\rangle$；投影到其他未扰动态 $|K\rangle$，给出它混入波函数的系数 $\langle K|\Psi^{(1)}\rangle=\langle K|\hat V|0\rangle/(E_0^{(0)}-E_K^{(0)})$。
+投影到参考态给出 $E^{(1)}=\langle\Phi_0|\hat V|\Phi_0\rangle$；投影到其他未扰动态 $|K\rangle$，给出它混入波函数的系数 $\langle K|\Psi^{(1)}\rangle=\langle K|\hat V|\Phi_0\rangle/(E_0^{(0)}-E_K^{(0)})$。
 
-二阶部分为 $(H_0-E_0^{(0)})|\Psi^{(2)}\rangle=-(V-E^{(1)})|\Psi^{(1)}\rangle+E^{(2)}|0\rangle$。左乘 $\langle0|$ 时，左侧因本征方程为零，$E^{(1)}\langle0|\Psi^{(1)}\rangle$ 也为零，因此 $E^{(2)}=\langle0|V|\Psi^{(1)}\rangle$。将 $|\Psi^{(1)}\rangle=\sum_{K\ne0}|K\rangle\langle K|\Psi^{(1)}\rangle$ 代入，利用 $V$ 的 Hermitian 性将两个共轭矩阵元合成模平方，得到
+二阶部分为 $(H_0-E_0^{(0)})|\Psi^{(2)}\rangle=-(V-E^{(1)})|\Psi^{(1)}\rangle+E^{(2)}|\Phi_0\rangle$。左乘 $\langle\Phi_0|$ 时，左侧因本征方程为零，$E^{(1)}\langle\Phi_0|\Psi^{(1)}\rangle$ 也为零，因此 $E^{(2)}=\langle\Phi_0|V|\Psi^{(1)}\rangle$。将 $|\Psi^{(1)}\rangle=\sum_{K\ne0}|K\rangle\langle K|\Psi^{(1)}\rangle$ 代入，利用 $V$ 的 Hermitian 性将两个共轭矩阵元合成模平方，得到
 \begin{equation}\label{corr:second-order}
-E^{(2)}=\langle0|\hat V|\Psi^{(1)}\rangle
-=\sum_{K\ne0}\frac{|\langle K|\hat V|0\rangle|^2}{E_0^{(0)}-E_K^{(0)}}.
+E^{(2)}=\langle\Phi_0|\hat V|\Psi^{(1)}\rangle
+=\sum_{K\ne0}\frac{|\langle K|\hat V|\Phi_0\rangle|^2}{E_0^{(0)}-E_K^{(0)}}.
 \end{equation}
 每一项都表示一个虚拟混合通道：耦合越大，影响越大；代价越高，影响越小。这与双构型模型的弱混合极限相同。
 
-对驻定的 HF 参考，令占据轨道 $\phi_i\to\phi_i+\eta\phi_a$，其中 $\phi_a$ 未占据。由行列式对每行的线性性，$\Phi\to\Phi_0+\eta\Phi_i^a+O(|\eta|^2)$；能量一阶变化为 $2\operatorname{Re}[\eta\langle\Phi_0|H|\Phi_i^a\rangle]$。它必须对任意复数 $\eta$ 为零，故 $\langle\Phi_i^a|H|\Phi_0\rangle=0$。正则轨道下 $H_0$ 对这些行列式为对角，也无非对角耦合，因此单激发的 $V=H-H_0$ 矩阵元为零。
+哪些通道真正贡献？先说明驻定 HF 参考为何不与单激发耦合。下面两种推导分别从轨道变分与算符矩阵元出发。
 
-一体算符只作用于一个坐标，若两个行列式有两条以上轨道不同，未被算符作用的坐标积分中必有正交内积使矩阵元为零；二体算符同理最多连接双激发。于是式\eqref{corr:second-order}只剩双激发。未扰动能量为轨道本征值之和，双激发的能量是 $E_{ij}^{ab,(0)}=E_0^{(0)}-\varepsilon_i-\varepsilon_j+\varepsilon_a+\varepsilon_b$，其与参考态的差给出分母。零阶加一阶满足 $E_0^{(0)}+\langle\Phi_0|H-H_0|\Phi_0\rangle=E_{\rm HF}$，所以
+\paragraph{波函数版本。}
+令占据轨道 $\phi_i\to\phi_i+\eta\phi_a$，其中 $\phi_a$ 未占据且与全部占据轨道正交。由行列式对每行的线性性，未归一化态变成 $\Phi_0+\eta\Phi_i^a$；其范数平方为 $1+|\eta|^2$，故归一化只改变二阶及更高阶项。能量的一阶变化为
+\begin{equation}
+\delta E=\eta\langle\Phi_0|H|\Phi_i^a\rangle
++\eta^*\langle\Phi_i^a|H|\Phi_0\rangle
+=2\operatorname{Re}\!\left[\eta\langle\Phi_0|H|\Phi_i^a\rangle\right].
+\end{equation}
+HF 驻定性要求它对任意复数 $\eta$ 为零；分别取实、纯虚的 $\eta$，矩阵元的实部和虚部都必须为零，因此 $\langle\Phi_i^a|H|\Phi_0\rangle=0$。
+
+\paragraph{占据数版本。}
+使用 $|\Phi_i^a\rangle=a_a^\dagger a_i|\Phi_0\rangle$。一体项必须移走 $i$、放入 $a$，给出 $h_{ai}$。两体项还须把另一条占据轨道 $j$ 移走再放回；两种湮灭次序与两种产生次序给出四项，其相对符号与上节的双激发计算相同。因此
+\begin{align}
+\langle\Phi_i^a|H|\Phi_0\rangle
+&=h_{ai}+\frac12\sum_{j\,\mathrm{occ}}
+\bigl[\langle aj|ij\rangle-\langle aj|ji\rangle
+-\langle ja|ij\rangle+\langle ja|ji\rangle\bigr]\notag\\
+&=h_{ai}+\sum_{j\,\mathrm{occ}}\langle aj\Vert ij\rangle
+=\langle\phi_a|\hat f|\phi_i\rangle
+=\varepsilon_i\langle\phi_a|\phi_i\rangle=0.
+\end{align}
+第二行先交换积分坐标，将四项合成直接减交换；$j=i$ 的贡献自行抵消。再用上一章定义的 $\hat f=\hat h+\sum_j(\hat J_j-\hat K_j)$，最后利用正则 HF 方程和轨道正交性。这样，变分的驻定条件与 Fock 算符的非对角矩阵元给出了同一个零。
+
+$H_0$ 在这些占据数态上为对角，故 $\langle\Phi_i^a|H_0|\Phi_0\rangle=0$。两项相减，单激发的 $V=H-H_0$ 矩阵元也为零。
+
+还可直接从式\eqref{hf:hamiltonian-occupation}筛选更高激发：$a_p^\dagger a_q$ 最多替换一条轨道，$a_p^\dagger a_q^\dagger a_s a_r$ 最多替换两条，所以 $H$ 不连接三激发及更高激发。这与波函数积分中的正交性是同一件事：未被算符作用的轨道若不同，其内积就是零。于是式\eqref{corr:second-order}只剩双激发。未扰动能量为轨道本征值之和，双激发的能量是 $E_{ij}^{ab,(0)}=E_0^{(0)}-\varepsilon_i-\varepsilon_j+\varepsilon_a+\varepsilon_b$，其与参考态的差给出分母。结合零阶加一阶等于 $E_{\rm HF}$，得到
 \begin{equation}
 E_{\rm MP2}=E_{\rm HF}+\sum_{i<j,a<b}
 \frac{|\langle\Phi_{ij}^{ab}|\hat V|\Phi_0\rangle|^2}
 {\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b}.
 \end{equation}
-这里 $i,j$ 为占据轨道，$a,b$ 为未占据轨道。$H_0$ 不连接不同行列式，因此双激发的 $V$ 矩阵元等于 $H$ 的矩阵元。用式\eqref{corr:hamiltonian-occupation}的两体展开，便得到可由轨道积分直接计算的形式
+这里 $i,j$ 为占据轨道，$a,b$ 为未占据轨道。$H_0$ 不连接不同行列式，因此双激发的 $V$ 矩阵元等于 $H$ 的矩阵元。用式\eqref{hf:hamiltonian-occupation}的两体展开，便得到可由轨道积分直接计算的形式
 \begin{equation}\label{corr:mp2-integrals}
 E^{(2)}=\sum_{i<j,a<b}\frac{|\langle ab\Vert ij\rangle|^2}
 {\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b}

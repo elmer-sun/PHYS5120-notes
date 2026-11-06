@@ -98,7 +98,7 @@
 \begin{equation}
 U_{\rm DBOC}=\sum_I\frac{\hbar^2}{2M_I}\langle\nabla_I\phi_n|\nabla_I\phi_n\rangle.
 \end{equation}
-不能在所有拓扑或简并情形下全局选择这种实规范；一般单面理论还含几何矢势。本书使用最低阶 BO 力学时默认远离这类情形。“Born--Huang 展开”通常指前节的通道展开，不应把这一名称直接定义为某一个删项方案。
+这里要求在所考虑区域内能选择实而光滑的非简并电子态；不满足这一条件时，应回到前节的完整导数耦合方程。本书后面的核动力学采用最低阶 BO 近似，对角修正用于说明被略去的项具有什么结构。前节的完整通道展开通常称为 Born--Huang 展开，它与随后采用哪一种删项近似是两回事。
 
 \section{从核波包到经典轨迹}
 量子平均值未必沿经典轨迹运动。为比较二者，先定义对易子 $[\hat A,\hat B]=\hat A\hat B-\hat B\hat A$；它衡量交换两个算符的作用顺序是否改变结果。核动量在位置表示中是 $\hat{\bm P}_I=-\ii\hbar\nabla_I$。对任意光滑函数 $f$，乘积求导给出 $[\hat R_\alpha,\hat P_\beta]f=-\ii\hbar R_\alpha\partial_\beta f+\ii\hbar\partial_\beta(R_\alpha f)=\ii\hbar\delta_{\alpha\beta}f$，所以 $[\hat R_\alpha,\hat P_\beta]=\ii\hbar\delta_{\alpha\beta}$。
@@ -120,7 +120,14 @@ U_{\rm DBOC}=\sum_I\frac{\hbar^2}{2M_I}\langle\nabla_I\phi_n|\nabla_I\phi_n\rang
 \frac{\dd\langle\bm R_I\rangle}{\dd t}=\frac{\langle\bm P_I\rangle}{M_I},\qquad
 \frac{\dd\langle\bm P_I\rangle}{\dd t}=-\langle\nabla_I E_n(R)\rangle.
 \end{equation}
-要把右侧换成 $-\nabla_I E_n(\langle R\rangle)$，还需波包在势能变化尺度上足够窄。对力在平均位置附近展开，线性涨落项平均为零，下一项与位置协方差及力的二阶导数相乘；只有这一修正小，经典封闭方程才合理。
+要把右侧换成 $-\nabla_I E_n(\langle R\rangle)$，还需波包在势能变化尺度上足够窄。把核坐标分量统一标为 $a,b,c$，记 $\overline R=\langle R\rangle$、$\delta R=R-\overline R$，并令 $F_a=-\partial_a E_n$。在平均位置作 Taylor 展开后取平均：
+\begin{align}
+\langle F_a(R)\rangle={}&F_a(\overline R)
++\sum_b(\partial_bF_a)_{\overline R}\langle\delta R_b\rangle\notag\\
+&+\frac12\sum_{bc}(\partial_b\partial_cF_a)_{\overline R}
+\langle\delta R_b\delta R_c\rangle+\cdots.
+\end{align}
+由平均位置的定义，$\langle\delta R_b\rangle=0$；二阶矩 $\langle\delta R_b\delta R_c\rangle$ 则衡量波包的宽度及不同方向的相关性。只有二阶及更高阶修正都小，平均力才近似等于平均位置处的力，前面的两个平均值方程才能封闭为经典轨迹方程。
 
 热 de Broglie 波长可从一个自由粒子的平动配分函数定义出来。每个量子态在相空间占据体积 $h_{\rm P}^3$，其中 $h_{\rm P}=2\pi\hbar$；利用第一章的高斯积分，
 \begin{equation}

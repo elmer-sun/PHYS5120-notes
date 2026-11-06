@@ -1,10 +1,12 @@
 \chapter{周期固体、基组与赝势}
 \section{平移对称性如何减少未知量}
-晶体有无限多个原胞，逐原子求解不可行。设原胞平移向量为 $\bm a_1,\bm a_2,\bm a_3$，晶格向量为 $\bm R=\sum_i n_i\bm a_i$，有效势满足 $v(\bm r+\bm R)=v(\bm r)$。定义平移算符 $T_R\psi(\bm r)=\psi(\bm r+\bm R)$。势的周期性以及动能的平移不变性给出 $[H,T_R]=0$。对易来自 Hamilton 算符的对称性，不能仅由 $T_R$ 是酉算符推出。
+晶体有无限多个原胞，逐原子求解不可行。设原胞平移向量为 $\bm a_1,\bm a_2,\bm a_3$，晶格向量为 $\bm R=\sum_i n_i\bm a_i$，有效势满足 $v(\bm r+\bm R)=v(\bm r)$。定义平移算符 $T_R\psi(\bm r)=\psi(\bm r+\bm R)$。势的周期性以及动能的平移不变性给出 $[H,T_R]=0$。
 
 上述对易关系可逐项验证：$\nabla^2\psi(\bm r+\bm R)$ 不受先平移还是先微分的影响，势项则由 $v(\bm r+\bm R)=v(\bm r)$ 保证相同。平移还保持内积，因为积分中换元 $\bm r'=\bm r+\bm R$ 不改变体积元；所以它是酉算符。
 
-在共同本征态上写 $T_R\psi=t_R\psi$。比较平移前后的范数，$\|T_R\psi\|^2=|t_R|^2\|\psi\|^2=\|\psi\|^2$，得 $|t_R|=1$。对三个原胞向量可记 $t_{a_i}=e^{\ii\theta_i}$，再选择满足 $\bm k\cdot\bm a_i=\theta_i$ 的向量 $\bm k$。群乘法使 $t_R=\prod_i(t_{a_i})^{n_i}=e^{\ii\sum_i n_i\theta_i}=e^{\ii\bm k\cdot\bm R}$。
+为什么可以同时取能量与平移的本征态？先在有限周期超胞中考虑 $H\psi=E\psi$。由对易性，$H(T_R\psi)=T_RH\psi=E(T_R\psi)$，故平移只在同一能量的本征子空间内作用。各个平移又彼此对易，可以在这一子空间内同时对角化它们；这样选择基，并不改变能量。
+
+在这组共同本征态上写 $T_R\psi=t_R\psi$。比较平移前后的范数，$\|T_R\psi\|^2=|t_R|^2\|\psi\|^2=\|\psi\|^2$，得 $|t_R|=1$。对三个原胞向量可记 $t_{a_i}=e^{\ii\theta_i}$，再选择满足 $\bm k\cdot\bm a_i=\theta_i$ 的向量 $\bm k$。群乘法使 $t_R=\prod_i(t_{a_i})^{n_i}=e^{\ii\sum_i n_i\theta_i}=e^{\ii\bm k\cdot\bm R}$。
 
 定义 $u_{n\bm k}(\bm r)=e^{-\ii\bm k\cdot\bm r}\psi_{n\bm k}(\bm r)$，则 $u_{n\bm k}(\bm r+\bm R)=e^{-\ii\bm k\cdot(\bm r+\bm R)}e^{\ii\bm k\cdot\bm R}\psi_{n\bm k}(\bm r)=u_{n\bm k}(\bm r)$。因此
 \begin{equation}
@@ -27,7 +29,7 @@
 
 一种均匀中点求积规则是将每个倒格分数坐标的区间 $[-1/2,1/2]$ 分成 $N_i$ 等份。第 $m_i$ 个中点为 $-1/2+(m_i-1/2)/N_i=(2m_i-N_i-1)/(2N_i)$，由此构造 Monkhorst--Pack 网格 $\bm k=\sum_i(2m_i-N_i-1)\bm b_i/(2N_i)$，$m_i=1,\ldots,N_i$。晶体对称性可把等价点合并，合并后的权重是所代表各点权重之和。画能带的高对称路径只是一条线，不能代替三维积分网格。金属的占据在 Fermi 面附近变化快，通常比绝缘体需要更细的采样与展宽收敛检查。
 
-无磁、无自旋轨道耦合且势为实标量时，复共轭把 $\bm k$ 态映为同能量的 $-\bm k$ 态。在合适基中 $\Gamma$ 点可选实轨道。这不意味着所有具有时间反演对称性的系统都有 Dirac 锥；能带交叉还依赖其他对称性和能带结构。含自旋时，时间反演也不能简单等同于复共轭。
+无磁、无自旋轨道耦合且势为实标量时，对本征方程和 Bloch 相位取复共轭，便把 $\bm k$ 态映为同能量的 $-\bm k$ 态。$\Gamma$ 点指 $\bm k=0$；此处方程和周期边界都为实数，可以选择实的空间轨道。
 
 \section{平面波为什么方便}
 将原胞内的位置写为 $\bm r=\sum_i s_i\bm a_i$，其中 $0\le s_i<1$。两个倒格平面波的内积化为 $\Omega_{\rm cell}\prod_i\int_0^1e^{2\pi\ii(l_i-l_i')s_i}\dd s_i$；整数差非零时积分为零，差为零时为一。因此 $\Omega_{\rm cell}^{-1/2}e^{\ii\bm G\cdot\bm r}$ 是正交归一基。周期函数的 Fourier 展开及投影系数为
@@ -37,7 +39,7 @@ c_{n\bm k}(G)=\frac1{\sqrt{\Omega_{\rm cell}}}\int_{\rm cell}e^{-\ii\bm G\cdot\b
 \end{equation}
 对一个基函数作用原胞动能算符，先有 $(\nabla+\ii\bm k)e^{\ii\bm G\cdot\bm r}=\ii(\bm k+\bm G)e^{\ii\bm G\cdot\bm r}$，再作用一次并乘 $-1/2$，得到 $|\bm k+\bm G|^2/2$ 乘原函数。动能因此在此基中对角。按动能选取有限基，便规定只保留 $|\bm k+\bm G|^2/2\le E_{\rm cut}$ 的项。增大截断在固定几何、嵌套基和充分求解下扩大变分空间，但实际计算还要控制积分网格等误差。
 
-势能乘法在实空间方便，故常以 FFT 在两种表示之间切换。将展开与其共轭相乘，密度中就出现 $c^*(G)c(G')e^{\ii(\bm G'-\bm G)\cdot\bm r}$。令 $K_{\max}=\sqrt{2E_{\rm cut}}$，三角不等式给出 $|\bm G'-\bm G|=|(\bm k+\bm G')-(\bm k+\bm G)|\le2K_{\max}$。密度表示所需的最大波数因而是轨道的两倍；按相同动能单位记截断，则为 $(2K_{\max})^2/2=4E_{\rm cut}$。这是平面波乘积的几何结论；超软赝势或 PAW 增广密度可能需要更高密度截断，不能机械设成四倍。
+势能乘法在实空间方便，故常用快速 Fourier 变换（FFT）切换表示。轨道展开与其共轭相乘，使密度含有 $c^*(G)c(G')e^{\ii(\bm G'-\bm G)\cdot\bm r}$。令 $K_{\max}=\sqrt{2E_{\rm cut}}$，由三角不等式，$|\bm G'-\bm G|=|(\bm k+\bm G')-(\bm k+\bm G)|\le2K_{\max}$。密度波数至多为轨道的两倍，对应截断 $(2K_{\max})^2/2=4E_{\rm cut}$。额外的芯区密度修正则须单独检查截断收敛。
 
 第七章的 Hartree 势是密度与 $1/r$ 的卷积。对 $r\ne0$，直接求导得到 $\nabla^2(1/r)=0$；对包围原点的小球积分，散度定理给出 $\int\nabla^2(1/r)\dd^3r=4\pi r^2\partial_r(1/r)=-4\pi$。因此在分布意义下 $\nabla^2(1/r)=-4\pi\delta(\bm r)$，作用于卷积就得到 Poisson 方程 $\nabla^2v_H=-4\pi n$。
 
@@ -48,7 +50,7 @@ c_{n\bm k}(G)=\frac1{\sqrt{\Omega_{\rm cell}}}\int_{\rm cell}e^{-\ii\bm G\cdot\b
 \begin{equation}
 \int_0^{r_c}|R_l(r)|^2r^2\dd r=\int_0^{r_c}|\widetilde R_l(r)|^2r^2\dd r.
 \end{equation}
-这个约束来自芯区概率的保持：写参考轨道为 $R_l(r)Y_{lm}(\widehat{\bm r})$，球坐标体积元为 $r^2\dd r\dd\Omega$，归一化球谐函数满足 $\int|Y_{lm}|^2\dd\Omega=1$。因此芯内概率是 $\int_0^{r_c}|R_l(r)|^2r^2\dd r$；要求赝轨道与它相等就给出上式。这是人为选定的构造条件之一，不是“任意平滑后就等价”的保证。不同角动量需要不同作用，因而赝势一般包含非局域投影项。可转移性必须在不同价态、成键和压强环境中检验。
+其依据是芯区概率的保持：轨道写为 $R_l(r)Y_{lm}(\widehat{\bm r})$，体积元为 $r^2\dd r\dd\Omega$；用 $\int|Y_{lm}|^2\dd\Omega=1$ 积掉角变量，芯内概率便是上式的径向积分。这是赝轨道的构造条件，不能由任意平滑保证。不同角动量需要不同作用，因此赝势一般含非局域投影项；可转移性需在不同价态、成键和压强环境中检验。
 
 局域原子轨道基则以较少函数描述成键，但需要控制基组完备性与近线性相关。Slater 型基函数选取 $e^{-\zeta r}$ 的径向衰减，Gaussian 型选取多项式乘 $e^{-\alpha r^2}$，便于积分运算；$\zeta,\alpha>0$ 是基组参数，这些形式是表示函数的选择。移动原子会移动局域基，所以力中要考虑第四章的 Pulay 项。
 
@@ -61,11 +63,10 @@ c_{n\bm k}(G)=\frac1{\sqrt{\Omega_{\rm cell}}}\int_{\rm cell}e^{-\ii\bm G\cdot\b
 奇数次项互相抵消，第二式除以 $a^2$ 就得到 $\psi''(x)=[\psi(x+a)-2\psi(x)+\psi(x-a)]/a^2+O(a^2)$。其网格误差需单独收敛，通常不具有相同的严格变分单调性。
 
 \section{从能带曲率理解有效质量}
-本节恢复 $\hbar$ 以显示量纲。考虑一条孤立能带上的窄波包，忽略能带间跃迁和 Berry 曲率修正。相邻波矢分量的相位差为 $\delta\bm k\cdot\bm r-\delta\varepsilon\,t/\hbar$；用 $\delta\varepsilon=\nabla_k\varepsilon\cdot\delta\bm k$，使这些分量保持相干的波包中心满足 $\bm r/t=\nabla_k\varepsilon/\hbar$，故群速度为 $v_\alpha=\hbar^{-1}\partial\varepsilon/\partial k_\alpha$。
+本节恢复 $\hbar$ 以显示量纲。考虑一条孤立能带上的窄波包，采用忽略带间跃迁、只由色散关系决定群速度的近似。相邻波矢分量的相位差为 $\delta\bm k\cdot\bm r-\delta\varepsilon\,t/\hbar$；用 $\delta\varepsilon=\nabla_k\varepsilon\cdot\delta\bm k$，使这些分量保持相干的波包中心满足 $\bm r/t=\nabla_k\varepsilon/\hbar$，故群速度为 $v_\alpha=\hbar^{-1}\partial\varepsilon/\partial k_\alpha$。
 
-在这一半经典模型中，以 $\bm r$ 与 $\bm p_c=\hbar\bm k$ 为正则变量，有效 Hamilton 函数为 $\mathcal H=\varepsilon(\bm p_c/\hbar)+U_{\rm ext}(\bm r)$。Hamilton 方程给出 $\dot{\bm p}_c=-\nabla U_{\rm ext}=\bm F$，即 $\hbar\dot k_\beta=F_\beta$。再用链式法则 $\dot v_\alpha=\hbar^{-1}\sum_\beta(\partial^2\varepsilon/\partial k_\alpha\partial k_\beta)\dot k_\beta$，代入外力关系，并将加速度对力的系数定义为逆有效质量张量，得到
+取正则变量 $\bm r,\bm p_c=\hbar\bm k$，有效 Hamilton 函数为 $\mathcal H=\varepsilon(\bm p_c/\hbar)+U_{\rm ext}(\bm r)$。Hamilton 方程给出 $\dot{\bm p}_c=-\nabla U_{\rm ext}=\bm F$，即 $\hbar\dot k_\beta=F_\beta$。在链式法则 $\dot v_\alpha=\hbar^{-1}\sum_\beta(\partial^2\varepsilon/\partial k_\alpha\partial k_\beta)\dot k_\beta$ 中代入此式，将加速度对力的系数定义为逆有效质量张量；各向同性抛物线附近才可化为标量：
 \begin{equation}
 \dot v_\alpha=\sum_\beta\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}F_\beta,
 \qquad (m^{*-1})_{\alpha\beta}=\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}.
 \end{equation}
-有效质量是带边曲率张量，不是先验输入来决定能带。仅在各向同性抛物线附近，才可简化成一个标量 $m^*$。

@@ -105,13 +105,33 @@ T_{\rm TF}[n_\uparrow,n_\downarrow]
 \end{equation}
 令两密度都为 $n/2$，括号变成 $2(n/2)^{5/3}=2^{-2/3}n^{5/3}$，便恢复前面的系数；这也是防止自旋因子数错的检查。
 
-这个近似怎样变成一个无需轨道的方程？先取最简单的
-$E_{\rm TF}=T_{\rm TF}+\int vn+E_H[n]$，暂不加入交换关联模型。令 $C_F=\tfrac3{10}(3\pi^2)^{2/3}$，对 $n\ge0$ 且 $\int n=N$ 作约束变分。在 $n>0$ 的区域有
+这个近似怎样变成一个无需轨道的方程？除了动能和外势能，还需要电子之间的排斥。最简单的处理是把数密度当作连续电荷云，用 Coulomb 能量定义
+\begin{equation}\label{dft:hartree-energy}
+E_H[n]=\frac12\iint\frac{n(\bm r)n(\bm r')}{|\bm r-\bm r'|}\dd\bm r\dd\bm r'.
+\end{equation}
+每对体积元在双重积分中计了两次，所以有 $1/2$。从这里起，$E_H[n]$ 专指\emph{经典 Hartree 排斥项}，不同于第 5 章的 Hartree 近似电子总能量。这一电荷云表达式本身还没有扣除自作用，也没有包含交换与关联。
+
+变分时，把两个密度因子都换成 $n+\delta n$，保留一阶项：
+\begin{equation}
+\delta E_H=\frac12\iint\frac{\delta n(\bm r)n(\bm r')+n(\bm r)\delta n(\bm r')}{|\bm r-\bm r'|}\dd\bm r\dd\bm r'.
+\end{equation}
+第二项交换积分变量后与第一项相同，合并消去 $1/2$，得到
+\begin{equation}\label{dft:hartree-potential}
+\delta E_H=\int v_H(\bm r)\delta n(\bm r)\dd\bm r,\qquad
+v_H(\bm r)=\int\frac{n(\bm r')}{|\bm r-\bm r'|}\dd\bm r'.
+\end{equation}
+所以 $v_H=\delta E_H/\delta n$ 是改变局部电子密度所需的经典排斥能变化率。
+
+现在取 $E_{\rm TF}=T_{\rm TF}+\int vn+E_H[n]$，暂不加入交换关联模型。令 $C_F=\tfrac3{10}(3\pi^2)^{2/3}$，并用 $\mu$ 约束 $\int n=N$。在 $n>0$ 的区域，$E_{\rm TF}-\mu(\int n-N)$ 的变分为
+\begin{equation}
+\delta\mathcal L=\int\left[\frac53 C_Fn^{2/3}+v+v_H-\mu\right]\delta n\dd\bm r=0.
+\end{equation}
+任意 $\delta n$ 的系数必须为零；再使用 $(5/3)C_F=\tfrac12(3\pi^2)^{2/3}$，便有
 \begin{equation}
 \frac53 C_F n^{2/3}+v+v_H=\mu,
 \qquad \frac12(3\pi^2n)^{2/3}=\mu-v-v_H.
 \end{equation}
-第一项的系数来自 $\dd n^{5/3}/\dd n=(5/3)n^{2/3}$；$E_H$ 的导数将在后面逐项推导。左侧非负，故当右侧为负时应取边界解 $n=0$，而不是继续取负数的分数次幂。解出正密度部分，得到
+第一项的系数来自 $\dd n^{5/3}/\dd n=(5/3)n^{2/3}$。第二式左侧非负；若 $\mu-v-v_H<0$，在边界 $n=0$ 向正密度方向变化反而会增加 $\mathcal L$，因此应取边界解。解出其余区域的正密度，合并写成
 \begin{equation}
 n(\bm r)=\frac1{3\pi^2}
 \bigl[2\max\{\mu-v(\bm r)-v_H(\bm r),0\}\bigr]^{3/2}.
@@ -132,11 +152,7 @@ T_s=\sum_i f_i\langle\phi_i|-\nabla^2/2|\phi_i\rangle.
 
 需要区别两个层次。给定密度时，可先将 $T_s[n]$ 定义为产生该密度的非相互作用行列式中动能的下确界；允许简并或分数占据时，相应扩展到非相互作用系综。要把最优轨道实现为某个\emph{局域势}的基态，还需非相互作用 $v$ 可表象性。这比存在任意反对称态产生密度更强，也不由相互作用体系的 HK 定理自动保证。以下在所需辅助表示存在的范围内讨论。
 
-“没有显式相互作用”不等于忽略真实排斥。我们先把真实能量中容易计算的部分单列出来。外势能为 $\int vn$，把密度当作连续电荷云的经典排斥能为
-\begin{equation}
-E_H[n]=\frac12\iint\frac{n(\bm r)n(\bm r')}{|\bm r-\bm r'|}\dd\bm r\dd\bm r'.
-\end{equation}
-这里 $E_H[n]$ 专指\emph{经典 Hartree 排斥项}，不同于第 5 章用 $E_H$ 表示的 Hartree 近似电子总能量。于是用定义
+“没有显式相互作用”不等于忽略真实排斥。把容易计算的辅助动能 $T_s$、外势能 $\int vn$ 和式\eqref{dft:hartree-energy}的经典排斥单列出来，再用定义
 \begin{equation}\label{dft:xc-definition}
 E_{xc}[n]=F[n]-T_s[n]-E_H[n]
 \end{equation}
@@ -149,16 +165,7 @@ E[n]=T_s[n]+\int vn+E_H[n]+E_{xc}[n]+E_{NN}.
 这也解释了 HF 与 KS 的区别。HF 行列式是对\emph{真实多电子波函数}的试探近似，能量来自真实 Hamilton 算符的期望值；KS 行列式首先是产生\emph{正确密度}的辅助工具，剩余物理通过 $E_{xc}$ 进入。不能仅因为它们都求解轨道，就认为二者只是换了一个交换项的同一种近似。
 
 \section{有效势从哪里来}
-有效势并不是猜出来的，它来自式 \eqref{dft:energy} 的变分。先考察经典排斥项。把 $n$ 换成 $n+\delta n$，保留一阶项：
-\begin{equation}
-\delta E_H=\frac12\iint\frac{\delta n(\bm r)n(\bm r')+n(\bm r)\delta n(\bm r')}{|\bm r-\bm r'|}\dd\bm r\dd\bm r'.
-\end{equation}
-第二项交换积分变量后与第一项相同，所以 $1/2$ 消去，得到
-\begin{equation}
-\delta E_H=\int v_H(\bm r)\delta n(\bm r)\dd\bm r,\qquad
-v_H(\bm r)=\int\frac{n(\bm r')}{|\bm r-\bm r'|}\dd\bm r'.
-\end{equation}
-同样用 $\delta E_{xc}=\int v_{xc}\delta n$ 定义 $v_{xc}=\delta E_{xc}/\delta n$。$E_{xc}$ 是能量，$v_{xc}$ 则描述密度在某处稍微改变时，这部分能量怎样改变；二者不能直接互换。
+有效势来自式\eqref{dft:energy}的变分。经典排斥项的导数已在式\eqref{dft:hartree-potential}中算出，为 $v_H$。同样用 $\delta E_{xc}=\int v_{xc}\delta n$ 定义 $v_{xc}=\delta E_{xc}/\delta n$。$E_{xc}$ 是能量，$v_{xc}$ 则描述密度在某处稍微改变时，这部分能量怎样改变；二者不能直接互换。
 
 为推导轨道方程，先考虑所有占据自旋轨道都有 $f_i=1$ 的情形。对第 $i$ 条轨道的复共轭变化，有 $\delta n=\phi_i\delta\phi_i^*$；辅助动能的对应变化为 $\int\delta\phi_i^*(-\nabla^2/2)\phi_i$。因此总能量的一阶变化中，乘在 $\delta\phi_i^*$ 前的系数是 $[-\nabla^2/2+v+v_H+v_{xc}]\phi_i$。
 
@@ -215,7 +222,16 @@ n_\sigma=\sum_i f_{i\sigma}|\phi_{i\sigma}|^2.
 \section{有限温度改变的是平衡判据}
 零温基态选择最低能量；有限电子温度下，一些较高能量状态也会被占据，因为可访问的状态数同样影响平衡。这时应比较自由能 $\mathcal A=E-TS$，其中熵 $S$ 描述热混合的不确定性。能量较高但熵更大的状态，也可能具有较低自由能。
 
-用密度算符 $\Gamma=\sum_a p_a|\Psi_a\rangle\langle\Psi_a|$ 表示以概率 $p_a$ 混合的量子态，$\sum_a p_a=1$。$\Tr(\Gamma H)$ 表示对各态能量加权求和，熵为 $S=-\kb\Tr(\Gamma\ln\Gamma)$。约束搜索现在对产生给定密度的混合态进行：
+以概率 $p_a$ 准备归一化态 $\Psi_a$ 时，可观测量的平均是 $\sum_a p_a\langle\Psi_a|A|\Psi_a\rangle$，其中 $p_a\ge0$、$\sum_a p_a=1$。把这些概率与态一起收进\emph{密度算符}
+$\Gamma=\sum_a p_a|\Psi_a\rangle\langle\Psi_a|$。在任意完备正交基 $\{|b\rangle\}$ 中，迹是对角元之和；插入该展开并使用 $\sum_b|b\rangle\langle b|=1$，有
+\begin{align}
+\Tr(\Gamma A)
+&=\sum_{ab}p_a\langle b|\Psi_a\rangle\langle\Psi_a|A|b\rangle\notag\\
+&=\sum_a p_a\langle\Psi_a|A|\Psi_a\rangle.
+\end{align}
+因此 $\Tr\Gamma=1$，$\Tr(\Gamma H)$ 是混合态能量。$\Gamma$ 描述整个多体态的统计制备，并非三维空间的电子数密度，也不是第五章迹为 $N$ 的一体密度算符。
+
+热混合的熵采用 $S=-\kb\Tr(\Gamma\ln\Gamma)$。把 $\Gamma$ 对角化，其本征值 $r_a$ 就是一组概率，故此式为 $-\kb\sum_a r_a\ln r_a$；这说明算符对数只是在本征基中对各本征值取对数。约束搜索现在对产生给定密度的混合态进行：
 \begin{equation}
 F_T[n]=\inf_{\Gamma\to n}\left\{\Tr[\Gamma(\hat T+\hat W)]+\kb T\Tr(\Gamma\ln\Gamma)\right\}.
 \end{equation}

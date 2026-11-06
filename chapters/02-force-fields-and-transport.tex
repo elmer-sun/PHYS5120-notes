@@ -81,7 +81,7 @@ D=\frac13\int_0^\infty C_v(s)\dd s.
 \section{电输运为何不能只看单粒子扩散}
 令展开坐标形成的电偶极矩为 $\bm M=\sum_iq_i\bm r_i$，求导得到总电流 $\bm J=\dot{\bm M}=\sum_iq_i\bm v_i$。从无外场平衡体系出发，施加弱的均匀电场 $\bm E(t)$。电荷在场中的势能使 Hamilton 函数改变为 $H=H_0-\bm E(t)\cdot\bm M$。下面保留外场的一阶项，推导电流响应。
 
-定义 Poisson 括号 $\{A,B\}=\sum_a(\partial_{q_a}A\,\partial_{p_a}B-\partial_{p_a}A\,\partial_{q_a}B)$，其中 $a$ 遍历所有坐标分量。代入 Hamilton 方程可知 $\dot A=\{A,H\}$。概率守恒要求 $\partial_t\rho+\nabla_\Gamma\cdot(\rho\dot\Gamma)=0$；Hamilton 速度场的散度为 $\sum_a(\partial_{q_a}\partial_{p_a}H-\partial_{p_a}\partial_{q_a}H)=0$，于是 $\partial_t\rho=-\{\rho,H\}$。
+将全部位置和动量分量分别记为 $R_a,P_a$，定义 Poisson 括号 $\{A,B\}=\sum_a(\partial_{R_a}A\,\partial_{P_a}B-\partial_{P_a}A\,\partial_{R_a}B)$。对不显含时间的 $A$ 用链式法则，并代入 Hamilton 方程 $\dot R_a=\partial_{P_a}H$、$\dot P_a=-\partial_{R_a}H$，得到 $\dot A=\{A,H\}$。概率守恒要求 $\partial_t\rho+\nabla_\Gamma\cdot(\rho\dot\Gamma)=0$；Hamilton 速度场的散度为 $\sum_a(\partial_{R_a}\partial_{P_a}H-\partial_{P_a}\partial_{R_a}H)=0$，于是 $\partial_t\rho=-\{\rho,H\}$。
 
 令 $\rho=\rho_0+\delta\rho$，其中 $\rho_0=Z^{-1}e^{-\beta H_0}$。利用链式法则，$\{\rho_0,M_\alpha\}=-\beta\rho_0\{H_0,M_\alpha\}=\beta\rho_0J_\alpha$。丢掉 $\delta\rho$ 与电场的乘积，得到
 \begin{equation}

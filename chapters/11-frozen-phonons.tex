@@ -17,9 +17,9 @@ D_{I\alpha,J\beta}=\frac{C_{I\alpha,J\beta}}{\sqrt{M_IM_J}}.
 \section{冻结位移如何测出曲率}
 所谓冻结声子或有限位移方法，是暂时把一个坐标移开 $\pm\Delta$，分别计算所有原子的力。将待测力分量简记为 $f(x)$，其中 $x$ 是被移动的坐标。Taylor 展开为 $f(\pm\Delta)=f(0)\pm f'(0)\Delta+f''(0)\Delta^2/2\pm f'''(0)\Delta^3/6+O(\Delta^4)$；两式相减再除以 $2\Delta$，得 $[f(\Delta)-f(-\Delta)]/(2\Delta)=f'(0)+O(\Delta^2)$。代入 $C=-\partial F/\partial R$，便有
 \begin{equation}
-C_{I\alpha,J\beta}\simeq-\frac{F_{I\alpha}(R^0+\Delta\bm e_{J\beta})-F_{I\alpha}(R^0-\Delta\bm e_{J\beta})}{2\Delta}.
+C_{I\alpha,J\beta}\simeq-\frac{F_{I\alpha}(R^0+\Delta\bm d_{J\beta})-F_{I\alpha}(R^0-\Delta\bm d_{J\beta})}{2\Delta}.
 \end{equation}
-中心差分截断误差通常为 $O(\Delta^2)$。但若力有误差 $\delta F$，差分误差还含 $O(\delta F/\Delta)$；所以位移越小并非总越好。应收紧电子收敛，比较数个振幅，并先把平衡结构优化到足够小的残余力。
+这里 $\bm d_{J\beta}$ 是仅在原子 $J$ 的 $\beta$ 坐标上为一、其他分量为零的单位位移向量，不是正则模本征向量。中心差分截断误差通常为 $O(\Delta^2)$。但若力有误差 $\delta F$，差分误差还含 $O(\delta F/\Delta)$；所以位移越小并非总越好。应收紧电子收敛，比较数个振幅，并先把平衡结构优化到足够小的残余力。
 
 若某本征值 $\omega^2<0$，线性化运动含指数增长而不是振荡，说明该构型在相应方向可能不稳定。很小的负值也可能来自数值误差或不充分收敛，不能只看绘图软件画出的“负频率”就断定新相。
 
@@ -56,7 +56,9 @@ D_{\kappa\alpha,\kappa'\beta}(\bm q)=\frac1{\sqrt{M_\kappa M_{\kappa'}}}\sum_l C
 \hat H_\omega=\hbar\omega(\hat a^\dagger\hat a+1/2),\qquad
 [\hat H_\omega,\hat a^\dagger]=\hbar\omega\hat a^\dagger.
 \end{equation}
-第一式说明能量不低于 $\hbar\omega/2$，因为 $\langle a^\dagger a\rangle=\|a\psi\|^2\ge0$。在 $\Pi=-\ii\hbar\partial_Q$ 表示下，$a\psi_0=0$ 化为 $(\partial_Q+\omega Q/\hbar)\psi_0=0$，其可归一化解为 $\psi_0\propto e^{-\omega Q^2/(2\hbar)}$，所以这个下界能够达到。第二式使每作用一次 $a^\dagger$ 就增加能量 $\hbar\omega$。反复用 $a$ 降低能量必须终止于基态，故允许的能级是 $E_n=\hbar\omega(n+1/2)$，$n=0,1,\ldots$。
+这里的 $a,a^\dagger$ 改变振动量子数，满足玻色对易关系；它们不是第五章改变电子占据的费米算符。
+
+第一式说明能量不低于 $\hbar\omega/2$，因为 $\langle a^\dagger a\rangle=\|a\psi\|^2\ge0$。在 $\Pi=-\ii\hbar\partial_Q$ 表示下，$a\psi_0=0$ 化为 $(\partial_Q+\omega Q/\hbar)\psi_0=0$，其可归一化解为 $\psi_0\propto e^{-\omega Q^2/(2\hbar)}$，所以这个下界能够达到。第二式使每作用一次 $a^\dagger$ 就增加能量 $\hbar\omega$；取 Hermitian 共轭则得 $[H_\omega,a]=-\hbar\omega a$，所以 $a$ 每次降低同样的能量。对归一化能量本征态，$\|a\psi_E\|^2=E/(\hbar\omega)-1/2$，只要 $E$ 高于下界，降低后的态就不为零。反复降低又不能越过下界，因而必须恰在 $E=\hbar\omega/2$ 处终止。由此得到 $E_n=\hbar\omega(n+1/2)$，$n=0,1,\ldots$。
 
 对这些能级作正则求和，令 $x=e^{-\beta\hbar\omega}<1$，几何级数给出
 \begin{equation}
