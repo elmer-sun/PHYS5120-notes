@@ -195,7 +195,16 @@ E_g=(\varepsilon_L^--\varepsilon_H^-)+\Delta_{xc}.
 E_g=\left.\frac{\delta T_s}{\delta n}\right|_+
 -\left.\frac{\delta T_s}{\delta n}\right|_-+\Delta_{xc}.
 \end{equation}
-这里应比较的是 $T_s$ 的\emph{泛函导数}，不是 $T_s$ 的数值；密度连续、动能连续都不能使这一导数差自动为零。为了识别它，固定整数左侧的辅助势 $v_s^-$，在这个独立粒子体系中增减平均电子数。左侧移除 HOMO、右侧填入 LUMO，能量分别按 $\varepsilon_H^-$ 与 $\varepsilon_L^-$ 线性变化；其 Euler 方程是
+这里应比较的是 $T_s$ 的\emph{泛函导数}，不是 $T_s$ 的数值；密度连续、动能连续都不能使这一导数差自动为零。为了识别它，用整数 $N$ 处的密度构造左侧辅助势 $v_s^-$，随后\emph{冻结这一势}，在同一个独立粒子 Hamilton 算符中增减平均电子数。冻结的是辅助算符，不是要求增减电子后的密度仍然不变。
+
+把这个固定势下的非相互作用能量记为 $E_s(M)$，$M$ 为平均电子数。由于各电子的 Hamilton 算符相加，轨道本征态的总能量为各占据轨道能量之和，所以 $E_s(M)=\sum_i f_i\varepsilon_i^-$，且 $\sum_i f_i=M$。令 $0\le\eta\le1$；从 HOMO 移除占据 $\eta$，或向 LUMO 加入占据 $\eta$，其余占据不变，分别给出
+\begin{equation}\label{spectra:fixed-ks-energy}
+E_s(N-\eta)=E_s(N)-\eta\varepsilon_H^-,\qquad
+E_s(N+\eta)=E_s(N)+\eta\varepsilon_L^-.
+\end{equation}
+因此辅助体系的移除能和亲和能为 $I_s=E_s(N-1)-E_s(N)=-\varepsilon_H^-$、$A_s=E_s(N)-E_s(N+1)=-\varepsilon_L^-$，相减得到 $I_s-A_s=\varepsilon_L^--\varepsilon_H^-$。这里 $E_s$ 是\emph{固定势的非相互作用体系}的能量；它不等于把占据数改变后重新求自洽的真实体系能量泛函，也不推翻第七章对 KS 总能量重复计数的分析。
+
+式\eqref{spectra:fixed-ks-energy}还直接给出两侧斜率 $\mu_s^-=\varepsilon_H^-$、$\mu_s^+=\varepsilon_L^-$。相应的密度 Euler 方程是
 $\delta T_s/\delta n+v_s^-=\mu_s^\pm$。
 两式相减后固定的 $v_s^-$ 抵消，留下
 \begin{equation}

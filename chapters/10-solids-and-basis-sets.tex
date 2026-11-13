@@ -1,49 +1,217 @@
 \chapter{周期固体、基组与赝势}
 \section{平移对称性如何减少未知量}
-晶体有无限多个原胞，逐原子求解不可行。设原胞平移向量为 $\bm a_1,\bm a_2,\bm a_3$，晶格向量为 $\bm R=\sum_i n_i\bm a_i$，有效势满足 $v(\bm r+\bm R)=v(\bm r)$。定义平移算符 $T_R\psi(\bm r)=\psi(\bm r+\bm R)$。势的周期性以及动能的平移不变性给出 $[H,T_R]=0$。
+前几章说明了如何由电子密度建立 KS 方程，但真实晶体有宏观数量的原子，不能把每个原子附近的轨道都作为独立未知函数。理想晶体的关键简化是：不同原胞中的环境相同。我们要找出这种重复性对波函数施加了什么限制，再把求解范围缩小到一个原胞。本章继续采用原子单位；暂考虑实的局域标量 KS 势，忽略磁场和自旋轨道耦合。
 
-上述对易关系可逐项验证：$\nabla^2\psi(\bm r+\bm R)$ 不受先平移还是先微分的影响，势项则由 $v(\bm r+\bm R)=v(\bm r)$ 保证相同。平移还保持内积，因为积分中换元 $\bm r'=\bm r+\bm R$ 不改变体积元；所以它是酉算符。
+设三个线性无关的原胞平移向量为 $\bm a_1,\bm a_2,\bm a_3$，晶格向量为 $\bm R=\sum_i n_i\bm a_i$，其中 $n_i$ 为整数。取保持晶格周期的自洽解，有效势满足 $v_s(\bm r+\bm R)=v_s(\bm r)$。若电子态或磁序自发具有更长的周期，就应先选用能够容纳该周期的晶胞，不能强迫解保留较小原胞的对称性。
+
+无限体积中的延展态不便直接归一化，因此先取沿三个方向各含 $N_i$ 个原胞的有限超胞，总原胞数为 $N_c=N_1N_2N_3$，并施加 Born--von Karman 周期边界条件
+\begin{equation}\label{solids:bvk}
+\psi(\bm r+N_i\bm a_i)=\psi(\bm r),\qquad i=1,2,3.
+\end{equation}
+它相当于把相对的超胞边界接起来，以消除表面，再在需要时令 $N_i$ 增大。这里须区分两种周期：有效势每隔\emph{一个原胞}就重复，而波函数目前只被要求绕过\emph{整个超胞}后重复。若一开始就要求波函数在每个原胞都相同，会漏掉下面的大多数允许态。
+
+定义平移算符 $T_R\psi(\bm r)=\psi(\bm r+\bm R)$，并记 $H=-\nabla^2/2+v_s(\bm r)$。它们的作用顺序可直接比较：
+\begin{align}
+H(T_R\psi)(\bm r)&=-\tfrac12\nabla^2\psi(\bm r+\bm R)
++v_s(\bm r)\psi(\bm r+\bm R),\\
+(T_RH\psi)(\bm r)&=-\tfrac12\nabla^2\psi(\bm r+\bm R)
++v_s(\bm r+\bm R)\psi(\bm r+\bm R).
+\end{align}
+微分部分相同，势的周期性又使最后一项相同，因此 $[H,T_R]=0$。
+
+平移还保持内积：积分中换元 $\bm r'=\bm r+\bm R$ 不改变体积元，周期边界使平移后的积分区域与原区域等价。因此 $\langle T_R\phi|T_R\psi\rangle=\langle\phi|\psi\rangle$，即 $T_R$ 是酉算符。酉性说明范数不变；与 $H$ 对易则来自前面的周期势论证，二者是不同的性质。
 
 为什么可以同时取能量与平移的本征态？先在有限周期超胞中考虑 $H\psi=E\psi$。由对易性，$H(T_R\psi)=T_RH\psi=E(T_R\psi)$，故平移只在同一能量的本征子空间内作用。各个平移又彼此对易，可以在这一子空间内同时对角化它们；这样选择基，并不改变能量。
 
 在这组共同本征态上写 $T_R\psi=t_R\psi$。比较平移前后的范数，$\|T_R\psi\|^2=|t_R|^2\|\psi\|^2=\|\psi\|^2$，得 $|t_R|=1$。对三个原胞向量可记 $t_{a_i}=e^{\ii\theta_i}$，再选择满足 $\bm k\cdot\bm a_i=\theta_i$ 的向量 $\bm k$。群乘法使 $t_R=\prod_i(t_{a_i})^{n_i}=e^{\ii\sum_i n_i\theta_i}=e^{\ii\bm k\cdot\bm R}$。
 
 定义 $u_{n\bm k}(\bm r)=e^{-\ii\bm k\cdot\bm r}\psi_{n\bm k}(\bm r)$，则 $u_{n\bm k}(\bm r+\bm R)=e^{-\ii\bm k\cdot(\bm r+\bm R)}e^{\ii\bm k\cdot\bm R}\psi_{n\bm k}(\bm r)=u_{n\bm k}(\bm r)$。因此
-\begin{equation}
+\begin{equation}\label{solids:bloch}
 \psi_{n\bm k}(\bm r)=e^{\ii\bm k\cdot\bm r}u_{n\bm k}(\bm r),\qquad u_{n\bm k}(\bm r+\bm R)=u_{n\bm k}(\bm r).
 \end{equation}
 这就是 Bloch 形式，$n$ 标记能带。同一个 Bloch 态的模平方在原胞间相同，但波函数本身一般只差相位，而非严格原胞周期。
 
-倒格基矢定义为满足 $\bm a_i\cdot\bm b_j=2\pi\delta_{ij}$ 的对偶基。将 $\bm k=\sum_i\xi_i\bm b_i$ 代入超胞周期条件 $e^{\ii\bm k\cdot N_i\bm a_i}=1$，得 $2\pi N_i\xi_i=2\pi m_i$，所以允许 $\bm k=\sum_i(m_i/N_i)\bm b_i$。若 $\bm G=\sum_i l_i\bm b_i$，则 $\bm G\cdot\bm R=2\pi\sum_i l_in_i$，其指数为一；故相差 $\bm G$ 的波矢具有相同平移本征值，只须选取倒格原胞内的代表；以倒格点为中心的 Wigner--Seitz 原胞称为第一 Brillouin 区。
+波矢 $\bm k$ 的允许取值由超胞边界决定。倒格基矢定义为满足 $\bm a_i\cdot\bm b_j=2\pi\delta_{ij}$ 的对偶基；一般晶格的基矢未必互相垂直，不能直接把各分量写成三个独立的 $2\pi/a_i$。将 $\bm k=\sum_i\xi_i\bm b_i$ 代入式\eqref{solids:bvk}，平移相位必须满足
+\begin{equation}
+e^{\ii\bm k\cdot N_i\bm a_i}=e^{2\pi\ii N_i\xi_i}=1,
+\qquad N_i\xi_i=m_i\in\mathbb Z.
+\end{equation}
+因此允许的波矢为 $\bm k=\sum_i(m_i/N_i)\bm b_i$。若 $\bm G=\sum_i l_i\bm b_i$ 是倒格向量，则 $\bm G\cdot\bm R=2\pi\sum_i l_in_i$，所以 $e^{\ii\bm G\cdot\bm R}=1$。相差 $\bm G$ 的波矢给出相同的平移相位：同一波函数既可写成 $e^{\ii\bm k\cdot\bm r}u$，也可写成 $e^{\ii(\bm k+\bm G)\cdot\bm r}(e^{-\ii\bm G\cdot\bm r}u)$，括号内仍为周期函数。
+
+因此只须在一个倒格原胞内选择波矢代表，每个方向有 $N_i$ 个不同取值，共 $N_c$ 个。围绕原点、由比任何其他倒格点更靠近原点的点组成的 Wigner--Seitz 原胞，称为第一 Brillouin 区。由三个倒格基矢张成的平行六面体也可作积分区域，但它一般不是这个 Wigner--Seitz 原胞；越界的点可以加减倒格向量折回第一 Brillouin 区。
+
+例如，一维晶格间距为 $a$，长度为 $4a$ 的周期链要求 $e^{4\ii ka}=1$。于是 $k=2\pi m/(4a)$；在 $[-\pi/a,\pi/a)$ 中可选 $k=-\pi/a,-\pi/(2a),0,\pi/(2a)$。各态相邻原胞的相位可以不同，但连续平移四次后都回到原态。这个例子说明，晶格的重复性不等于只能保留 $k=0$。
 
 对 Bloch 形式使用乘积法则，$\nabla(e^{\ii\bm k\cdot\bm r}u)=e^{\ii\bm k\cdot\bm r}(\nabla+\ii\bm k)u$；再求一次导数，得到 $\nabla^2(e^{\ii\bm k\cdot\bm r}u)=e^{\ii\bm k\cdot\bm r}(\nabla+\ii\bm k)^2u$。代入 KS 方程并约去共同的指数因子，得到原胞内方程
-\begin{equation}
+\begin{equation}\label{solids:cell-ks}
 \left[-\tfrac12(\nabla+\ii\bm k)^2+v_s(\bm r)\right]u_{n\bm k}=\varepsilon_{n\bm k}u_{n\bm k}.
 \end{equation}
 无限晶体问题转化为不同 $\bm k$ 参数下的有限原胞问题。
 
+\section{时间反演把哪些波矢联系起来}
+即使只求一个原胞，仍须处理许多 $\bm k$。在本章的实标量 Hamilton 算符下，一部分波矢的计算结果可以相互推知。对 $H\psi_{n\bm k}=\varepsilon_{n\bm k}\psi_{n\bm k}$ 取复共轭，利用 $H^*=H$ 及实的本征值，得到
+\begin{equation}
+H\psi_{n\bm k}^*=\varepsilon_{n\bm k}\psi_{n\bm k}^*,
+\qquad
+\psi_{n\bm k}^*(\bm r+\bm R)
+=e^{-\ii\bm k\cdot\bm R}\psi_{n\bm k}^*(\bm r).
+\end{equation}
+第二式来自 Bloch 相位的共轭，说明这个同能量态属于 $-\bm k$。因而 $\bm k$ 与 $-\bm k$ 处的能谱相同，配对后可记为 $\varepsilon_{n,-\bm k}=\varepsilon_{n\bm k}$。在非简并能带上可选择相位使 $u_{n,-\bm k}=u_{n\bm k}^*$；若有简并，复共轭可能给出简并子空间内的线性组合，不能要求数值程序任意输出的两条轨道逐点满足这个等式。
+
+这为什么称为时间反演？暂恢复 $\hbar$，令 $\psi(\bm r,t)$ 满足 $\ii\hbar\partial_t\psi=H\psi$。取共轭得 $-\ii\hbar\partial_t\psi^*=H\psi^*$。定义反向演化 $\widetilde\psi(\bm r,t)=\psi^*(\bm r,-t)$，时间求导又产生一个负号，故 $\ii\hbar\partial_t\widetilde\psi=H\widetilde\psi$。运动反向后的态仍遵守同一方程，而 Bloch 相位把它的波矢变为 $-\bm k$。
+
+$\Gamma$ 点定义为 $\bm k=0$。此处方程及原胞周期边界均为实数；若 $\psi=a+\ii b$ 是能量本征态，取实部、虚部分别得到 $Ha=\varepsilon a$、$Hb=\varepsilon b$，且 $a,b$ 仍满足相同边界。可在每个本征子空间内选取实的正交基，所以 $\Gamma$ 点的空间轨道\emph{可以选为实函数}，并非任意相位下的轨道本来就是实数。一般 $\bm k$ 与 $-\bm k$ 属于不同的边界相位扇区，不能用同一理由把每个 Bloch 态都取成实数。包含磁场或自旋轨道耦合时须重新处理相应对称性，不能直接套用这里的复共轭公式。
+
 \section{积分采样与能带路径不是同一件事}
-将三个正格基矢组成列矩阵 $A$、倒格基矢组成 $B$，对偶关系就是 $A^{\mathsf T}B=2\pi I$。取行列式绝对值，得 $\Omega_{\rm cell}\Omega_{BZ}=(2\pi)^3$，即 $\Omega_{BZ}=(2\pi)^3/\Omega_{\rm cell}$。超胞有 $N_c=N_1N_2N_3$ 个原胞，也有 $N_c$ 个不同的允许波矢。均匀网格上的平均 $N_c^{-1}\sum_kA(\bm k)$ 在大体系极限趋于 $\Omega_{BZ}^{-1}\int_{BZ}A(\bm k)\dd^3k$。
+\subsection{为什么密度中出现波矢平均}
+一条 Bloch 轨道只描述某个能带、某个波矢上的态；电子密度需要把所有占据态的贡献相加。先确定这个求和的归一化。记原胞体积为 $\Omega_{\rm cell}$，第一 Brillouin 区的体积为 $\Omega_{BZ}$。将三个正格基矢组成列矩阵 $A$、倒格基矢组成 $B$，对偶关系就是 $A^{\mathsf T}B=2\pi I$。取行列式绝对值，得 $\Omega_{\rm cell}\Omega_{BZ}=(2\pi)^3$，即 $\Omega_{BZ}=(2\pi)^3/\Omega_{\rm cell}$。超胞的 $N_c$ 个允许波矢将倒空间平均分成体积为 $\Omega_{BZ}/N_c$ 的小块。因此对适合求积的周期函数 $\mathcal A(\bm k)$，Riemann 和给出
+\begin{equation}\label{solids:bz-average}
+\frac1{N_c}\sum_{\bm k}\mathcal A(\bm k)
+=\frac1{\Omega_{BZ}}\sum_{\bm k}\frac{\Omega_{BZ}}{N_c}\mathcal A(\bm k)
+\longrightarrow\frac1{\Omega_{BZ}}\int_{BZ}\mathcal A(\bm k)\dd^3k.
+\end{equation}
 
-数值求积用 $\sum_k w_kA(\bm k)$ 近似这个平均；令 $A=1$ 就要求 $\sum_kw_k=1$。若 $u$ 在原胞归一化，则在整个超胞归一化的态是 $\psi_{nk}=N_c^{-1/2}e^{\ii\bm k\cdot\bm r}u_{nk}$。将它代入占据态密度之和，得到 $n=N_c^{-1}\sum_{nk}f_{nk}|u_{nk}|^2$；用求积权重替换波矢平均，就有 $n(\bm r)=\sum_{nk}w_k f_{nk}|u_{nk}(\bm r)|^2$。自旋简并是否计入 $f$ 必须前后一致。
+式\eqref{solids:bloch}尚未固定归一化。现在选 $\int_{\rm cell}|u_{n\bm k}|^2\dd\bm r=1$；由于每个原胞给出相同的模平方积分，$e^{\ii\bm k\cdot\bm r}u_{n\bm k}$ 在整个超胞上的范数平方为 $N_c$。故用大写 $\Psi$ 表示超胞归一化态时，有
+\begin{equation}
+\Psi_{n\bm k}=\frac1{\sqrt{N_c}}e^{\ii\bm k\cdot\bm r}u_{n\bm k},
+\qquad
+n(\bm r)=\sum_{n\bm k}f_{n\bm k}|\Psi_{n\bm k}|^2
+=\frac1{N_c}\sum_{n\bm k}f_{n\bm k}|u_{n\bm k}|^2.
+\end{equation}
+这里 $f_{n\bm k}$ 是占据数；若使用空间轨道并已合并两个相同的自旋通道，满占据为二，若逐一列出自旋轨道则为一。以下只要求整次求和使用同一种约定。
 
-一种均匀中点求积规则是将每个倒格分数坐标的区间 $[-1/2,1/2]$ 分成 $N_i$ 等份。第 $m_i$ 个中点为 $-1/2+(m_i-1/2)/N_i=(2m_i-N_i-1)/(2N_i)$，由此构造 Monkhorst--Pack 网格 $\bm k=\sum_i(2m_i-N_i-1)\bm b_i/(2N_i)$，$m_i=1,\ldots,N_i$。晶体对称性可把等价点合并，合并后的权重是所代表各点权重之和。画能带的高对称路径只是一条线，不能代替三维积分网格。金属的占据在 Fermi 面附近变化快，通常比绝缘体需要更细的采样与展宽收敛检查。
+数值上不必逐个计算宏观超胞的全部波矢，而以较少采样点的加权和近似式\eqref{solids:bz-average}中的积分平均。记权重为 $w_{\bm k}$，对常函数 $\mathcal A=1$ 也必须求积正确，故要求 $\sum_{\bm k}w_{\bm k}=1$。密度与每原胞电子数于是为
+\begin{equation}\label{solids:density-kmesh}
+n(\bm r)\simeq\sum_{n\bm k}w_{\bm k}f_{n\bm k}|u_{n\bm k}(\bm r)|^2,
+\qquad N_{\rm cell}=\int_{\rm cell}n\dd\bm r
+\simeq\sum_{n\bm k}w_{\bm k}f_{n\bm k}.
+\end{equation}
+后一式使用了每个 $u$ 的原胞归一化，也是检查自旋因子和权重是否一致的直接办法。例如一条双自旋满占据的能带给出 $N_{\rm cell}=2\sum_{\bm k}w_{\bm k}=2$，不会因为网格变密而增加每胞电子数。
 
-无磁、无自旋轨道耦合且势为实标量时，对本征方程和 Bloch 相位取复共轭，便把 $\bm k$ 态映为同能量的 $-\bm k$ 态。$\Gamma$ 点指 $\bm k=0$；此处方程和周期边界都为实数，可以选择实的空间轨道。
+\pagebreak[3]
+\begin{samepage}
+\subsection{Monkhorst--Pack 网格从哪里来}
+一种均匀求积方式是在倒格分数坐标中使用每小段的中点。为区别于前面宏观超胞的 $N_i$，将实际求积的划分数记为 $M_i$。把 $[-1/2,1/2]$ 分为 $M_i$ 等份，第 $m_i$ 段的左端点为 $-1/2+(m_i-1)/M_i$，再加半个段宽，得到中点
+\begin{equation}
+\xi_{m_i}=-\frac12+\frac{m_i-1}{M_i}+\frac1{2M_i}
+=\frac{2m_i-M_i-1}{2M_i},\qquad m_i=1,\ldots,M_i.
+\end{equation}
+\end{samepage}
+三个方向作直积，就得到 Monkhorst--Pack（MP）网格
+\begin{equation}\label{solids:mp-mesh}
+\bm k_{m_1m_2m_3}=\sum_{i=1}^3\frac{2m_i-M_i-1}{2M_i}\bm b_i,
+\qquad w_{\bm k}=\frac1{M_1M_2M_3}.
+\end{equation}
+等权重来自各小块相同的倒空间体积。以一维为例，$M=2$ 时将 $m=1,2$ 代入，得到 $\xi=-1/4,1/4$；$M=3$ 时则为 $-1/3,0,1/3$。实际波矢是这些分数乘倒格基矢 $b=2\pi/a$，不能把分数本身当作带长度倒数单位的波矢。
+
+MP 网格包含零点的条件是 $2m=M+1$，所以一维奇数划分包含 $\Gamma$，偶数划分不包含。三维则须三个 $M_i$ 都为奇数，直积网格才含 $\Gamma$。另一种常用选择是从 $\xi_m=m/M$（$m=0,\ldots,M-1$）出发、再按倒格周期折回的 $\Gamma$ 中心网格。由于 MP 坐标也可写为 $[m-(M+1)/2]/M$，奇数 $M$ 时二者只是整数重编号，偶数时相差半个网格步长。平移后的求积网格不必等于某个指定有限超胞的全部允许波矢；这里的目标是逼近无限晶体的积分。
+
+对称性可进一步减少计算量。若某个对称操作把网格映回自身，而且所求标量 $\mathcal A$ 在等价点取相同值，那么一组 $g$ 个等价点的贡献为
+\begin{equation}
+\sum_{j=1}^{g}\frac1{M_1M_2M_3}\mathcal A(\bm k_j)
+=\frac{g}{M_1M_2M_3}\mathcal A(\bm k_{\rm rep}).
+\end{equation}
+所以保留一个代表点即可，其权重是所代表点的权重之和。这些代表组成不可约采样集合。以一维 $M=3$ 网格及时间反演为例，$\pm b/3$ 合为权重 $2/3$ 的一点，$\Gamma$ 点权重为 $1/3$。一般空间旋转也会旋转轨道的空间分布，因此式\eqref{solids:density-kmesh}若只用不可约点计算密度，还须重建等价贡献或对密度作相应对称化；不能把标量能量的合并规则直接当作固定位置处的轨道模平方恒等式。
+
+采样网格须与准备利用的对称性相容；例如六角晶格的面内偶数 MP 网格可能破坏晶格旋转对称性，不能只因点数相同就与 $\Gamma$ 中心网格等同。实际应比较目标量随网格加密的变化。金属在 Fermi 面附近的占据变化快，还须一起检查占据展宽及采样收敛。
+
+能带图回答的是另一个问题：本征值沿选定方向怎样变化。通常先用体积分网格得到自洽密度与势，再固定该势，沿高对称路径求 $\varepsilon_{n\bm k}$。一条路径在三维倒空间中没有体积，不能代替密度和总能量所需的体积分。加密路径上的绘图点只会使曲线更细，不会自动改善自洽密度。
+
+\section{把连续函数变成有限未知量}
+确定 $\bm k$ 以后，式\eqref{solids:cell-ks}中的 $u_{n\bm k}(\bm r)$ 仍是连续函数。计算机需要有限个数来表示它：可以存储实空间网格上的函数值，也可以存储某组基函数的展开系数。两者都须检查分辨率，但导数的处理方式不同。
+
+\begin{samepage}
+先看一维实空间表示。设均匀网格间隔为 $h$，在光滑函数的 Taylor 展开中相加正、负位移：
+\begin{align}
+\psi(x\pm h)&=\psi(x)\pm h\psi'(x)+\frac{h^2}{2}\psi''(x)
+\pm\frac{h^3}{6}\psi'''(x)+O(h^4),\\
+\psi(x+h)+\psi(x-h)-2\psi(x)&=h^2\psi''(x)+O(h^4).
+\end{align}
+\end{samepage}
+奇数次项互相抵消，第二式除以 $h^2$ 得到中心差分 $\psi''(x)=[\psi(x+h)-2\psi(x)+\psi(x-h)]/h^2+O(h^2)$。以 $\Gamma$ 点的一维 KS 方程为例，令 $\psi_j=\psi(x_j)$、$v_j=v_s(x_j)$，代入动能项后成为
+\begin{equation}
+-\frac{\psi_{j+1}-2\psi_j+\psi_{j-1}}{2h^2}+v_j\psi_j
+\simeq\varepsilon\psi_j.
+\end{equation}
+每一行只连接一个点及其相邻两点，边界处则按周期条件连接首尾。三维 Laplacian 是三个方向二阶导数之和，分别沿各轴应用同一推导即可。缩小 $h$ 降低导数截断误差，但这里改变了微分算符的离散近似，通常不具有下节嵌套变分基的能量单调性。
 
 \section{平面波为什么方便}
+\subsection{从 Fourier 系数到矩阵方程}
+周期函数天然适合用离散倒格向量标记的 Fourier 级数表示。$\bm k$ 标记相邻原胞间的相位，而 $\bm G$ 描述同一个原胞\emph{内部}的空间变化；这两个波矢各有作用，不能把增加 $\bm k$ 点数当作增加基函数数目。
 将原胞内的位置写为 $\bm r=\sum_i s_i\bm a_i$，其中 $0\le s_i<1$。两个倒格平面波的内积化为 $\Omega_{\rm cell}\prod_i\int_0^1e^{2\pi\ii(l_i-l_i')s_i}\dd s_i$；整数差非零时积分为零，差为零时为一。因此 $\Omega_{\rm cell}^{-1/2}e^{\ii\bm G\cdot\bm r}$ 是正交归一基。周期函数的 Fourier 展开及投影系数为
-\begin{equation}
+\begin{equation}\label{solids:fourier}
 u_{n\bm k}=\frac1{\sqrt{\Omega_{\rm cell}}}\sum_Gc_{n\bm k}(G)e^{\ii\bm G\cdot\bm r},\qquad
 c_{n\bm k}(G)=\frac1{\sqrt{\Omega_{\rm cell}}}\int_{\rm cell}e^{-\ii\bm G\cdot\bm r}u_{n\bm k}\dd\bm r.
 \end{equation}
-对一个基函数作用原胞动能算符，先有 $(\nabla+\ii\bm k)e^{\ii\bm G\cdot\bm r}=\ii(\bm k+\bm G)e^{\ii\bm G\cdot\bm r}$，再作用一次并乘 $-1/2$，得到 $|\bm k+\bm G|^2/2$ 乘原函数。动能因此在此基中对角。按动能选取有限基，便规定只保留 $|\bm k+\bm G|^2/2\le E_{\rm cut}$ 的项。增大截断在固定几何、嵌套基和充分求解下扩大变分空间，但实际计算还要控制积分网格等误差。
+把展开式与其共轭相乘并在原胞积分，平面波正交性消去不同 $G$ 的交叉项，故 $\int_{\rm cell}|u|^2\dd\bm r=\sum_G|c(G)|^2=1$。对导数则逐项作用：$\nabla e^{\ii\bm G\cdot\bm r}=\ii\bm G e^{\ii\bm G\cdot\bm r}$，再取散度给出 $\nabla^2e^{\ii\bm G\cdot\bm r}=-G^2e^{\ii\bm G\cdot\bm r}$。因此在 Fourier 表示中，求梯度和 Laplacian 分别变成乘 $\ii\bm G$ 与 $-G^2$；对保留的每个 Fourier 分量，这一步没有有限差分截断误差。
 
-势能乘法在实空间方便，故常用快速 Fourier 变换（FFT）切换表示。轨道展开与其共轭相乘，使密度含有 $c^*(G)c(G')e^{\ii(\bm G'-\bm G)\cdot\bm r}$。令 $K_{\max}=\sqrt{2E_{\rm cut}}$，由三角不等式，$|\bm G'-\bm G|=|(\bm k+\bm G')-(\bm k+\bm G)|\le2K_{\max}$。密度波数至多为轨道的两倍，对应截断 $(2K_{\max})^2/2=4E_{\rm cut}$。额外的芯区密度修正则须单独检查截断收敛。
+原胞 KS 动能包含 $\bm k$。先有 $(\nabla+\ii\bm k)e^{\ii\bm G\cdot\bm r}=\ii(\bm k+\bm G)e^{\ii\bm G\cdot\bm r}$，再作用一次并乘 $-1/2$，得到 $|\bm k+\bm G|^2/2$ 乘原函数。动能因此在此基中对角。局域势的矩阵元则为
+\begin{equation}
+\frac1{\Omega_{\rm cell}}\int_{\rm cell}
+e^{-\ii\bm G\cdot\bm r}v_s(\bm r)e^{\ii\bm G'\cdot\bm r}\dd\bm r
+=v_s(\bm G-\bm G'),
+\end{equation}
+右侧定义了势的 Fourier 系数，采用 $v_s(\bm Q)=\Omega_{\rm cell}^{-1}\int_{\rm cell}v_s(\bm r)e^{-\ii\bm Q\cdot\bm r}\dd\bm r$。将展开式代入式\eqref{solids:cell-ks}，左乘一个平面波的共轭并积分，于是得到系数的本征方程
+\begin{equation}\label{solids:pw-matrix}
+\frac{|\bm k+\bm G|^2}{2}c_{n\bm k}(G)
++\sum_{G'}v_s(\bm G-\bm G')c_{n\bm k}(G')
+=\varepsilon_{n\bm k}c_{n\bm k}(G).
+\end{equation}
+周期势通过它的 Fourier 分量耦合不同平面波，因而一般本征态是多项平面波的叠加。若 $v_s$ 是常数，非零波矢的势系数消失，每个平面波才独立成为能量本征态。
+
+\subsection{截断能选择怎样的空间分辨率}
+Fourier 级数仍有无限项。按动能选取有限基，规定只保留
+\begin{equation}\label{solids:wave-cutoff}
+\frac{|\bm k+\bm G|^2}{2}\le E_{\rm cut},\qquad
+K_{\max}=\sqrt{2E_{\rm cut}}.
+\end{equation}
+它在 $\bm G$ 空间选取以 $-\bm k$ 为中心、半径为 $K_{\max}$ 的球；只有 $\Gamma$ 点时球心才在原点。若恢复通常单位，左边应为 $\hbar^2|\bm k+\bm G|^2/(2m_e)$，其中 $m_e$ 是电子质量，因此 $K_{\max}=\sqrt{2m_eE_{\rm cut}}/\hbar$。这些写法描述相同的选择。
+
+一个平面波沿传播方向移动波长 $\lambda$ 后相位增加 $2\pi$，故 $K\lambda=2\pi$。保留的最大波数越大，能够表示的最短波长 $2\pi/K_{\max}$ 越小。截断在这个意义上相当于去掉快速空间振荡的低通选择。增大截断在固定几何、嵌套基和充分求解下扩大变分空间，最小化能量因可选试探态增多而不会升高；实际计算还要控制实空间求积、自洽收敛等误差，才能使用这一判断。
+
+\subsection{为什么密度需要更高的截断}
+密度是波函数的乘积，其空间变化可以比单个波函数更快。固定一个 $n,\bm k$，用 $c(G)$ 简记其系数。Bloch 指数与共轭相消，将式\eqref{solids:fourier}的两份级数相乘，得到
+\begin{equation}\label{solids:density-product}
+|\psi_{n\bm k}(\bm r)|^2=|u_{n\bm k}(\bm r)|^2
+=\frac1{\Omega_{\rm cell}}\sum_{G,G'}c^*(G)c(G')
+e^{\ii(\bm G'-\bm G)\cdot\bm r}.
+\end{equation}
+这里 $\psi$ 仍指原胞归一化的 Bloch 形式，不是前面归一化到整个超胞的大写 $\Psi$。密度中的波矢是差 $\bm Q=\bm G'-\bm G$，而不是原来某一个 $\bm G$。两项分别满足式\eqref{solids:wave-cutoff}，由三角不等式
+\begin{equation}
+|\bm Q|=|(\bm k+\bm G')-(\bm k+\bm G)|
+\le|\bm k+\bm G'|+|\bm k+\bm G|\le2K_{\max}.
+\end{equation}
+所以要完整表示这些平滑轨道乘积，密度的 Fourier 空间须能容纳至多两倍的波数。若仍用 $Q^2/2$ 标记密度截断能，对应上限为
+\begin{equation}\label{solids:density-cutoff}
+E_{\rm cut}^{\rm density}=\frac{(2K_{\max})^2}{2}=4E_{\rm cut}.
+\end{equation}
+这里的``能量''只是用来给密度的空间分辨率标度，并不是给密度本身赋予电子动能。将各 $n,\bm k$ 的密度按式\eqref{solids:density-kmesh}相加，不会再产生不同轨道间的相干交叉项，因此不会在此基础上再次翻倍。
+
+一维例子可以直接看出这个因子。取周期长度 $L$，非零整数 $p$ 给出 $G_0=2\pi p/L$，并令 $u(x)=[e^{\ii G_0x}+e^{-\ii G_0x}]/\sqrt{2L}$。两项正交使它归一化；相乘后
+\begin{equation}
+|u(x)|^2=\frac{2+e^{2\ii G_0x}+e^{-2\ii G_0x}}{2L}
+=\frac1L[1+\cos(2G_0x)].
+\end{equation}
+轨道只含 $\pm G_0$，密度却确实出现 $\pm2G_0$。若密度也只保留原来的波数范围，这个起伏会被丢掉。这说明四倍关系源于乘积的 Fourier 支持范围，不是一个任意经验参数。它也不保证实际赝势计算中四倍总是充分：芯区的额外密度修正和势的数值表示须分别检查，不能仅凭平滑轨道乘积的推导规定全部计算的网格。
+
+\subsection{FFT 怎样连接两种表示}
+式\eqref{solids:pw-matrix}的势项在倒空间是不同系数的求和，在实空间却只是 $v_s(\bm r)u(\bm r)$ 的逐点相乘。因此常用快速 Fourier 变换（FFT）在两种表示间转换：把轨道系数变到实空间网格，在每个点求模平方得到密度，再变回密度的 Fourier 系数。求势作用时同样先在实空间相乘，再回到倒空间；动能则直接在倒空间乘以 $|\bm k+\bm G|^2/2$。
+
+这为什么节省计算？设一个网格共有 $M$ 个点，直接为每个输出 Fourier 系数求和 $M$ 项，需要 $O(M^2)$ 次运算。以 $M=2^s$ 的一维变换为例，把输入下标分成偶数与奇数，就把一个长度 $M$ 的变换拆成两个长度 $M/2$ 的变换，合并结果需 $O(M)$ 次运算。逐层二分共有 $s=\log_2M$ 层，每层处理的总数据量仍为 $M$，因此成本为 $O(M\log M)$。三维张量积网格可沿各方向依次变换，具有相同类型的标度；模平方本身只需 $O(M)$ 次逐点运算。这里谈的是变换及乘法成本，不是整个电子结构求解的总成本。
+
+FFT 加速的是同一离散 Fourier 变换，不会自动补回网格无法分辨的高波数。以一维等距点 $x_j=jh$ 为例，
+\begin{equation}
+e^{\ii(Q+2\pi/h)x_j}=e^{\ii Qx_j}e^{2\pi\ii j}=e^{\ii Qx_j}.
+\end{equation}
+因此相差 $2\pi/h$ 的波数在网格上完全无法区分，这称为混叠。唯一可区分的波数区间宽度为 $2\pi/h$；为使整个密度范围 $[-2K_{\max},2K_{\max}]$ 落在其内部，可取 $2K_{\max}<\pi/h$。三维网格需沿各倒空间方向容纳相应范围。网格过粗时，高波数会折到低波数上污染密度；先保证分辨率，再使用 FFT，才能得到式\eqref{solids:density-product}所描述的乘积。
+
+\subsection{同一 Fourier 表示怎样求 Hartree 势}
 
 第七章的 Hartree 势是密度与 $1/r$ 的卷积。对 $r\ne0$，直接求导得到 $\nabla^2(1/r)=0$；对包围原点的小球积分，散度定理给出 $\int\nabla^2(1/r)\dd^3r=4\pi r^2\partial_r(1/r)=-4\pi$。因此在分布意义下 $\nabla^2(1/r)=-4\pi\delta(\bm r)$，作用于卷积就得到 Poisson 方程 $\nabla^2v_H=-4\pi n$。
 
 采用 Fourier 系数 $n(G)=\Omega_{\rm cell}^{-1}\int_{\rm cell}n(\bm r)e^{-\ii\bm G\cdot\bm r}\dd\bm r$，将 $n$ 与 $v_H$ 均展开为平面波。Laplacian 将每项乘以 $-G^2$，比较同一 $G$ 的系数，得 $-G^2v_H(G)=-4\pi n(G)$。只有 $G\ne0$ 时才能相除，得到 $v_H(G)=4\pi n(G)/G^2$。令 $N_{\rm cell}=\int_{\rm cell}n\dd\bm r$ 表示每原胞电子数，则 $n(0)=N_{\rm cell}/\Omega_{\rm cell}$ 是平均电子数密度，\emph{不为零}。单独正的电子数密度没有周期 Poisson 解；零模必须结合离子电荷、中性条件和势零点约定处理。带电超胞还涉及补偿背景，不能把零模发散解释成分子也变为零。
+
+平面波也可用来表示一个分子：把分子放在带有真空区的大超胞中，再使用周期边界。但此时计算的仍是周期重复的分子阵列；真空区的作用是减弱相邻副本的轨道重叠和相互作用。只取 $\Gamma$ 点并不会取消这些副本，仍须增大超胞、检查目标能量与力是否收敛。改变超胞大小、加密 $\bm k$ 网格和提高平面波截断分别控制周期副本影响、倒空间积分误差和原胞内函数表示误差，不能相互替代。
 
 \section{赝势为何与基组选择相连}
 核附近全电子轨道快速变化，并与芯态正交；直接用平面波表示需很高截断。赝势在芯区内用平滑价态与有效作用替代显式芯电子，同时希望保持芯区外的散射性质。对某个角动量通道，模守恒构造要求参考能量和芯区外径向函数匹配，并满足
@@ -53,14 +221,6 @@ c_{n\bm k}(G)=\frac1{\sqrt{\Omega_{\rm cell}}}\int_{\rm cell}e^{-\ii\bm G\cdot\b
 其依据是芯区概率的保持：轨道写为 $R_l(r)Y_{lm}(\widehat{\bm r})$，体积元为 $r^2\dd r\dd\Omega$；用 $\int|Y_{lm}|^2\dd\Omega=1$ 积掉角变量，芯内概率便是上式的径向积分。这是赝轨道的构造条件，不能由任意平滑保证。不同角动量需要不同作用，因此赝势一般含非局域投影项；可转移性需在不同价态、成键和压强环境中检验。
 
 局域原子轨道基则以较少函数描述成键，但需要控制基组完备性与近线性相关。Slater 型基函数选取 $e^{-\zeta r}$ 的径向衰减，Gaussian 型选取多项式乘 $e^{-\alpha r^2}$，便于积分运算；$\zeta,\alpha>0$ 是基组参数，这些形式是表示函数的选择。移动原子会移动局域基，所以力中要考虑第四章的 Pulay 项。
-
-实空间有限差分是另一种选择。设网格间隔为 $a$，在光滑函数的 Taylor 展开中相加正、负位移：
-\begin{align}
-\psi(x\pm a)&=\psi(x)\pm a\psi'(x)+\frac{a^2}{2}\psi''(x)
-\pm\frac{a^3}{6}\psi'''(x)+O(a^4),\\
-\psi(x+a)+\psi(x-a)-2\psi(x)&=a^2\psi''(x)+O(a^4).
-\end{align}
-奇数次项互相抵消，第二式除以 $a^2$ 就得到 $\psi''(x)=[\psi(x+a)-2\psi(x)+\psi(x-a)]/a^2+O(a^2)$。其网格误差需单独收敛，通常不具有相同的严格变分单调性。
 
 \section{从能带曲率理解有效质量}
 本节恢复 $\hbar$ 以显示量纲。考虑一条孤立能带上的窄波包，采用忽略带间跃迁、只由色散关系决定群速度的近似。相邻波矢分量的相位差为 $\delta\bm k\cdot\bm r-\delta\varepsilon\,t/\hbar$；用 $\delta\varepsilon=\nabla_k\varepsilon\cdot\delta\bm k$，使这些分量保持相干的波包中心满足 $\bm r/t=\nabla_k\varepsilon/\hbar$，故群速度为 $v_\alpha=\hbar^{-1}\partial\varepsilon/\partial k_\alpha$。
