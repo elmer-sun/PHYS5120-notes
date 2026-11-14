@@ -27,7 +27,84 @@ $E_{NN}(R)$ 对给定核构型是常数，不改变电子本征函数。若 $\ha
 \end{equation}
 要对任意 $\delta\phi^*$ 都驻定，括号必须为零，即 $\hat H\phi=\varepsilon\phi$。乘子确保最小化不能通过把波函数缩成零来作弊。
 
-数值上可沿残差 $(\hat H-\varepsilon)\phi$ 的负方向移动，再归一化。归一化必须除以 $\sqrt{\langle\phi|\phi\rangle}$。求多个态时还要保持正交，否则所有向量都可能落向同一个最低态。非线性多轨道能量还可能存在多个驻点，自洽不等于已找到全局最低点。
+\subsection{用拉格朗日乘子保持梯度下降中的归一化}\label{hf:constrained-descent}
+驻值方程告诉我们最小值应满足什么条件，还没有说明怎样逐步接近它。先考虑固定的 Hermitian 算符 $\hat H$，以归一化函数 $\phi$ 为变量，最小化 $E[\phi]=\langle\phi|\hat H|\phi\rangle$。对复共轭函数的导数为 $\delta E/\delta\phi^*=\hat H\phi$，因此无约束下降的方向是 $-\hat H\phi$。问题在于，这个方向一般会改变函数长度；我们需要在下降的同时满足 $\langle\phi|\phi\rangle=1$。
+
+引入实的拉格朗日乘子 $\lambda$，将归一化约束加入下降方程。用 $\tau$ 表示人为的优化参数，它不是物理时间；把整体正的下降速率吸收到 $\tau$ 中，取
+\begin{equation}\label{hf:gradient-flow}
+\frac{\partial\phi}{\partial\tau}
+=-\frac{\delta}{\delta\phi^*}
+\left[E-\lambda(\langle\phi|\phi\rangle-1)\right]
+=-\hat H\phi+\lambda\phi.
+\end{equation}
+这里的 $\lambda$ 要沿优化过程确定，不能预先当作未知基态的本征值。对范数求导，bra 与 ket 各产生一项；利用 $\hat H$ 的 Hermitian 性，得到
+\begin{align}
+\frac{\dd}{\dd\tau}\langle\phi|\phi\rangle
+&=\langle\partial_\tau\phi|\phi\rangle
++\langle\phi|\partial_\tau\phi\rangle\notag\\
+&=-2\langle\phi|\hat H|\phi\rangle
++2\lambda\langle\phi|\phi\rangle.
+\end{align}
+要求这个导数为零，就确定了乘子
+\begin{equation}\label{hf:flow-multiplier}
+\lambda(\tau)=\frac{\langle\phi|\hat H|\phi\rangle}
+{\langle\phi|\phi\rangle}.
+\end{equation}
+只要初始范数为一，连续方程便始终保持它为一，此时 $\lambda=E[\phi]$。因此可定义残差 $r=(\hat H-E)\phi$，把下降方程写为 $\partial_\tau\phi=-r$。归一化给出 $\langle\phi|r\rangle=\langle\phi|\hat H|\phi\rangle-E=0$，所以下降方向与当前函数正交。几何上，所有单位范数函数构成一个球面，$-r$ 沿着球面的切向；乘子消去了原梯度中改变长度的分量。
+
+还须检查这个约束是否妨碍能量下降。由于 $\hat H$ 固定，对能量求导并代入 $\partial_\tau\phi=-r$，有
+\begin{align}
+\frac{\dd E}{\dd\tau}
+&=2\operatorname{Re}\langle\partial_\tau\phi|\hat H\phi\rangle
+=-2\operatorname{Re}\langle r|r+E\phi\rangle\notag\\
+&=-2\langle r|r\rangle\le0.
+\end{align}
+最后一步用了 $\langle r|\phi\rangle=0$。因此它同时保持范数和降低能量；当残差为零时，才恢复 $\hat H\phi=E\phi$。任一本征态都是驻点，所以这本身不保证从任意初态都能找到基态。例如初态恰好是激发本征态，就不会移动；寻找基态通常需要初态具有基态分量。
+
+\subsection{有限步长时，也可以直接由约束求乘子}
+连续保范数与离散保范数必须区分。设第 $m$ 步的 $\phi_m$ 已归一化，记 $E_m=\langle\phi_m|\hat H|\phi_m\rangle$、$r_m=(\hat H-E_m)\phi_m$。若把连续乘子直接用于显式 Euler 步，取 $\phi_m-\alpha r_m$，其中 $\alpha>0$ 为步长，则
+\begin{equation}
+\|\phi_m-\alpha r_m\|^2
+=1-2\alpha\operatorname{Re}\langle\phi_m|r_m\rangle
++\alpha^2\|r_m\|^2
+=1+\alpha^2\|r_m\|^2.
+\end{equation}
+交叉项虽为零，二阶项仍存在。因此切向方向只保证\emph{无穷小变化}不改变长度，沿切线走有限距离会离开球面。将更新结果再除以其范数是一种处理，但也可以让离散乘子本身承担约束。
+
+具体地，仍写带乘子的更新式，却不预先令离散乘子 $\lambda_m$ 等于 $E_m$：
+\begin{equation}\label{hf:discrete-constrained-step}
+\phi_{m+1}=\phi_m-\alpha(\hat H\phi_m-\lambda_m\phi_m)
+=a_m\phi_m-\alpha r_m,\qquad
+a_m=1+\alpha(\lambda_m-E_m).
+\end{equation}
+令 $s_m^2=\langle r_m|r_m\rangle$。由于 $\phi_m$ 与 $r_m$ 正交，要求新态范数为一就化为一个标量方程：
+\begin{equation}
+1=\|\phi_{m+1}\|^2=a_m^2+\alpha^2s_m^2.
+\end{equation}
+选取在 $\alpha\to0$ 时趋于原态的正根，便得到
+\begin{equation}\label{hf:discrete-multiplier}
+a_m=\sqrt{1-\alpha^2s_m^2},\qquad
+\lambda_m=E_m+\frac{\sqrt{1-\alpha^2s_m^2}-1}{\alpha}.
+\end{equation}
+把这个乘子放回式\eqref{hf:discrete-constrained-step}，新态便已满足归一化，整个步骤不需要再除以新态的范数。实根要求 $\alpha s_m\le1$；实际下降通常取严格小于一的小步长。用 $\sqrt{1-z}=1-z/2+O(z^2)$ 展开可见 $a_m=1-\alpha^2s_m^2/2+O(\alpha^4)$、$\lambda_m=E_m-\alpha s_m^2/2+O(\alpha^3)$，所以连续极限恢复式\eqref{hf:flow-multiplier}。乘子补上的径向变化从二阶开始，恰好抵消有限切向步产生的范数增加。
+
+保范数还不等于任意步长都降低能量。利用 $\hat H\phi_m=E_m\phi_m+r_m$，有 $\langle\phi_m|\hat H|r_m\rangle=s_m^2$。把 $a_m\phi_m-\alpha r_m$ 代入能量，两项交叉贡献相等，故
+\begin{equation}
+E_{m+1}-E_m=-2a_m\alpha s_m^2
++\alpha^2\bigl(\langle r_m|\hat H|r_m\rangle-E_ms_m^2\bigr).
+\end{equation}
+非零残差下，充分小步长的负的一阶项占优，能量下降；实际可试算新能量，若没有下降就减小步长并重新求乘子。这与更新后重新缩放函数是不同的操作。
+
+例如取两维模型 $H=\operatorname{diag}(0,2)$，初态为 $\phi=(1,1)^{\mathsf T}/\sqrt2$。两分量对应能量为零和二的本征态，故 $E=1$；直接相减得到 $r=(-1,1)^{\mathsf T}/\sqrt2$，于是 $s^2=1$。取 $\alpha=0.2$，有 $a=\sqrt{0.96}$，并得到
+\begin{equation}
+\phi_{\rm new}=\frac1{\sqrt2}
+\begin{pmatrix}\sqrt{0.96}+0.2\\\sqrt{0.96}-0.2\end{pmatrix},
+\qquad
+\|\phi_{\rm new}\|^2=0.96+0.04=1.
+\end{equation}
+新能量等于二乘第二分量的模平方，即 $E_{\rm new}=(\sqrt{0.96}-0.2)^2\simeq0.60808$，低于原来的 $1$；基态分量同时增大。相比之下，直接使用 $\phi-0.2r$ 的范数平方为 $1.04$。这个例子将乘子在有限步中所作的修正显示出来。
+
+若最小化的是非线性能量泛函，应把 $\hat H\phi$ 换成当前的泛函梯度 $g=\delta E/\delta\phi^*$；同样对范数求导得到实乘子 $\lambda=\operatorname{Re}\langle\phi|g\rangle/\langle\phi|\phi\rangle$，它未必等于总能量。求多个轨道时还要保持彼此正交，单个归一化乘子不足以完成所有约束；后文 HF 变分将引入乘子矩阵。非线性多轨道能量还可能有多个驻点，因此自洽不等于已找到全局最低点。
 
 \section{Hartree 乘积如何产生平均场}
 将本章已经定义的固定核电子 Hamilton 算符简写为 $\hat H=\sum_i\hat h(i)+\sum_{i<j}r_{ij}^{-1}$，其中 $\hat h=-\nabla^2/2+v_{\rm ext}$，$v_{\rm ext}(\bm r;R)=-\sum_I Z_I/|\bm r-\bm R_I|$ 是固定原子核产生的外势。最简单的试探态是归一化单粒子函数的乘积 $\Psi_H=\prod_i\phi_i(x_i)$。$x=(\bm r,s)$ 包括位置与自旋，$\int\dd x$ 代表空间积分和自旋求和。
