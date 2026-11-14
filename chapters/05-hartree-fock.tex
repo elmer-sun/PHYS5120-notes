@@ -121,7 +121,72 @@ E_{\rm new}-E
 
 若只保留无穷小步的一阶项，方法二的乘子趋于 $\lambda=E$；这就是连续约束下降中常见的乘子。但在有限一步中直接取 $\phi_{\rm new}=\phi-\alpha r$，其范数平方是 $1+\alpha^2\|r\|^2$，仍有二阶偏差。式\eqref{hf:direct-normalized-step}保留了使这一有限步也精确归一化的修正。
 
-这里讲的是固定 $\hat H$ 下的单个态。初态应含有基态分量；若恰好从某个激发本征态出发，残差也为零，算法不会自行离开它。多个轨道还需保持彼此正交，后文 HF 变分将用乘子矩阵处理这一约束。
+这里讲的是固定 $\hat H$ 下的单个态。初态应含有基态分量；若恰好从某个激发本征态出发，残差也为零，算法不会自行离开它。下面说明：要有意寻找激发态，应该改变允许搜索的空间。
+
+\subsection{找基态与找第一激发态，约束有什么不同}\label{hf:ground-excited-search}
+先假定 $\hat H$ 有离散的正交归一本征态 $u_0,u_1,\ldots$，能量依次为 $E_0<E_1\le E_2\le\cdots$；这里先取基态非简并，即能量 $E_0$ 只有一个独立本征态。写 $\phi=\sum_n c_nu_n$，归一化就是 $\sum_n|c_n|^2=1$。能量 $E[\phi]=\sum_n|c_n|^2E_n$ 是各本征能量的加权平均，因此只要求归一化时，能够达到的最低值为 $E_0$。这就是前面寻找基态的最小化问题。
+
+现在假定已经求得归一化基态 $u_0$，希望寻找第一激发态。若仍只要求归一化，下降仍然会偏向基态。应增加一个条件：$\langle u_0|\phi\rangle=0$。由于本征态正交，这个内积就是 $c_0$，所以约束恰好排除了基态分量。此时
+\begin{equation}
+E[\phi]-E_1=\sum_{n\ge1}|c_n|^2(E_n-E_1)\ge0,
+\qquad \sum_{n\ge1}|c_n|^2=1.
+\end{equation}
+于是，在与基态正交的空间里找最低能量，就得到了第一激发能 $E_1$；若 $E_1$ 简并，最小化可给出其本征子空间中的任意归一化态。\emph{使目标从基态变成激发态的是正交约束，乘子是实现约束的一种工具。}
+
+\subsection{直接做：减去基态分量，再归一化}\label{hf:project-excited}
+完全可以沿用方法一，只在归一化前加一个投影步骤。已知归一化的 $u_0$ 时，从任意候选向量 $v$ 中减掉基态分量，得到 $v_\perp=v-u_0\langle u_0|v\rangle$。检查其内积：
+\begin{equation}
+\langle u_0|v_\perp\rangle
+=\langle u_0|v\rangle-\langle u_0|u_0\rangle\langle u_0|v\rangle=0.
+\end{equation}
+这里的系数是内积 $\langle u_0|v\rangle$，包括其复数相位，不能只减去一个概率或模平方。先对初始猜测做这一步并归一化，再重复以下操作：
+\begin{align}
+\text{下降：}\quad&\widetilde\phi=\phi-\alpha\hat H\phi,\\
+\text{去掉基态分量：}\quad&v=\widetilde\phi-u_0\langle u_0|\widetilde\phi\rangle,\\
+\text{归一化：}\quad&\phi_{\rm new}=v/\sqrt{\langle v|v\rangle}.
+\label{hf:project-normalize-excited}
+\end{align}
+如果投影后的向量为零，就要更换初态或步长；它已没有可供搜索的剩余分量。还应确保初态有第一激发态分量，并像前面一样检查每一步的能量下降。为了找到这一受限空间的最低点，不能把任意一个高激发本征态的零残差误当作已经找到第一激发态。
+
+用三能级模型可以同时看清两种搜索。取 $H=\operatorname{diag}(0,2,5)$，已知 $u_0=(1,0,0)^{\mathsf T}$，从三个分量相等的候选态出发，取 $\alpha=0.1$。普通下降将三个分量分别乘以 $1,0.8,0.5$。若只归一化，一步得到
+\begin{equation}
+\phi_{\rm new}^{\text{找基态}}
+=\frac1{\sqrt{1.89}}\begin{pmatrix}1\\0.8\\0.5\end{pmatrix},
+\qquad E_{\rm new}=\frac{2(0.8)^2+5(0.5)^2}{1.89}\simeq1.33862.
+\end{equation}
+继续迭代时，高能分量相对于第一分量分别再乘 $0.8$ 与 $0.5$，最终趋于零，留下基态。
+
+若找第一激发态，先将候选态投影并归一化为 $(0,1,1)^{\mathsf T}/\sqrt2$，其能量为 $(2+5)/2=3.5$。执行式\eqref{hf:project-normalize-excited}：下降后为 $(0,0.8,0.5)^{\mathsf T}/\sqrt2$，第一分量仍为零，归一化给出
+\begin{equation}
+\phi_{\rm new}^{\text{找第一激发态}}
+=\frac1{\sqrt{0.89}}\begin{pmatrix}0\\0.8\\0.5\end{pmatrix},
+\qquad E_{\rm new}=\frac{2(0.8)^2+5(0.5)^2}{0.89}\simeq2.84270.
+\end{equation}
+第三分量相对于第二分量每步乘以 $0.5/0.8=0.625$，因此最终趋于零，留下 $(0,1,0)^{\mathsf T}$，能量趋于 $2$。两次搜索都在降低能量，但允许保留的最低态不同。
+
+\subsection{乘子如何实现同样的约束}
+也可以把归一化与正交条件一起放进变分式。除实乘子 $\lambda$ 外，用复乘子 $\eta$ 处理 $\langle u_0|\phi\rangle=0$；复约束包含实部和虚部两个条件，故写成实的组合
+\begin{equation}
+\mathcal L=\langle\phi|\hat H|\phi\rangle
+-\lambda(\langle\phi|\phi\rangle-1)
+-\eta\langle\phi|u_0\rangle-\eta^*\langle u_0|\phi\rangle.
+\end{equation}
+对 $\phi^*$ 变分，梯度为 $\hat H\phi-\lambda\phi-\eta u_0$。于是带约束的更新式为
+\begin{equation}
+\phi_{\rm new}=\phi-\alpha(\hat H\phi-\lambda\phi-\eta u_0).
+\end{equation}
+假定当前 $\phi$ 已与 $u_0$ 正交，左乘 $\langle u_0|$，再要求新态仍正交，得到
+\begin{equation}
+0=-\alpha\bigl(\langle u_0|\hat H\phi\rangle-\eta\bigr),
+\qquad \eta=\langle u_0|\hat H\phi\rangle.
+\end{equation}
+因此 $\eta u_0$ 恰好去掉梯度中的基态方向。记 $g=\hat H\phi-u_0\langle u_0|\hat H\phi\rangle$，就有 $\langle u_0|g\rangle=0$；又因 $\phi\perp u_0$，$\langle\phi|g\rangle=E$。令 $r_\perp=g-E\phi$，它同时与 $u_0$、$\phi$ 正交。归一化乘子 $\lambda$ 的求法便与方法二完全相同：在式\eqref{hf:direct-normalized-step}中用 $r_\perp$ 代替 $r$，即可让新态同时满足两个约束，无须重新推导另一套归一化公式。
+
+这与“下降、减去基态分量、归一化”处理的是同一组约束，有限步长的具体轨迹可以不同。还有一个有用的检查：若 $u_0$ 是\emph{精确}本征态，Hermitian 性给出 $\langle u_0|H\phi\rangle=\langle Hu_0|\phi\rangle=E_0\langle u_0|\phi\rangle=0$，所以此时 $\eta=0$，精确算术中的普通下降本来就不会重新产生基态分量。每步再投影可清除数值误差；不能据此宣称单个精确已知基态的情形必须使用乘子法。
+
+乘子的作用在同时处理多个待优化态时更容易看清。逐条归一化只保证每条向量长度为一，几条向量仍可能全部变成同一基态。如果已有正交归一的 $u_0,\ldots,u_{p-1}$，直接减去 $\sum_{j<p}u_j\langle u_j|v\rangle$ 后再归一化，同样是可行的逐次正交化。若这些轨道本身也一起变化，就要同时维护所有 $\langle\phi_i|\phi_j\rangle=\delta_{ij}$；乘子矩阵把这些条件统一写进变分方程，后面的 HF 推导正需要这种形式。显式正交化也仍然可用，乘子法并不自动保证更快。
+
+最后明确两条边界。若基态简并，应排除整个基态子空间，而不只减掉一条向量。若 $u_0$ 只是近似态，投影最小化得到的是与这个\emph{近似态}正交的最低能量，不能保证恰好等于真实第一激发能，应先控制基态误差。这里的结论针对固定线性 Hamilton 算符的本征态；HF 或 KS 的单电子激发轨道不能直接等同于真实多电子体系的第一激发态。
 
 \section{Hartree 乘积如何产生平均场}
 将本章已经定义的固定核电子 Hamilton 算符简写为 $\hat H=\sum_i\hat h(i)+\sum_{i<j}r_{ij}^{-1}$，其中 $\hat h=-\nabla^2/2+v_{\rm ext}$，$v_{\rm ext}(\bm r;R)=-\sum_I Z_I/|\bm r-\bm R_I|$ 是固定原子核产生的外势。最简单的试探态是归一化单粒子函数的乘积 $\Psi_H=\prod_i\phi_i(x_i)$。$x=(\bm r,s)$ 包括位置与自旋，$\int\dd x$ 代表空间积分和自旋求和。
