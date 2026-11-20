@@ -76,7 +76,7 @@ $C$ 的单位是能量除以长度平方，等价于质量除以时间平方；$
 沿 $\beta$ 方向整体平移一个小距离 $a$，即 $u_{J\gamma}=a\delta_{\beta\gamma}$。代入力公式，得到 $F_{I\alpha}=-a\sum_JC_{I\alpha,J\beta}$。整体平移不改变平衡结构的力，而 $a$ 可任取，所以 $\sum_JC_{I\alpha,J\beta}=0$，称声学和规则。它既是物理约束，也是数值检验；强制修正不能替代检查原始力的收敛。
 
 \section{从超胞力常数到声子}
-上例的两个振型描述一个有限体系。晶体里即使每个原胞内的振型相同，不同胞也可以在不同时间达到最大位移。第十章的电子波矢 $\bm k$ 标记轨道跨胞的相位；以下用另一个波矢 $\bm q$ 标记核位移跨胞的相位。用 $l$ 标记平衡晶格向量为 $\bm R_l$ 的原胞，用 $\kappa$ 标记胞内原子。整体平移一个晶格向量不会改变任何两原子间的力常数，所以每个胞的运动方程只依赖其他胞相对它的距离。我们可以沿用第十章平移算符的思路，使平移在一个振型上只产生相位。于是把振幅分为胞内形状 $e_{\kappa\alpha}$ 和逐胞积累的相位，取 $u_{l\kappa\alpha}=M_\kappa^{-1/2}e_{\kappa\alpha}(\bm q)e^{\ii(\bm q\cdot\bm R_l-\omega t)}$。考察原点胞 $l=0$ 的运动方程，消去时间因子后有
+双原子键只有整体平移和相对伸缩两个纵向振型。把许多原子接成周期晶体，同一种胞内运动还可以从一个胞传播到下一个胞。晶体里即使每个原胞内的振型相同，不同胞也可以在不同时间达到最大位移。第十章的电子波矢 $\bm k$ 标记轨道跨胞的相位；以下用另一个波矢 $\bm q$ 标记核位移跨胞的相位。用 $l$ 标记平衡晶格向量为 $\bm R_l$ 的原胞，用 $\kappa$ 标记胞内原子。整体平移一个晶格向量不会改变任何两原子间的力常数，所以胞间力常数只依赖两胞的相对晶格向量以及所选原子与方向。我们可以沿用第十章平移算符的思路，使平移在一个振型上只产生相位。于是把振幅分为胞内形状 $e_{\kappa\alpha}$ 和逐胞积累的相位，取 $u_{l\kappa\alpha}=M_\kappa^{-1/2}e_{\kappa\alpha}(\bm q)e^{\ii(\bm q\cdot\bm R_l-\omega t)}$。考察原点胞 $l=0$ 的运动方程，消去时间因子后有
 \begin{equation}
 \omega^2\sqrt{M_\kappa}\,e_{\kappa\alpha}
 =\sum_{l\kappa'\beta}C_{0\kappa\alpha,l\kappa'\beta}
@@ -86,7 +86,7 @@ $C$ 的单位是能量除以长度平方，等价于质量除以时间平方；$
 \begin{equation}
 D_{\kappa\alpha,\kappa'\beta}(\bm q)=\frac1{\sqrt{M_\kappa M_{\kappa'}}}\sum_l C_{0\kappa\alpha,l\kappa'\beta}e^{\ii\bm q\cdot\bm R_l}.
 \end{equation}
-若每个原胞有 $n$ 个原子，每个 $\bm q$ 下只需对角化一个 $3n\times3n$ 的矩阵，得到 $3n$ 条分支。$\bm q=0$ 时各胞同相，三个整体平移给出三条声学支的起点；有多个胞内原子时，它们在同一个胞里还可以相对振动，在普通稳定晶体中其余分支在此具有有限频率，称为光学支。这个名称不保证每个这样的模都能吸收光。极性材料的长程偶极作用还需处理非解析修正。本式采用只在胞向量上带相位的约定，其他加入胞内坐标的约定给出等价频率。
+若每个原胞有 $n$ 个原子，每个 $\bm q$ 下只需对角化一个 $3n\times3n$ 的矩阵，得到 $3n$ 条分支。$\bm q=0$ 时各胞同相，三个整体平移给出三条声学支的起点；有多个胞内原子时，它们在同一个胞里还可以相对振动，在普通稳定晶体中其余分支在此具有有限频率，称为光学支。这个名称不保证每个这样的模都能吸收光。本式采用只在胞向量上带相位的约定，其他加入胞内坐标的约定给出等价频率。
 
 \subsection{一条原子链的整条色散}
 取长度为 $Na$ 的周期链，每个原胞有一个质量为 $M$ 的原子，相邻平衡间距为 $a$，只考虑纵向运动。每条最近邻键的刚度均为 $k$。原子 $l$ 右侧的键伸长 $u_{l+1}-u_l$，向右拉它；左侧的键伸长 $u_l-u_{l-1}$，向左拉它。合力为
@@ -101,7 +101,7 @@ D_{\kappa\alpha,\kappa'\beta}(\bm q)=\frac1{\sqrt{M_\kappa M_{\kappa'}}}\sum_l C
 \]
 波矢 $q$ 指定相邻原子相差多少相位，$\omega(q)$ 指定这种集体位移振动得多快，两者的关系称为色散。$q=0$ 时整条链同移，所有弹簧保持原长。在长波极限 $|q|a\ll1$，$\sin(qa/2)\simeq qa/2$，故 $\omega\simeq a\sqrt{k/M}|q|$。波包以有限的声速 $a\sqrt{k/M}$ 传播，这就是“声学支”得名的原因。在区边 $q=\pi/a$，相邻原子反向运动，每根键交替拉伸和压缩，频率达到 $2\sqrt{k/M}$。
 
-这个例子也说明超胞的作用。令位移绕过全链后重复，$u_{l+N}=u_l$ 要求 $e^{\ii qNa}=1$，即 $q=2\pi j/(Na)$，$j$ 为整数。四原子超胞能直接容纳 $q=0,\ \pm\pi/(2a),\ \pi/a$ 的模式；最后一个模式需要偶数个原胞才能首尾相接。若已知作用只达最近邻，则力常数已由 $C_{00}=2k$ 和 $C_{0,\pm1}=-k$ 给全，把它们作 Fourier 求和便能算任意 $q$。实际用有限超胞移动一个原子时，它的所有周期副本也同时移动，测到的力会叠加这些副本的作用。要由此插值得到可靠的整条色散，须增大超胞直到相关作用距离已被容纳、关注的频率趋于稳定。加密画色散曲线的 $q$ 点本身并未增加力常数的信息。
+这个例子也说明超胞的作用。令位移绕过全链后重复，$u_{l+N}=u_l$ 要求 $e^{\ii qNa}=1$，即 $q=2\pi j/(Na)$，$j$ 为整数。四原子超胞能直接容纳 $q=0,\ \pm\pi/(2a),\ \pi/a$ 的模式；最后一个模式需要偶数个原胞才能首尾相接。若已知作用只达最近邻，则力常数已由 $C_{00}=2k$ 和 $C_{0,\pm1}=-k$ 给全，把它们作 Fourier 求和便能算任意 $q$。实际用有限超胞移动一个原子时，它的所有周期副本也同时移动，测到的力会叠加这些副本的作用。要由此插值得到可靠的整条色散，须增大超胞直到相关作用距离已被容纳、关注的频率趋于稳定。加密画色散曲线的 $q$ 点本身并未增加力常数的信息。若晶体中正负离子的相对位移会在远处产生电场，远处原子仍会受力，便不能简单截去远邻并按短程弹簧插值；这时还需单独处理长程电场的贡献。
 
 图\ref{phonon:chain-plot}把这两类信息画在一起。沿实线从中心向右走，振型由同相平移逐渐变成邻居反向运动；只保留圆点，则正好是四个原子首尾相接时能得到的频谱。
 \begin{figure}[htbp]
@@ -125,7 +125,7 @@ D_{\kappa\alpha,\kappa'\beta}(\bm q)=\frac1{\sqrt{M_\kappa M_{\kappa'}}}\sum_l C
 \end{figure}
 
 \section{从正则模到量子能级与自由能}
-上述正则模可以用经典力学求频率，但声子是它们量子化后的激发。本节恢复 $\hbar$。先对有限体系的实对称 $D$ 取正交本征向量 $e_{a\lambda}$，其中 $a$ 合并原子与方向指标，$\lambda$ 标记模。令质量加权位移 $y_a=\sqrt{M_a}u_a=\sum_\lambda e_{a\lambda}Q_\lambda$。正交性给出 $\sum_a\dot y_a^2=\sum_\lambda\dot Q_\lambda^2$，而 $De_\lambda=\omega_\lambda^2e_\lambda$ 给出 $\sum_{ab}y_aD_{ab}y_b=\sum_\lambda\omega_\lambda^2Q_\lambda^2$。因此谐 Hamilton 函数解耦为 $\sum_\lambda(\Pi_\lambda^2+\omega_\lambda^2Q_\lambda^2)/2$，其中 $\Pi_\lambda=\dot Q_\lambda$ 是该正则坐标的共轭动量。
+知道每个模的频率以后，还能求晶体受热时储存了多少振动能。第一章的经典平均给每个二次自由度相同的热能；低温下，一次振动所能增加的能量却有最小份额。晶格正则模的一个能量量子称为声子。下面从已经求出的频率算出这份能量，再对各份能量按热平衡概率求平均。本节恢复 $\hbar$。先对有限体系的实对称 $D$ 取正交本征向量 $e_{a\lambda}$，其中 $a$ 合并原子与方向指标，$\lambda$ 标记模。令质量加权位移 $y_a=\sqrt{M_a}u_a=\sum_\lambda e_{a\lambda}Q_\lambda$。正交性给出 $\sum_a\dot y_a^2=\sum_\lambda\dot Q_\lambda^2$，而 $De_\lambda=\omega_\lambda^2e_\lambda$ 给出 $\sum_{ab}y_aD_{ab}y_b=\sum_\lambda\omega_\lambda^2Q_\lambda^2$。因此谐 Hamilton 函数解耦为 $\sum_\lambda(\Pi_\lambda^2+\omega_\lambda^2Q_\lambda^2)/2$，其中 $\Pi_\lambda=\dot Q_\lambda$ 是该正则坐标的共轭动量。
 
 对一个 $\omega>0$ 的模，量子化要求 $[\hat Q,\hat\Pi]=\ii\hbar$。定义
 \begin{equation}
@@ -143,13 +143,13 @@ D_{\kappa\alpha,\kappa'\beta}(\bm q)=\frac1{\sqrt{M_\kappa M_{\kappa'}}}\sum_l C
 
 第一式说明能量不低于 $\hbar\omega/2$，因为 $\langle a^\dagger a\rangle=\|a\psi\|^2\ge0$。在 $\Pi=-\ii\hbar\partial_Q$ 表示下，$a\psi_0=0$ 化为 $(\partial_Q+\omega Q/\hbar)\psi_0=0$，其可归一化解为 $\psi_0\propto e^{-\omega Q^2/(2\hbar)}$，所以这个下界能够达到。第二式使每作用一次 $a^\dagger$ 就增加能量 $\hbar\omega$；取 Hermitian 共轭则得 $[H_\omega,a]=-\hbar\omega a$，所以 $a$ 每次降低同样的能量。对归一化能量本征态，$\|a\psi_E\|^2=E/(\hbar\omega)-1/2$，只要 $E$ 高于下界，降低后的态就不为零。反复降低又不能越过下界，因而必须恰在 $E=\hbar\omega/2$ 处终止。由此得到 $E_n=\hbar\omega(n+1/2)$，$n=0,1,\ldots$。
 
-对这些能级作正则求和，令 $x=e^{-\beta\hbar\omega}<1$，几何级数给出
+对这些能级作正则求和，令 $\beta=1/(\kb T)$，相邻两项的比为 $x=e^{-\beta\hbar\omega}<1$，几何级数给出
 \begin{equation}
 Z_\omega=\sum_{n=0}^\infty e^{-\beta\hbar\omega(n+1/2)}
 =\frac{e^{-\beta\hbar\omega/2}}{1-e^{-\beta\hbar\omega}}.
 \end{equation}
-自由能与配分函数的关系也可由定义推出。正则概率为 $p_n=e^{-\beta E_n}/Z_\omega$，故 $\ln p_n=-\beta E_n-\ln Z_\omega$。代入熵 $S=-\kb\sum_n p_n\ln p_n$，得到 $S=\kb\beta\langle E\rangle+\kb\ln Z_\omega$；再代入 $F=\langle E\rangle-TS$，能量项抵消，留下 $F_\omega=-\kb T\ln Z_\omega$。对上式的 $Z_\omega$ 取对数，便有 $F_\omega=\hbar\omega/2+\kb T\ln(1-e^{-\beta\hbar\omega})$。独立模的配分函数相乘，自由能相加；在晶体中改用波矢 $\bm q$ 和分支 $\nu$ 标记每个模，得到
+式\eqref{dft:canonical-free-energy}已从正则概率推出平衡自由能与配分函数的关系。对于这个模，它给出 $F_\omega=-\kb T\ln Z_\omega$。对上式的 $Z_\omega$ 取对数，便有 $F_\omega=\hbar\omega/2+\kb T\ln(1-e^{-\beta\hbar\omega})$。独立模的配分函数相乘，自由能相加；在晶体中改用波矢 $\bm q$ 和分支 $\nu$ 标记每个模，得到
 \begin{equation}
 F_{\rm vib}=\sum_{\bm q\nu}\left[\frac{\hbar\omega_{\bm q\nu}}2+\kb T\ln(1-e^{-\beta\hbar\omega_{\bm q\nu}})\right],
 \end{equation}
-其中求和按所需总量或每胞量归一化，刚体零模需另行处理。要检查高温极限，先对配分函数求导：$\partial_\beta Z_\omega=-\sum_n E_ne^{-\beta E_n}=-Z_\omega\langle E_\omega\rangle$，所以 $\langle E_\omega\rangle=-\partial_\beta\ln Z_\omega=\hbar\omega/2+\hbar\omega/(e^{\beta\hbar\omega}-1)$。令 $z=\beta\hbar\omega\ll1$，由 $e^z-1=z+z^2/2+O(z^3)$ 得 $1/(e^z-1)=z^{-1}[1-z/2+O(z^2)]=1/z-1/2+O(z)$。代回后两个 $\hbar\omega/2$ 项抵消，留下 $\langle E_\omega\rangle=1/\beta+O(\beta\hbar^2\omega^2)\simeq\kb T$，恢复经典极限。
+对有限周期晶体，遍历所有允许波矢和正频分支得到总振动自由能；除以原胞数即得每胞量。整体平移没有回复力，上面的几何级数对它不收敛，这里取固定质心，去掉这部分运动。对稳定晶体，加上静态平衡结构的能量，就可在谐近似下比较同温同体积的两种结构。要检查高温极限，先对配分函数求导：$\partial_\beta Z_\omega=-\sum_n E_ne^{-\beta E_n}=-Z_\omega\langle E_\omega\rangle$，所以 $\langle E_\omega\rangle=-\partial_\beta\ln Z_\omega=\hbar\omega/2+\hbar\omega/(e^{\beta\hbar\omega}-1)$。令 $z=\beta\hbar\omega\ll1$，由 $e^z-1=z+z^2/2+O(z^3)$ 得 $1/(e^z-1)=z^{-1}[1-z/2+O(z^2)]=1/z-1/2+O(z)$。代回后两个 $\hbar\omega/2$ 项抵消，留下 $\langle E_\omega\rangle=1/\beta+O(\beta\hbar^2\omega^2)\simeq\kb T$，恢复经典极限。

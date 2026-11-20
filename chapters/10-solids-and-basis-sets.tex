@@ -1,6 +1,6 @@
 \chapter{周期固体、基组与赝势}
 \section{平移对称性如何减少未知量}
-前几章说明了如何由电子密度建立 KS 方程，但真实晶体有宏观数量的原子，不能把每个原子附近的轨道都作为独立未知函数。理想晶体的关键简化是：不同原胞中的环境相同。我们要找出这种重复性对波函数施加了什么限制，再把求解范围缩小到一个原胞。本章继续采用原子单位；暂考虑实的局域标量 KS 势，忽略磁场和自旋轨道耦合。
+前几章说明了如何由电子密度建立 KS 方程，但真实晶体有宏观数量的原子，不能把每个原子附近的轨道都作为独立未知函数。理想晶体由同一小块空间连同其中的原子沿三个独立方向平移重复而成。能这样铺满晶体的最小体积单元称为原胞。不同原胞中的环境相同。我们要找出这种重复性对波函数施加了什么限制，再把求解范围缩小到一个原胞。本章继续采用原子单位；暂考虑实的局域标量 KS 势，忽略磁场和自旋轨道耦合。
 
 设三个线性无关的原胞平移向量为 $\bm a_1,\bm a_2,\bm a_3$，晶格向量为 $\bm R=\sum_i n_i\bm a_i$，其中 $n_i$ 为整数。取保持晶格周期的自洽解，有效势满足 $v_s(\bm r+\bm R)=v_s(\bm r)$。若电子态或磁序自发具有更长的周期，就应先选用能够容纳该周期的晶胞，不能强迫解保留较小原胞的对称性。
 
@@ -29,7 +29,7 @@ H(T_R\psi)(\bm r)&=-\tfrac12\nabla^2\psi(\bm r+\bm R)
 \begin{equation}\label{solids:bloch}
 \psi_{n\bm k}(\bm r)=e^{\ii\bm k\cdot\bm r}u_{n\bm k}(\bm r),\qquad u_{n\bm k}(\bm r+\bm R)=u_{n\bm k}(\bm r).
 \end{equation}
-这就是 Bloch 形式，$n$ 标记能带。同一个 Bloch 态的模平方在原胞间相同，但波函数本身一般只差相位，而非严格原胞周期。
+这就是 Bloch 形式。在给定波矢 $\bm k$ 下仍有多组能量解，用 $n$ 区分它们。让 $\bm k$ 连续变化，同一组解的能量随之形成一条能带。同一个 Bloch 态的模平方在原胞间相同，但波函数本身一般只差相位，而非严格原胞周期。
 
 波矢 $\bm k$ 的允许取值由超胞边界决定。倒格基矢定义为满足 $\bm a_i\cdot\bm b_j=2\pi\delta_{ij}$ 的对偶基；一般晶格的基矢未必互相垂直，不能直接把各分量写成三个独立的 $2\pi/a_i$。将 $\bm k=\sum_i\xi_i\bm b_i$ 代入式\eqref{solids:bvk}，平移相位必须满足
 \begin{equation}
@@ -113,9 +113,19 @@ MP 网格包含零点的条件是 $2m=M+1$，所以一维奇数划分包含 $\Ga
 \end{equation}
 所以保留一个代表点即可，其权重是所代表点的权重之和。这些代表组成不可约采样集合。以一维 $M=3$ 网格及时间反演为例，$\pm b/3$ 合为权重 $2/3$ 的一点，$\Gamma$ 点权重为 $1/3$。一般空间旋转也会旋转轨道的空间分布，因此式\eqref{solids:density-kmesh}若只用不可约点计算密度，还须重建等价贡献或对密度作相应对称化；不能把标量能量的合并规则直接当作固定位置处的轨道模平方恒等式。
 
-采样网格须与准备利用的对称性相容；例如六角晶格的面内偶数 MP 网格可能破坏晶格旋转对称性，不能只因点数相同就与 $\Gamma$ 中心网格等同。实际应比较目标量随网格加密的变化。金属在 Fermi 面附近的占据变化快，还须一起检查占据展宽及采样收敛。
+采样网格须与准备利用的对称性相容；例如六角晶格的面内偶数 MP 网格可能破坏晶格旋转对称性，不能只因点数相同就与 $\Gamma$ 中心网格等同。实际应比较目标量随网格加密的变化。金属在零温下有部分填充的能带，倒空间中已占据与未占据区域的分界称为 Fermi 面。这一边界附近的占据变化快，还须一起检查占据展宽及采样收敛。
 
 能带图回答的是另一个问题：本征值沿选定方向怎样变化。通常先用体积分网格得到自洽密度与势，再固定该势，沿高对称路径求 $\varepsilon_{n\bm k}$。一条路径在三维倒空间中没有体积，不能代替密度和总能量所需的体积分。加密路径上的绘图点只会使曲线更细，不会自动改善自洽密度。
+
+\subsection{怎样从能带图读出有效质量}
+能带图上一条曲线的斜率和弯曲程度有什么物理含义？选定一条能带，把波矢集中在某个值附近的态叠加起来，就能组成空间上相对集中的波包。跟踪其中心在弱外力下的运动，可以把图的形状与速度、加速度联系起来。本节恢复 $\hbar$ 以显示量纲。假设外力足够弱，可忽略带间跃迁，并只考虑能带色散对速度的贡献。取初始波包中心为坐标原点。相邻波矢分量的相位差为 $\delta\bm k\cdot\bm r-\delta\varepsilon\,t/\hbar$；用 $\delta\varepsilon=\nabla_k\varepsilon\cdot\delta\bm k$，使这些分量保持相干的波包中心满足 $\bm r/t=\nabla_k\varepsilon/\hbar$，故群速度为 $v_\alpha=\hbar^{-1}\partial\varepsilon/\partial k_\alpha$。
+
+取正则变量 $\bm r,\bm p_c=\hbar\bm k$，有效 Hamilton 函数为 $\mathcal H=\varepsilon(\bm p_c/\hbar)+U_{\rm ext}(\bm r)$。Hamilton 方程给出 $\dot{\bm p}_c=-\nabla U_{\rm ext}=\bm F$，即 $\hbar\dot k_\beta=F_\beta$。在链式法则 $\dot v_\alpha=\hbar^{-1}\sum_\beta(\partial^2\varepsilon/\partial k_\alpha\partial k_\beta)\dot k_\beta$ 中代入此式，将加速度对力的系数定义为逆有效质量张量；各向同性抛物线附近才可化为标量：
+\begin{equation}
+\dot v_\alpha=\sum_\beta\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}F_\beta,
+\qquad (m^{*-1})_{\alpha\beta}=\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}.
+\end{equation}
+例如若带底附近有 $\varepsilon(k)=\varepsilon_0+\hbar^2 k^2/(2m^*)$，一阶导数给出速度 $\hbar k/m^*$，二阶导数给出加速度 $F/m^*$。相同外力作用下，带底越平坦，波包的速度改变得越慢。
 
 \section{把连续函数变成有限未知量}
 确定 $\bm k$ 以后，式\eqref{solids:cell-ks}中的 $u_{n\bm k}(\bm r)$ 仍是连续函数。计算机需要有限个数来表示它：可以存储实空间网格上的函数值，也可以存储某组基函数的展开系数。两者都须检查分辨率，但导数的处理方式不同。
@@ -212,14 +222,14 @@ e^{\ii(Q+2\pi/h)x_j}=e^{\ii Qx_j}e^{2\pi\ii j}=e^{\ii Qx_j}.
 
 \subsection{同一 Fourier 表示怎样求 Hartree 势}
 
-第七章的 Hartree 势是密度与 $1/r$ 的卷积。对 $r\ne0$，直接求导得到 $\nabla^2(1/r)=0$；对包围原点的小球积分，散度定理给出 $\int\nabla^2(1/r)\dd^3r=4\pi r^2\partial_r(1/r)=-4\pi$。因此在分布意义下 $\nabla^2(1/r)=-4\pi\delta(\bm r)$，作用于卷积就得到 Poisson 方程 $\nabla^2v_H=-4\pi n$。
+第七章的 Hartree 势是密度与 $1/r$ 的卷积。对 $r\ne0$，直接求导得到 $\nabla^2(1/r)=0$；对包围原点的小球积分，散度定理给出 $\int\nabla^2(1/r)\dd^3r=4\pi r^2\partial_r(1/r)=-4\pi$。因此在分布意义下 $\nabla^2(1/r)=-4\pi\delta(\bm r)$。在 Hartree 势的积分中，这个等式使 Laplacian 选出当前位置的密度，形式上给出 Poisson 方程 $\nabla^2v_H=-4\pi n$。在周期晶胞中还要检查该方程的空间平均。
 
-采用 Fourier 系数 $n(G)=\Omega_{\rm cell}^{-1}\int_{\rm cell}n(\bm r)e^{-\ii\bm G\cdot\bm r}\dd\bm r$，将 $n$ 与 $v_H$ 均展开为平面波。Laplacian 将每项乘以 $-G^2$，比较同一 $G$ 的系数，得 $-G^2v_H(G)=-4\pi n(G)$。只有 $G\ne0$ 时才能相除，得到 $v_H(G)=4\pi n(G)/G^2$。令 $N_{\rm cell}=\int_{\rm cell}n\dd\bm r$ 表示每原胞电子数，则 $n(0)=N_{\rm cell}/\Omega_{\rm cell}$ 是平均电子数密度，\emph{不为零}。单独正的电子数密度没有周期 Poisson 解；零模必须结合离子电荷、中性条件和势零点约定处理。带电超胞还涉及补偿背景，不能把零模发散解释成分子也变为零。
+采用 Fourier 系数 $n(G)=\Omega_{\rm cell}^{-1}\int_{\rm cell}n(\bm r)e^{-\ii\bm G\cdot\bm r}\dd\bm r$，将 $n$ 与 $v_H$ 均展开为平面波。Laplacian 将每项乘以 $-G^2$，比较同一 $G$ 的系数，得 $-G^2v_H(G)=-4\pi n(G)$。只有 $G\ne0$ 时才能相除，得到 $v_H(G)=4\pi n(G)/G^2$。令 $N_{\rm cell}=\int_{\rm cell}n\dd\bm r$ 表示每原胞电子数，则 $n(0)=N_{\rm cell}/\Omega_{\rm cell}$ 是平均电子数密度，\emph{不为零}。对周期势，晶胞相对两面上的通量相消，所以 $\int_{\rm cell}\nabla^2v\,\dd\bm r=0$。若源只含电子，右侧的平均值却不为零；这正是 $G=0$ 处不能相除的原因。中性晶胞将电子与离子的电荷一同计入后，总源的平均值为零。此时方程留下一个任意的常数势，可选定为能量零点。
 
 平面波也可用来表示一个分子：把分子放在带有真空区的大超胞中，再使用周期边界。但此时计算的仍是周期重复的分子阵列；真空区的作用是减弱相邻副本的轨道重叠和相互作用。只取 $\Gamma$ 点并不会取消这些副本，仍须增大超胞、检查目标能量与力是否收敛。改变超胞大小、加密 $\bm k$ 网格和提高平面波截断分别控制周期副本影响、倒空间积分误差和原胞内函数表示误差，不能相互替代。
 
 \section{赝势为何与基组选择相连}
-核附近全电子轨道快速变化，并与芯态正交；直接用平面波表示需很高截断。赝势在芯区内用平滑价态与有效作用替代显式芯电子，同时希望保持芯区外的散射性质。对某个角动量通道，模守恒构造要求参考能量和芯区外径向函数匹配，并满足
+原子里靠近核、束缚较紧的电子称为芯电子；参与成键的外层电子称为价电子。若显式计算所有电子，价轨道在核附近既感受到很强的吸引，又必须与已占据的芯轨道正交，因而可能出现快速振荡。直接用平面波分辨这些细节需要很高的截断。赝势在芯区内用平滑价态与有效作用替代显式芯电子，同时希望保持芯区外的散射性质。在孤立参考原子中，可把轨道分成角向和径向两部分。固定角动量 $l$，用 $r_c$ 表示平滑处理的芯区半径，$R_l$ 和 $\widetilde R_l$ 分别表示原来的径向函数及其平滑替代。模守恒构造要求参考能量和芯区外径向函数匹配，并满足
 \begin{equation}
 \int_0^{r_c}|R_l(r)|^2r^2\dd r=\int_0^{r_c}|\widetilde R_l(r)|^2r^2\dd r.
 \end{equation}
@@ -227,13 +237,4 @@ e^{\ii(Q+2\pi/h)x_j}=e^{\ii Qx_j}e^{2\pi\ii j}=e^{\ii Qx_j}.
 
 局域原子轨道基则以较少函数描述成键，但需要控制基组完备性与近线性相关。Slater 型基函数选取 $e^{-\zeta r}$ 的径向衰减，Gaussian 型选取多项式乘 $e^{-\alpha r^2}$，便于积分运算；$\zeta,\alpha>0$ 是基组参数，这些形式是表示函数的选择。移动原子会移动局域基，所以力中要考虑第四章的 Pulay 项。
 
-\section{从能带曲率理解有效质量}
-本节恢复 $\hbar$ 以显示量纲。考虑一条孤立能带上的窄波包，采用忽略带间跃迁、只由色散关系决定群速度的近似。相邻波矢分量的相位差为 $\delta\bm k\cdot\bm r-\delta\varepsilon\,t/\hbar$；用 $\delta\varepsilon=\nabla_k\varepsilon\cdot\delta\bm k$，使这些分量保持相干的波包中心满足 $\bm r/t=\nabla_k\varepsilon/\hbar$，故群速度为 $v_\alpha=\hbar^{-1}\partial\varepsilon/\partial k_\alpha$。
-
-取正则变量 $\bm r,\bm p_c=\hbar\bm k$，有效 Hamilton 函数为 $\mathcal H=\varepsilon(\bm p_c/\hbar)+U_{\rm ext}(\bm r)$。Hamilton 方程给出 $\dot{\bm p}_c=-\nabla U_{\rm ext}=\bm F$，即 $\hbar\dot k_\beta=F_\beta$。在链式法则 $\dot v_\alpha=\hbar^{-1}\sum_\beta(\partial^2\varepsilon/\partial k_\alpha\partial k_\beta)\dot k_\beta$ 中代入此式，将加速度对力的系数定义为逆有效质量张量；各向同性抛物线附近才可化为标量：
-\begin{equation}
-\dot v_\alpha=\sum_\beta\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}F_\beta,
-\qquad (m^{*-1})_{\alpha\beta}=\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}.
-\end{equation}
-
-能带对 $\bm k$ 的曲率决定电子波包的加速度。下一章改为移动原子，考察总能量对核位移的曲率，由此求出核振动的频率。
+基组、截断和采样都确定以后，每个核构型都能给出一个总能量和一组核力。下一章保持这些电子计算条件一致，只改变原子的位置，看看从邻近构型的力差能够读出什么。

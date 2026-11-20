@@ -1,6 +1,6 @@
 \chapter{从微观运动到统计平均}
 \section{为什么一条轨迹还不是一个宏观答案}
-设想一盒液体。我们想知道温度、压强和扩散速度，却不可能在实验中逐一指定所有原子的位置。计算机能够追踪有限个原子，但它输出的位置序列本身也不是温度。因此，分子动力学需要两座桥：从力学模型得到轨迹，从轨迹得到统计平均。
+设想一盒液体。给出一帧原子的位置和速度，能从中读出液体的温度吗？若想知道一个分子多久能走出近邻的包围，一帧又够不够？分子动力学从给定的力出发，逐步算出原子随时间变化的轨迹。本章先用温度说明怎样从许多次微观观测得到一个宏观量，再推导实际生成轨迹的算法。
 
 先取最简单的模型：$N$ 个经典点粒子，质量 $m_i$，位置 $\bm r_i$，动量 $\bm p_i=m_i\dot{\bm r}_i$，体积为 $V$。记全部位置为 $R$、全部动量为 $P$。一个微观状态 $\Gamma=(R,P)$ 是 $6N$ 维相空间中的一点。对于不显含时间、没有速度依赖相互作用的体系，
 \begin{equation}
@@ -9,14 +9,14 @@ H(R,P)=K(P)+U(R),\qquad K=\sum_i\frac{\bm p_i^2}{2m_i},\qquad
 \end{equation}
 $H$ 是能量函数，$U$ 是势能。这里以 Newton 定律和保守力的功关系为力学起点：$\dd U=-\sum_i\bm F_i\cdot\dd\bm r_i$ 对任意位移成立，所以 $\bm F_i=-\nabla_iU$。动能由 $\dd K_i=\bm v_i\cdot\dd\bm p_i$ 积分得到 $K_i=m_i v_i^2/2=p_i^2/(2m_i)$，零速时取动能为零。
 
-Hamilton 形式把同一动力学写为 $\dot{\bm r}_i=\partial H/\partial\bm p_i$、$\dot{\bm p}_i=-\partial H/\partial\bm r_i$。对上式分别求偏导，得到 $\dot{\bm r}_i=\bm p_i/m_i$ 与 $\dot{\bm p}_i=-\nabla_iU=\bm F_i$；对第一式再求时间导数，就有 $m_i\ddot{\bm r}_i=\bm F_i$。这里的相空间坐标是普通变量，不是量子算符。
+Hamilton 形式把同一动力学写为 $\dot{\bm r}_i=\partial H/\partial\bm p_i$、$\dot{\bm p}_i=-\partial H/\partial\bm r_i$。对上式分别求偏导，得到 $\dot{\bm r}_i=\bm p_i/m_i$ 与 $\dot{\bm p}_i=-\nabla_iU=\bm F_i$；对第一式再求时间导数，就有 $m_i\ddot{\bm r}_i=\bm F_i$。给定初始位置和动量，这些方程决定体系此后怎样运动。
 
-宏观可观测量用相空间函数 $A(\Gamma)$ 表示。若平衡状态的概率密度是 $\rho(\Gamma)$，则
+只给定相同的宏观条件，可以有许多不同的初始微观状态。设想重复制备这样一盒液体，每次量出一个数，例如全部粒子的总动能。所有可能微观状态连同它们出现的概率称为\emph{系综}。将一次测量得到的量写成相空间函数 $A(\Gamma)$ 表示。若平衡状态的概率密度是 $\rho(\Gamma)$，则
 \begin{equation}
 \langle A\rangle=\int\dd\Gamma\,\rho(\Gamma)A(\Gamma),\qquad
 \int\dd\Gamma\,\rho(\Gamma)=1.
 \end{equation}
-概率不是在否认力学的确定性，而是在描述我们没有指定的微观信息。
+这里 $\dd\Gamma$ 是全部位置和动量分量的体积元。$\rho\,\dd\Gamma$ 给出一次制备落在该小区域的概率，角括号表示将各区域的测量值按这一概率作平均。
 
 \section{能量固定与温度固定意味着不同的分布}
 孤立系统的粒子数、体积和能量固定，称为微正则或 NVE 系综。仅有能量守恒还没有指定概率；微正则系综另采用等先验权重，在允许的薄能量壳内按相空间体积等权。令 $\delta_\epsilon(H-E)$ 在宽度 $\epsilon$ 的壳内为 $1/\epsilon$、壳外为零，则归一化密度为 $\rho_{E,\epsilon}=\delta_\epsilon(H-E)/\int\delta_\epsilon(H-E)\dd\Gamma$。代入平均值定义，再取薄壳极限 $\epsilon\to0$，得到
@@ -25,15 +25,15 @@ Hamilton 形式把同一动力学写为 $\dot{\bm r}_i=\partial H/\partial\bm p_
 \end{equation}
 Dirac $\delta$ 函数在积分中选取能量面；连续相空间不能直接用离散态的 Kronecker 符号代替。
 
-如果系统可以与一个大热库交换能量，系统能量便会涨落。设总能量为 $E_{\rm tot}$，系统处于能量 $H$ 的状态时，热库可用的状态数是 $\Omega_b(E_{\rm tot}-H)$。定义热库熵 $S_b=\kb\ln\Omega_b$，用 $\partial S_b/\partial E_b=1/T$ 展开：
+如果系统可以与一个大热库交换能量，系统能量便会涨落。设总能量为 $E_{\rm tot}$，系统处于能量 $H$ 的状态时，热库可用的状态数是 $\Omega_b(E_{\rm tot}-H)$。总系统孤立且各微观状态等权，给定系统状态的概率就正比于与它相容的热库状态数。令 $\kb$ 表示 Boltzmann 常数，定义热库熵 $S_b=\kb\ln\Omega_b$，用 $\partial S_b/\partial E_b=1/T$ 展开：
 \begin{equation}
 S_b(E_{\rm tot}-H)\simeq S_b(E_{\rm tot})-H/T.
 \end{equation}
-热库足够大时，高阶项可忽略，因而系统状态的权重正比于 $e^{-\beta H}$，其中 $\beta=1/(\kb T)$。归一化得到正则或 NVT 系综：
+热库足够大时，高阶项可忽略，由 $\Omega_b=\exp(S_b/\kb)$ 可见，展开中的常数项只给一个公共因子，系统状态的权重正比于 $e^{-\beta H}$，其中 $\beta=1/(\kb T)$。归一化得到正则或 NVT 系综：
 \begin{equation}
 \rho=Z^{-1}e^{-\beta H},\qquad Z=\int\dd\Gamma\,e^{-\beta H}.
 \end{equation}
-这里讨论归一化平均，经典配分函数中用于量纲和不可分辨性的公共常数已约去。计算绝对自由能时必须恢复这些常数。
+$Z$ 称为配分函数，它把所有状态的权重加在一起。这里讨论归一化平均，经典配分函数中用于量纲和不可分辨性的公共常数已约去。计算绝对自由能时必须恢复这些常数。
 
 动量与位置在 $H=K+U$ 中可分离，故 $e^{-\beta H}=e^{-\beta U}\prod_{i\alpha}e^{-\beta m_i v_{i\alpha}^2/2}$。积分掉其他变量后，一个速度分量的密度只差归一化常数。为求这个常数，令 $a=\beta m/2$、$I(a)=\int_{-\infty}^{\infty}e^{-av^2}\dd v$。将两个相同积分相乘，再在二维平面改用极坐标：
 \begin{equation}
@@ -53,11 +53,11 @@ f(v_x)=\sqrt{\frac{m}{2\pi\kb T}}\exp[-mv_x^2/(2\kb T)],\qquad
 这说明温度与\emph{平均}动能联系，而非每一瞬间的动能都相同。若独立二次动量自由度为 $f$，则 $\langle K\rangle=f\kb T/2$。去掉质心平动后，三维无其他约束的体系常有 $f=3N-3$；刚性键等约束还会改变 $f$。
 
 \section{时间平均怎样代替系综平均}
-轨迹给出的估计是
+系综平均相当于对许多份样品在同一时刻测量。模拟时常常只有一盒液体，于是改为沿同一盒液体的轨迹反复测量。观测时长为 $\mathcal T$ 时，这给出
 \begin{equation}
 \overline A_{\mathcal T}=\frac1{\mathcal T}\int_0^{\mathcal T}A(\Gamma(t))\dd t.
 \end{equation}
-只有当动力学在相关不变分布上具有适当遍历性，并且模拟足够长时，才可以用它估计系综平均。普通孤立 Newton 轨迹保持能量，不会自动采样 NVT。给速度按正则分布初始化，也不等于此后每一步都受热库控制。
+若对几乎所有按目标分布选取的初态，长时间平均都趋于该分布的系综平均，就称这种动力学对该分布具有遍历性。直观地说，轨迹在不同区域停留的时间比例应能代表这些区域的统计权重。有限轨迹还要足够长，才能利用这个极限。普通孤立 Newton 轨迹保持能量，不会自动采样 NVT。给速度按正则分布初始化，也不等于此后每一步都受热库控制。
 
 高势垒会使轨迹在一个亚稳盆地停留很久；有限时间看不到跨越，并不能证明数学意义上的不遍历。固体也不是一概不能进行统计平均：晶格振动可以在局部平衡下被良好采样，而缺陷迁移可能远慢于模拟时间。判断必须针对可观测量和时间尺度。
 
@@ -83,7 +83,7 @@ v_{n+1}&=v_{n+1/2}+\frac h{2m}F(x_{n+1}).
 
 上一时步的末次半步更新给出 $v_n=v_{n-1/2}+hF_n/(2m)$，再加本时步的首次半步更新，得到 $v_{n+1/2}=v_{n-1/2}+hF_n/m$，这就是 leapfrog 的交错存储。将 $hv_{n+1/2}=x_{n+1}-x_n$ 和 $hv_{n-1/2}=x_n-x_{n-1}$ 代入并相减，得 $x_{n+1}-2x_n+x_{n-1}=h^2F_n/m$，回到式\eqref{md:verlet}。二者等价需要一致的初始化；整步与半步速度不能直接混用来计算动能。
 
-\section{可逆性、稳定性与能量误差}
+\section{可逆性、稳定性与能量误差}\label{md:stability}
 把速度 Verlet 的三个步骤逆序，并令 $h\to-h$，每一步都撤销原来的更新，所以它具有时间可逆性。但时间反演是离散对称性，不能据此推出数值能量严格守恒。连续体系的能量守恒来自时间平移不变性。
 
 取 $U=m\omega^2x^2/2$ 检查稳定性。位置递推变为 $x_{n+1}-(2-h^2\omega^2)x_n+x_{n-1}=0$。试探 $x_n=z^n$，得到
@@ -95,7 +95,7 @@ z+z^{-1}=2-h^2\omega^2.
 在上述稳定区间，$x_n=A\cos(n\theta)+B\sin(n\theta)$ 保持有界。将速度 Verlet 在 $t_n$ 前后的两条位置式相减，力项抵消，得到整步速度 $v_n=(x_{n+1}-x_{n-1})/(2h)$，它也有界；因此这个谐振子的数值能量可以振荡，却不持续增长。这一具体检验不能代替一般体系的收敛检查。可信性仍要靠减小步长、检查守恒量和比较统计量共同判断，不能靠轨迹看起来平滑。
 
 \section{离散作用量提供另一条理解路径}
-作用量是一个把整条路径映成数的泛函，定义为 $S[x]=\int(\tfrac12m\dot x^2-U(x))\dd t$。固定两端位置，改变中间路径，速度变化为 $\delta\dot x=\dd(\delta x)/\dd t$。保留一阶项并分部积分：
+上一节从 Newton 方程向前推一步。还可以固定起点和终点，问哪条中间路径服从同一力学定律。为此取动能减势能作为 Lagrange 函数 $L$，沿一条候选路径对 $L$ 积分，所得的数称为作用量，即 $S[x]=\int(\tfrac12m\dot x^2-U(x))\dd t$。固定两端位置，改变中间路径，速度变化为 $\delta\dot x=\dd(\delta x)/\dd t$。保留一阶项并分部积分：
 \begin{align}
 \delta S&=\int[m\dot x\,\delta\dot x-U'(x)\delta x]\dd t\\
 &=[m\dot x\,\delta x]_{t_i}^{t_f}
@@ -105,7 +105,7 @@ z+z^{-1}=2-h^2\omega^2.
 \begin{equation}
 \delta S=\int[-m\ddot x-U'(x)]\delta x\,\dd t.
 \end{equation}
-端点变分为零，边界项消失。任意内部 $\delta x$ 都使一阶变分为零，便要求 Newton 方程。这里是\emph{驻值}条件，不保证极小值。
+力学的驻作用量原理要求真实路径对任意内部变化都满足 $\delta S=0$。因为可以只在任意一个短时间区间改变路径，被积式中乘 $\delta x$ 的系数必须处处为零，故 $m\ddot x=-U'(x)$。这里是\emph{驻值}条件，不保证极小值。
 
 离散后取 $S_d=\sum_{n=0}^{M-1}[m(x_{n+1}-x_n)^2/(2h)-hU(x_n)]$。内部 $x_n$ 同时出现在相邻两段，故
 \begin{equation}

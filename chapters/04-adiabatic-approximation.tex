@@ -86,7 +86,7 @@
 \label{bo:energy-accounting}
 \end{figure}
 
-若只丢掉不同面之间的耦合而保留对角修正，先在可局域取实且光滑的规范下，对归一化求导。两个实内积相等，因此
+若只丢掉不同面之间的耦合而保留对角修正，先考虑一个没有能级简并的小区域。每个核构型上的电子本征函数可以乘以任意整体相位而仍描述同一个电子态。若能连续选择这些相位，使这一电子态处处为实且随核位置光滑变化，就可直接对归一化求导。两个实内积相等，因此
 \begin{align}
 0&=\nabla_I\langle\phi_n|\phi_n\rangle
 =2\langle\phi_n|\nabla_I\phi_n\rangle,\\
@@ -120,14 +120,14 @@ U_{\rm DBOC}=\sum_I\frac{\hbar^2}{2M_I}\langle\nabla_I\phi_n|\nabla_I\phi_n\rang
 \frac{\dd\langle\bm R_I\rangle}{\dd t}=\frac{\langle\bm P_I\rangle}{M_I},\qquad
 \frac{\dd\langle\bm P_I\rangle}{\dd t}=-\langle\nabla_I E_n(R)\rangle.
 \end{equation}
-要把右侧换成 $-\nabla_I E_n(\langle R\rangle)$，还需波包在势能变化尺度上足够窄。把核坐标分量统一标为 $a,b,c$，记 $\overline R=\langle R\rangle$、$\delta R=R-\overline R$，并令 $F_a=-\partial_a E_n$。在平均位置作 Taylor 展开后取平均：
+一般势能下，波包各部分受到的力不同。波包集中在力变化足够平缓的小区域，是将右侧近似为 $-\nabla_I E_n(\langle R\rangle)$ 的一个充分条件。把核坐标分量统一标为 $a,b,c$，记 $\overline R=\langle R\rangle$、$\delta R=R-\overline R$，并令 $F_a=-\partial_a E_n$。在平均位置作 Taylor 展开后取平均：
 \begin{align}
 \langle F_a(R)\rangle={}&F_a(\overline R)
 +\sum_b(\partial_bF_a)_{\overline R}\langle\delta R_b\rangle\notag\\
 &+\frac12\sum_{bc}(\partial_b\partial_cF_a)_{\overline R}
 \langle\delta R_b\delta R_c\rangle+\cdots.
 \end{align}
-由平均位置的定义，$\langle\delta R_b\rangle=0$；二阶矩 $\langle\delta R_b\delta R_c\rangle$ 则衡量波包的宽度及不同方向的相关性。只有二阶及更高阶修正都小，平均力才近似等于平均位置处的力，前面的两个平均值方程才能封闭为经典轨迹方程。
+由平均位置的定义，$\langle\delta R_b\rangle=0$；二阶矩 $\langle\delta R_b\delta R_c\rangle$ 则衡量波包的宽度及不同方向的相关性。当二阶及更高阶修正都小时，只知道平均位置就足以近似计算平均力，前面两个方程因而能像经典方程一样从当前状态向前推进。谐势给出一个可直接检验的特例：若 $F(x)=-kx$，则 $\langle F(x)\rangle=-k\langle x\rangle$ 对任何宽度的波包都成立。波包中心此时严格作经典运动，其位置仍有量子涨落。
 
 热 de Broglie 波长可从一个自由粒子的平动配分函数定义出来。每个量子态在相空间占据体积 $h_{\rm P}^3$，其中 $h_{\rm P}=2\pi\hbar$；利用第一章的高斯积分，
 \begin{equation}
@@ -183,7 +183,7 @@ $\nabla_{\bm R}|\bm R-\bm r|^{-1}=-(\bm R-\bm r)/|\bm R-\bm r|^3$，将这两项
 \end{equation}
 精确本征态的残差 $(H-E)\phi$ 为零；变分近似则要求残差与允许的态变化正交，才能消去相应贡献。这说明 Hellmann--Feynman 化简依靠本征方程或充分的驻值条件。
 
-有限、随核位置移动的基组会产生额外基组导数，即 Pulay 力；自洽未收敛也会破坏驻值条件。第一性原理分子动力学因此不仅要积分核运动，还要使每一步电子能量和力在所需精度内一致。
+例如只用一组以原子为中心的函数来展开电子态，移动原子时，这些基函数也随之平移。即使展开系数在原来的基组中已达最优，移动基组所引起的态变化仍可能有额外的力贡献，称为 Pulay 力。若电子态的求解本身尚未收敛，能量对允许态变化的一阶导数也可能没有消失。第一性原理分子动力学因此不仅要积分核运动，还要使每一步电子能量和力在所需精度内一致。
 
 \section{下一步：在每个固定核构型上求多电子态}\label{bo:to-hartree}
 现在已经建立了有效核势能的定义，但还没有给出计算电子基态的实用方法。电子之间的 $r_{ij}^{-1}$ 项仍同时依赖两个电子的位置，电子波函数一般不能分成彼此独立的单粒子函数。BO 近似没有删除这项作用，也没有把多电子波函数自动变为轨道乘积。

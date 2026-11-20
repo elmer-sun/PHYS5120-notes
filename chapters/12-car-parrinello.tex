@@ -56,7 +56,7 @@ E_{\rm ext}=\frac12\sum_I M_I|\dot{\bm R}_I|^2+
 这不等于物理核动能加 BO 基态能量：虚拟电子动能也包含其中。数值积分还会带误差。仅见 $E_{\rm ext}$ 近似守恒，不能证明核始终在正确的基态面上运动。
 
 \section{两能级模型解释频率分离}
-固定核，令 $H|1\rangle=\varepsilon_1|1\rangle$、$H|2\rangle=\varepsilon_2|2\rangle$，$\Delta=\varepsilon_2-\varepsilon_1>0$。以归一化试探态 $|\phi\rangle=\cos(\theta/2)|1\rangle+\sin(\theta/2)|2\rangle$ 描述偏离基态的程度。求导得 $|\dot\phi\rangle=(\dot\theta/2)[-\sin(\theta/2)|1\rangle+\cos(\theta/2)|2\rangle]$。由两态正交性，速度范数中的交叉项为零，余下 $\dot\theta^2[\sin^2(\theta/2)+\cos^2(\theta/2)]/4$。能量期望值同样只有 $\varepsilon_1\cos^2(\theta/2)+\varepsilon_2\sin^2(\theta/2)$；使用 $\cos^2=1-\sin^2$，两者分别成为
+为看清虚拟惯性有多大影响，先把核固定。在一个只有两条能级的模型中，轨道偏离基态的程度只需一个混合角就能描述。令 $H|1\rangle=\varepsilon_1|1\rangle$、$H|2\rangle=\varepsilon_2|2\rangle$，$\Delta=\varepsilon_2-\varepsilon_1>0$。在实系数的两态子空间，以归一化试探态 $|\phi\rangle=\cos(\theta/2)|1\rangle+\sin(\theta/2)|2\rangle$ 描述偏离基态的程度。求导得 $|\dot\phi\rangle=(\dot\theta/2)[-\sin(\theta/2)|1\rangle+\cos(\theta/2)|2\rangle]$。由两态正交性，速度范数中的交叉项为零，余下 $\dot\theta^2[\sin^2(\theta/2)+\cos^2(\theta/2)]/4$。能量期望值同样只有 $\varepsilon_1\cos^2(\theta/2)+\varepsilon_2\sin^2(\theta/2)$；使用 $\cos^2=1-\sin^2$，两者分别成为
 \begin{equation}
 \langle\dot\phi|\dot\phi\rangle=\dot\theta^2/4,\qquad
 \langle\phi|H|\phi\rangle=\varepsilon_1+\Delta\sin^2(\theta/2).
@@ -86,7 +86,7 @@ Euler--Lagrange 方程成为 $(\mu/2)\ddot\theta=-(\Delta/2)\sin\theta$。小振
 \]
 例如 $\omega_e=10\Omega$ 时，受迫部分的振幅是谷底振幅的 $1/99$；若电子辅助频率降到核频率的两倍，即 $\omega_e=2\Omega$，这个比值升到 $1/3$。完整解还包括频率为 $\omega_e$ 的自由振动，其振幅由初态决定；守恒传播不会自动消除它。两频率接近时上述小偏差估计失效。这就解释了为什么既要让轨道初态靠近基态，又要让相关的电子辅助频率充分高于核频率。在金属或小能隙体系中，低能电子方向容易破坏这种分离。
 
-减小 $\mu$ 能提高 $\omega_e$，也增加了积分负担。对一个频率为 $\omega$ 的自由模，Verlet 更新满足 $x^{n+1}=(2-h^2\omega^2)x^n-x^{n-1}$。取 $x^n=e^{\ii n\vartheta}$，两边除以 $x^n$，得到 $2\cos\vartheta=2-h^2\omega^2$。要得到有界、可分辨的振荡须处于 $h\omega<2$ 的稳定区内；要精确给出相位，还应远离边界。在许多电子自由度的体系中，和核频率比较的是最低的相关辅助频率，限制步长的却是最高频率。即使在两能级模型里，将 $\mu$ 减为四分之一也会使 $\omega_e$ 加倍，保持相同的 $h\omega_e$ 就得把步长减半。
+减小 $\mu$ 能提高 $\omega_e$，也增加了积分负担。第\ref{md:stability}节已从谐振子的递推式求得 Verlet 的稳定条件 $h\omega<2$。CP 每步同时推进核和轨道，这个条件也要对辅助振动满足。即使没有越过稳定边界，要准确跟踪振动相位仍可能需要更短的步长。在许多电子自由度的体系中，和核频率比较的是最低的相关辅助频率，限制步长的却是最高频率。即使在两能级模型里，将 $\mu$ 减为四分之一也会使 $\omega_e$ 加倍，保持相同的 $h\omega_e$ 就得把步长减半。
 
 \section{用同一条键检验动力学}
 设我们关心的输出是键的伸缩周期。从平衡附近稍微拉长这根键、由静止释放，可以从键长随时间的相邻两个同向峰之间读出周期。作为参照，上一章两原子模型给出小振幅极限 $2\pi/\sqrt{k(1/M_1+1/M_2)}$。实际计算可在同一电子近似下用冻结位移取得局部曲率，或直接用收敛的 BO 力作短轨迹对照。比较时需保持初始核构型、质量和核速度一致。
