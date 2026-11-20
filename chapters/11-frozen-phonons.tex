@@ -1,35 +1,82 @@
 \chapter{从势能曲率到晶格振动}
-\section{平衡结构附近的第一个非平凡近似}
-电子结构给出核构型的能量 $E(R)$，但一个极小值只告诉我们原子平均停在哪里。温度与零点运动使原子在附近振动，振动频率由势能曲率决定。设平衡位置为 $R^0$，位移为 $u_{I\alpha}=R_{I\alpha}-R^0_{I\alpha}$。平衡要求一阶导数为零，故
-\begin{equation}
-E=E_0+\frac12\sum_{I\alpha,J\beta}C_{I\alpha,J\beta}u_{I\alpha}u_{J\beta}+O(u^3),\quad
-C_{I\alpha,J\beta}=\frac{\partial^2E}{\partial R_{I\alpha}\partial R_{J\beta}}.
-\end{equation}
-$C$ 是力常数矩阵。由 $F_{I\alpha}=-\partial E/\partial R_{I\alpha}$ 再求一次导数，就有 $C_{I\alpha,J\beta}=-\partial F_{I\alpha}/\partial R_{J\beta}$。光滑能量的混合导数相等，使 $C$ 对称。对二次势能求导时，$u_{I\alpha}$ 在两个因子中各贡献一次；两项借助 $C$ 的对称性合并，消去 $1/2$。于是谐近似下 $F_{I\alpha}=-\sum_{J\beta}C_{I\alpha,J\beta}u_{J\beta}$，Newton 方程为 $M_I\ddot u_{I\alpha}=F_{I\alpha}$。
+\section{从一个静止构型提出动力学问题}
+设想电子结构程序已经找到一组核位置，每个原子受到的合力都为零。仅凭这一次输出，能分辨一根键是软是硬吗？在平衡键长处，软弹簧和硬弹簧都不施力。把键拉长同样的一小段，比较它们试图把原子拉回去的力，才能看出差别。晶体中事情还多一层：推开一个原子，邻居也会受力。因此要测量的是一组原子对另一组位移的响应。
 
-试取所有原子以同一频率振动，$u_{I\alpha}(t)=U_{I\alpha}e^{-\ii\omega t}$。两次时间求导给出 $\ddot u=-\omega^2u$；代入 Newton 方程并消去共同的时间因子和负号，得 $\omega^2M_IU_{I\alpha}=\sum_{J\beta}C_{I\alpha,J\beta}U_{J\beta}$。令 $e_{I\alpha}=\sqrt{M_I}U_{I\alpha}$，右端用 $U_{J\beta}=e_{J\beta}/\sqrt{M_J}$ 代换，再把等式两边除以 $\sqrt{M_I}$，得到普通对称本征问题
-\begin{equation}
-\sum_{J\beta}D_{I\alpha,J\beta}e_{J\beta}=\omega^2e_{I\alpha},\qquad
-D_{I\alpha,J\beta}=\frac{C_{I\alpha,J\beta}}{\sqrt{M_IM_J}}.
-\end{equation}
-质量加权使相同的势能曲率对重原子产生较低的频率。例如双原子一维弹簧 $E=k(u_1-u_2)^2/2$ 给出力 $F_1=-k(u_1-u_2)$、$F_2=+k(u_1-u_2)$。两条运动方程相减，令 $q=u_1-u_2$，得 $\ddot q=-k(1/M_1+1/M_2)q$，所以 $\omega^2=k(1/M_1+1/M_2)=k/\mu_{\rm red}$，其中约化质量定义为 $\mu_{\rm red}=M_1M_2/(M_1+M_2)$。另一方面，质量加权相加给出质心 $X=(M_1u_1+M_2u_2)/(M_1+M_2)$ 满足 $\ddot X=0$，这就是平移零模。
+固定晶胞，用 $R$ 表示全部核坐标。每给定一组 $R$，都在这些核位置上求电子基态，并把核间排斥计入总能量，记所得势能面为 $E(R)$。在允许移动的坐标上，力为 $F_{I\alpha}=-\partial E/\partial R_{I\alpha}$，其中 $I$ 标记原子，$\alpha=x,y,z$ 标记方向。先找力为零的参考构型 $R^0$，把偏离它的位移写为 $u_{I\alpha}=R_{I\alpha}-R^0_{I\alpha}$。力为零只保证能量驻定；推开以后原子会回来还是会继续远离，正是要从计算中判断的事。
 
-\section{冻结位移如何测出曲率}
-所谓冻结声子或有限位移方法，是暂时把一个坐标移开 $\pm\Delta$，分别计算所有原子的力。将待测力分量简记为 $f(x)$，其中 $x$ 是被移动的坐标。Taylor 展开为 $f(\pm\Delta)=f(0)\pm f'(0)\Delta+f''(0)\Delta^2/2\pm f'''(0)\Delta^3/6+O(\Delta^4)$；两式相减再除以 $2\Delta$，得 $[f(\Delta)-f(-\Delta)]/(2\Delta)=f'(0)+O(\Delta^2)$。代入 $C=-\partial F/\partial R$，便有
-\begin{equation}
-C_{I\alpha,J\beta}\simeq-\frac{F_{I\alpha}(R^0+\Delta\bm d_{J\beta})-F_{I\alpha}(R^0-\Delta\bm d_{J\beta})}{2\Delta}.
+若势能在该处光滑，沿位移作 Taylor 展开，一次项的系数是势能梯度，在驻点消失。留下的第一个一般非零项是
+\begin{equation}\label{phonon:curvature}
+E(R^0+u)=E(R^0)+\tfrac12\sum_{I\alpha,J\beta}C_{I\alpha,J\beta}u_{I\alpha}u_{J\beta}
++O(\|u\|^3),\qquad
+C_{I\alpha,J\beta}=\left.\frac{\partial^2 E}{\partial R_{I\alpha}\partial R_{J\beta}}\right|_{R^0}.
 \end{equation}
-这里 $\bm d_{J\beta}$ 是仅在原子 $J$ 的 $\beta$ 坐标上为一、其他分量为零的单位位移向量，不是正则模本征向量。中心差分截断误差通常为 $O(\Delta^2)$。但若力有误差 $\delta F$，差分误差还含 $O(\delta F/\Delta)$；所以位移越小并非总越好。应收紧电子收敛，比较数个振幅，并先把平衡结构优化到足够小的残余力。
+保留到二次项称为谐近似。混合导数可交换，故力常数矩阵 $C$ 对称。对二次项按 $u_{I\alpha}$ 求导，前后两个位移因子各给一项，经这一对称性合并，抵消 $1/2$。取负号得到线性力
+\begin{equation}\label{phonon:linear-force}
+F_{I\alpha}(R^0+u)\simeq-\sum_{J\beta} C_{I\alpha,J\beta}u_{J\beta},\qquad
+C_{I\alpha,J\beta}=-\left.\frac{\partial F_{I\alpha}}{\partial R_{J\beta}}\right|_{R^0}.
+\end{equation}
+只有一个坐标时，这就是 $F=-ku$，$k$ 是弹簧刚度。多原子情形中，列指标 $J\beta$ 指明推了谁、往哪边推，行指标 $I\alpha$ 指明读出谁的哪一个力分量。若有 $N$ 个原子，按 $1x,1y,1z,2x,\ldots,Nz$ 排列，就有一个 $3N$ 行、$3N$ 列的矩阵。每两个原子之间对应一个 $3\times3$ 的块；例如 $C_{1x,2y}$ 可以描述沿 $y$ 推动原子 2 引起的原子 1 的横向受力。
 
-若某本征值 $\omega^2<0$，线性化运动含指数增长而不是振荡，说明该构型在相应方向可能不稳定。很小的负值也可能来自数值误差或不充分收敛，不能只看绘图软件画出的“负频率”就断定新相。
+\section{怎样用静态的力填出矩阵}
+先只移动 $J\beta$ 这一个坐标，分别向两侧移 $\Delta$，其余核固定。每次重新求电子基态，记录\emph{全部}原子的受力。这里“冻结”指在求力期间固定核的位置；若放开其他核让它们也弛豫，测到的就掺入了它们的位移响应。设 $\bm d_{J\beta}$ 是只在该坐标上等于一的单位向量，记 $f(s)=F_{I\alpha}(R^0+s\bm d_{J\beta})$。两侧力的展开为
+\[
+ f(\pm\Delta)=f(0)\pm f'(0)\Delta+\tfrac12 f''(0)\Delta^2
+ \pm\tfrac16 f'''(0)\Delta^3+O(\Delta^4).
+\]
+两式相减消去平衡力和二次项，再除以 $2\Delta$ 就得到力的斜率，首项截断误差与 $\Delta^2$ 成正比。依式\eqref{phonon:linear-force}取负号，
+\begin{equation}\label{phonon:central}
+ C_{I\alpha,J\beta}\simeq-
+ \frac{F_{I\alpha}(R^0+\Delta\bm d_{J\beta})-F_{I\alpha}(R^0-\Delta\bm d_{J\beta})}{2\Delta}.
+\end{equation}
+两次计算给出一整列。逐列做，在完全不利用对称性时共需 $6N$ 个位移构型。若每个力分量有大小至多 $\delta F$ 的数值误差，两次误差相减后至多为 $2\delta F$，除以 $2\Delta$ 后可达 $\delta F/\Delta$。实际应先使参考构型的残余力足够小，并用相同截断、电子波矢网格和自洽精度算两侧的力。将 $\Delta$ 减半时，若结果先趋稳、再变得起伏，后者提示力的数值精度已限制了差分。
+
+\subsection{两颗原子的力怎样成为两列}
+只允许两颗原子沿键方向运动，以 $u_1,u_2$ 为相对各自平衡位置的位移，键的伸长为 $u_2-u_1$。取教学模型 $E-E_0=k(u_2-u_1)^2/2$，其中 $k=2\,\mathrm{eV}/\text{\AA}^2$。分别求偏导并取负号，得 $F_1=k(u_2-u_1)$、$F_2=-F_1$。以下四个静态结果取 $\Delta=0.01\,\text{\AA}$，力的单位为 $\mathrm{eV}/\text{\AA}$。
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+核位移 & $F_1$ & $F_2$\\
+\midrule
+$u_1=+\Delta,\ u_2=0$ & $-0.02$ & $+0.02$\\
+$u_1=-\Delta,\ u_2=0$ & $+0.02$ & $-0.02$\\
+$u_1=0,\ u_2=+\Delta$ & $+0.02$ & $-0.02$\\
+$u_1=0,\ u_2=-\Delta$ & $-0.02$ & $+0.02$\\
+\bottomrule
+\end{tabular}
+\end{center}
+由前两行，$C_{11}=-(-0.02-0.02)/0.02=2$，而 $C_{21}=-(0.02+0.02)/0.02=-2$；由后两行，$C_{12}=-2$、$C_{22}=2$，单位均为 $\mathrm{eV}/\text{\AA}^2$。于是
+\[
+ C=k\begin{pmatrix}1&-1\\-1&1\end{pmatrix}.
+\]
+负的非对角元在这里有直接的物理含义：向右拉原子 2，原子 1 也被拉向右。若同时把两颗原子都向右移同样多，键长不变；矩阵乘 $(1,1)^{\mathsf T}$ 也确实给出零。可见单个矩阵元的正负并不足以判定结构是否稳定。
+
+\section{由回复力求振型和频率}
+放开核以后，Newton 方程给出 $M_I\ddot u_{I\alpha}=-\sum_{J\beta}C_{I\alpha,J\beta}u_{J\beta}$。先寻找运动中各坐标始终保持确定振幅比的解，这样的集体运动称为正则模。取 $u_{I\alpha}(t)=\operatorname{Re}[U_{I\alpha}e^{-\ii\omega t}]$，其中 $U$ 表示振幅和初相。两次求导引入 $-\omega^2$，消去共同时间因子即得
+\[
+ \sum_{J\beta}C_{I\alpha,J\beta}U_{J\beta}=\omega^2 M_I U_{I\alpha}.
+\]
+重原子与轻原子对同一力的加速度不同，不能直接将 $C$ 的本征值当作频率平方。令 $e_{I\alpha}=\sqrt{M_I}U_{I\alpha}$，右边含 $\sqrt{M_I}e_{I\alpha}$，左边的每个 $U_{J\beta}$ 变成 $e_{J\beta}/\sqrt{M_J}$。将两边同除以 $\sqrt{M_I}$，得到实对称的\emph{动力学矩阵}
+\begin{equation}\label{phonon:dynamical}
+ \sum_{J\beta} D_{I\alpha,J\beta}e_{J\beta}=\omega^2 e_{I\alpha},
+ \qquad D_{I\alpha,J\beta}=\frac{C_{I\alpha,J\beta}}{\sqrt{M_I M_J}} .
+\end{equation}
+$C$ 的单位是能量除以长度平方，等价于质量除以时间平方；$D$ 的单位正好是时间的负二次方。它的 $3N$ 个本征向量可取为正交归一的一组，任意小位移都可在这组振型上展开。看原子怎样运动时，要把本征向量每个分量除回相应的 $\sqrt{M_I}$。
+
+回到刚才的键。让 $M_1=m$、$M_2=4m$，则
+\[
+ D=\frac{k}{m}\begin{pmatrix}1&-1/2\\-1/2&1/4\end{pmatrix}.
+\]
+把矩阵乘 $(1,2)^{\mathsf T}$，两行都给零；除回质量平方根，两个原子的实际位移相等。这是整体平移。与它正交的 $(2,-1)^{\mathsf T}$ 乘上矩阵后为原向量的 $5k/(4m)$ 倍。因此伸缩角频率为 $\sqrt{5k/(4m)}$，实际振幅比为 $U_1:U_2=2:(-1/2)=4:(-1)$。轻原子向右走四份，重原子向左走一份，质心恰好不动。也可以从力独立检验：令 $s=u_2-u_1$，用 $\ddot s=F_2/M_2-F_1/M_1$ 得到 $\ddot s=-k(1/M_1+1/M_2)s$。括号正是约化质量 $M_1M_2/(M_1+M_2)$ 的倒数。
+
+本征值为负时又会怎样？沿归一化实本征向量 $e$ 取位移 $u_{I\alpha}=s e_{I\alpha}/\sqrt{M_I}$。由式\eqref{phonon:curvature}，二次能量变化为 $s^2 e^{\mathsf T}De/2=\omega^2s^2/2$。若 $\omega^2=-\gamma^2<0$，两侧小位移都会降低能量，而且运动方程变成 $\ddot s=\gamma^2s$，含有随时间增长的 $e^{\gamma t}$ 解。谱图中常把这个虚频画在横轴下方。实际遇到它时，可以沿该本征向量做正、负两次静态位移并比较能量，同时检查力精度和超胞大小。若负曲率随收敛保留，就找到了该结构局部失稳的方向；若本征值恰为零，二次项本身无法判定更高阶项的符号。
 
 \section{零模数量取决于系统}
-孤立非线性分子的整体平移和转动不改变能量，通常有三个平移及三个转动零模，剩 $3N-6$ 个振动模；线性分子只有两个独立转动方向，剩 $3N-5$ 个振动模。固定周期晶胞不能任意刚体转动而保持边界不变，晶体在 $\bm q=0$ 有三个声学平移零模，不能照搬分子的六零模计数。
+孤立非线性分子的整体平移和转动不改变能量，通常有三个平移及三个转动零模，剩 $3N-6$ 个振动模；线性分子只有两个独立转动方向，剩 $3N-5$ 个振动模。绕线性分子的键轴转动时，所有核都留在原位，这正是它少一个转动自由度的原因。固定周期晶胞不能任意刚体转动而保持边界不变；三个独立的整体平移仍然可行，对应所有原胞同相移动的三个零模。
 
 沿 $\beta$ 方向整体平移一个小距离 $a$，即 $u_{J\gamma}=a\delta_{\beta\gamma}$。代入力公式，得到 $F_{I\alpha}=-a\sum_JC_{I\alpha,J\beta}$。整体平移不改变平衡结构的力，而 $a$ 可任取，所以 $\sum_JC_{I\alpha,J\beta}=0$，称声学和规则。它既是物理约束，也是数值检验；强制修正不能替代检查原始力的收敛。
 
 \section{从超胞力常数到声子}
-晶体中以胞标号 $l$ 和胞内原子 $\kappa$ 区分原子。平移对称性允许不同胞的振动幅度相差相位，取 $u_{l\kappa\alpha}=M_\kappa^{-1/2}e_{\kappa\alpha}(\bm q)e^{\ii(\bm q\cdot\bm R_l-\omega t)}$。考察原点胞 $l=0$ 的运动方程，消去时间因子后有
+上例的两个振型描述一个有限体系。晶体里即使每个原胞内的振型相同，不同胞也可以在不同时间达到最大位移。第十章的电子波矢 $\bm k$ 标记轨道跨胞的相位；以下用另一个波矢 $\bm q$ 标记核位移跨胞的相位。用 $l$ 标记平衡晶格向量为 $\bm R_l$ 的原胞，用 $\kappa$ 标记胞内原子。整体平移一个晶格向量不会改变任何两原子间的力常数，所以每个胞的运动方程只依赖其他胞相对它的距离。我们可以沿用第十章平移算符的思路，使平移在一个振型上只产生相位。于是把振幅分为胞内形状 $e_{\kappa\alpha}$ 和逐胞积累的相位，取 $u_{l\kappa\alpha}=M_\kappa^{-1/2}e_{\kappa\alpha}(\bm q)e^{\ii(\bm q\cdot\bm R_l-\omega t)}$。考察原点胞 $l=0$ 的运动方程，消去时间因子后有
 \begin{equation}
 \omega^2\sqrt{M_\kappa}\,e_{\kappa\alpha}
 =\sum_{l\kappa'\beta}C_{0\kappa\alpha,l\kappa'\beta}
@@ -39,7 +86,43 @@ C_{I\alpha,J\beta}\simeq-\frac{F_{I\alpha}(R^0+\Delta\bm d_{J\beta})-F_{I\alpha}
 \begin{equation}
 D_{\kappa\alpha,\kappa'\beta}(\bm q)=\frac1{\sqrt{M_\kappa M_{\kappa'}}}\sum_l C_{0\kappa\alpha,l\kappa'\beta}e^{\ii\bm q\cdot\bm R_l}.
 \end{equation}
-超胞决定可可靠恢复的作用距离；极性材料的长程偶极作用还需处理非解析修正。本式采用只在胞向量上带相位的约定，其他加入胞内坐标的约定给出等价频率。
+若每个原胞有 $n$ 个原子，每个 $\bm q$ 下只需对角化一个 $3n\times3n$ 的矩阵，得到 $3n$ 条分支。$\bm q=0$ 时各胞同相，三个整体平移给出三条声学支的起点；有多个胞内原子时，它们在同一个胞里还可以相对振动，在普通稳定晶体中其余分支在此具有有限频率，称为光学支。这个名称不保证每个这样的模都能吸收光。极性材料的长程偶极作用还需处理非解析修正。本式采用只在胞向量上带相位的约定，其他加入胞内坐标的约定给出等价频率。
+
+\subsection{一条原子链的整条色散}
+取长度为 $Na$ 的周期链，每个原胞有一个质量为 $M$ 的原子，相邻平衡间距为 $a$，只考虑纵向运动。每条最近邻键的刚度均为 $k$。原子 $l$ 右侧的键伸长 $u_{l+1}-u_l$，向右拉它；左侧的键伸长 $u_l-u_{l-1}$，向左拉它。合力为
+\[
+ M\ddot u_l=k(u_{l+1}-u_l)-k(u_l-u_{l-1}).
+\]
+取 $u_l=Ue^{\ii(qla-\omega t)}$ 并取实部作实际位移。左右邻居的振幅分别多出相位因子 $e^{\pm\ii qa}$，故
+\[
+ -M\omega^2=k(e^{\ii qa}+e^{-\ii qa}-2)
+ =-2k(1-\cos qa),\qquad
+ \omega(q)=2\sqrt{k/M}\,|\sin(qa/2)|.
+\]
+波矢 $q$ 指定相邻原子相差多少相位，$\omega(q)$ 指定这种集体位移振动得多快，两者的关系称为色散。$q=0$ 时整条链同移，所有弹簧保持原长。在长波极限 $|q|a\ll1$，$\sin(qa/2)\simeq qa/2$，故 $\omega\simeq a\sqrt{k/M}|q|$。波包以有限的声速 $a\sqrt{k/M}$ 传播，这就是“声学支”得名的原因。在区边 $q=\pi/a$，相邻原子反向运动，每根键交替拉伸和压缩，频率达到 $2\sqrt{k/M}$。
+
+这个例子也说明超胞的作用。令位移绕过全链后重复，$u_{l+N}=u_l$ 要求 $e^{\ii qNa}=1$，即 $q=2\pi j/(Na)$，$j$ 为整数。四原子超胞能直接容纳 $q=0,\ \pm\pi/(2a),\ \pi/a$ 的模式；最后一个模式需要偶数个原胞才能首尾相接。若已知作用只达最近邻，则力常数已由 $C_{00}=2k$ 和 $C_{0,\pm1}=-k$ 给全，把它们作 Fourier 求和便能算任意 $q$。实际用有限超胞移动一个原子时，它的所有周期副本也同时移动，测到的力会叠加这些副本的作用。要由此插值得到可靠的整条色散，须增大超胞直到相关作用距离已被容纳、关注的频率趋于稳定。加密画色散曲线的 $q$ 点本身并未增加力常数的信息。
+
+图\ref{phonon:chain-plot}把这两类信息画在一起。沿实线从中心向右走，振型由同相平移逐渐变成邻居反向运动；只保留圆点，则正好是四个原子首尾相接时能得到的频谱。
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+ width=0.76\linewidth,height=5.1cm,
+ xmin=-1.06,xmax=1.06,ymin=-0.08,ymax=1.12,
+ xlabel={波矢 $q$（单位 $\pi/a$）},
+ ylabel={角频率 $\omega/(2\sqrt{k/M})$},
+ xtick={-1,-0.5,0,0.5,1},ytick={0,0.5,1},
+ tick label style={font=\small},label style={font=\small},
+ grid=major,grid style={gray!20}]
+\addplot[thick,blue!65!black,domain=-1:1,samples=121] {abs(sin(90*x))};
+\addplot[only marks,mark=*,orange!80!black]
+ coordinates {(-0.5,0.707107) (0,0) (0.5,0.707107) (1,1)};
+\end{axis}
+\end{tikzpicture}
+\caption{最近邻单原子链的纵向振动。实线为无限链的色散，圆点为四原子周期链的四个不同模式。区间两端相差一个倒格矢，代表同一个交替振动模，仅在右端标点。}
+\label{phonon:chain-plot}
+\end{figure}
 
 \section{从正则模到量子能级与自由能}
 上述正则模可以用经典力学求频率，但声子是它们量子化后的激发。本节恢复 $\hbar$。先对有限体系的实对称 $D$ 取正交本征向量 $e_{a\lambda}$，其中 $a$ 合并原子与方向指标，$\lambda$ 标记模。令质量加权位移 $y_a=\sqrt{M_a}u_a=\sum_\lambda e_{a\lambda}Q_\lambda$。正交性给出 $\sum_a\dot y_a^2=\sum_\lambda\dot Q_\lambda^2$，而 $De_\lambda=\omega_\lambda^2e_\lambda$ 给出 $\sum_{ab}y_aD_{ab}y_b=\sum_\lambda\omega_\lambda^2Q_\lambda^2$。因此谐 Hamilton 函数解耦为 $\sum_\lambda(\Pi_\lambda^2+\omega_\lambda^2Q_\lambda^2)/2$，其中 $\Pi_\lambda=\dot Q_\lambda$ 是该正则坐标的共轭动量。

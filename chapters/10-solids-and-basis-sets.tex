@@ -205,6 +205,11 @@ e^{\ii(Q+2\pi/h)x_j}=e^{\ii Qx_j}e^{2\pi\ii j}=e^{\ii Qx_j}.
 \end{equation}
 因此相差 $2\pi/h$ 的波数在网格上完全无法区分，这称为混叠。唯一可区分的波数区间宽度为 $2\pi/h$；为使整个密度范围 $[-2K_{\max},2K_{\max}]$ 落在其内部，可取 $2K_{\max}<\pi/h$。三维网格需沿各倒空间方向容纳相应范围。网格过粗时，高波数会折到低波数上污染密度；先保证分辨率，再使用 FFT，才能得到式\eqref{solids:density-product}所描述的乘积。
 
+\paragraph{从盒长和截断读出两种间距。}
+考虑长度为 $L$ 的一维周期盒，先取 $\Gamma$ 点。平面波 $e^{\ii Gx}$ 绕盒一周须回到原值，故 $GL=2\pi m$，$m$ 为整数。相邻两个允许波数的间隔是 $\Delta G=2\pi/L$。若截断保留 $m=-p,\ldots,p$（$p$ 为正整数），最大波数为 $G_{\max}=2\pi p/L$，最快的平面波恰在盒中振荡 $p$ 周。它的波长 $\lambda_{\min}=2\pi/G_{\max}=L/p$ 给出了能分辨的空间尺度。
+
+实际做 FFT 时需要决定每隔多远取一个样本。若取 $N$ 个等距点、间距 $h=L/N$，指标相差 $N$ 的平面波在每个点相等。要区分从 $-p$ 到 $p$ 的全部 $2p+1$ 个系数，至少要取 $N=2p+1$；此时 $h=L/(2p+1)<\lambda_{\min}/2$。例如保留 $m=0,\pm1,\pm2$ 时，最短波长是 $L/2$。若只取四个点，$m=2$ 和 $m=-2$ 在点上都给出 $1,-1,1,-1$，它们的差完全丢失；取五个点即可区分。求这些轨道的密度时，差指标从 $-4$ 到 $4$，相同的计数要求至少九个点。由此可见，增大盒长会缩小倒空间点距；在给定盒长内提高截断则会缩短最短波长，要求更密的实空间网格。
+
 \subsection{同一 Fourier 表示怎样求 Hartree 势}
 
 第七章的 Hartree 势是密度与 $1/r$ 的卷积。对 $r\ne0$，直接求导得到 $\nabla^2(1/r)=0$；对包围原点的小球积分，散度定理给出 $\int\nabla^2(1/r)\dd^3r=4\pi r^2\partial_r(1/r)=-4\pi$。因此在分布意义下 $\nabla^2(1/r)=-4\pi\delta(\bm r)$，作用于卷积就得到 Poisson 方程 $\nabla^2v_H=-4\pi n$。
@@ -230,3 +235,5 @@ e^{\ii(Q+2\pi/h)x_j}=e^{\ii Qx_j}e^{2\pi\ii j}=e^{\ii Qx_j}.
 \dot v_\alpha=\sum_\beta\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}F_\beta,
 \qquad (m^{*-1})_{\alpha\beta}=\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}.
 \end{equation}
+
+能带对 $\bm k$ 的曲率决定电子波包的加速度。下一章改为移动原子，考察总能量对核位移的曲率，由此求出核振动的频率。
