@@ -6,7 +6,7 @@
 
 相邻时间步的核位置只差一点，基态轨道也常连续变化。能否利用这一点，让轨道随核一起走？Car--Parrinello 分子动力学（CPMD，以下简记 CP）保留电子能量作为势能，并给轨道引入惯性。偏离能量谷底时，能量对轨道的梯度会把轨道拉回。谷底又在随核移动，轨道能跟得多好，将决定算出的核力有多准。
 
-这里的轨道运动是辅助数值动力学，不是实际电子的含时 Schrödinger 演化。下面为清楚起见采用固定单占据的正交自旋轨道；闭壳层双占据形式须一致地处理占据系数。
+这里的轨道运动是辅助数值动力学，与实际电子的含时 Schrödinger 演化有不同的方程。下面采用固定晶胞和不随原子移动的轨道基，取固定单占据的自旋轨道，以普通内积施加正交约束。若用闭壳层双占据空间轨道，能量和轨道惯性项都须一致处理占据因子。固定截断的平面波配模守恒赝势使用这里的普通内积。第\ref{solids:aug-core}节中超软赝势的重叠算符随原子移动，采用这种表示时，约束本身也会对核坐标产生导数。
 
 \section{扩展 Lagrange 函数与约束}
 保留真实核动能，以电子能量泛函作为势能，再给轨道速度添加正的二次项，其系数 $\mu$ 是可选择的虚拟惯性参数。用乘子加入轨道正交约束，定义扩展 Lagrange 函数
@@ -21,7 +21,7 @@ L=\frac12\sum_I M_I|\dot{\bm R}_I|^2+
 \begin{equation}
 \frac{\dd}{\dd t}\frac{\partial L}{\partial\dot q}=\frac{\partial L}{\partial q}.
 \end{equation}
-对核坐标，$\partial L/\partial\dot{\bm R}_I=M_I\dot{\bm R}_I$；假设基组不随核移动，则固定轨道时的约束项不含核坐标，$\partial L/\partial\bm R_I=-\partial E/\partial\bm R_I$。因此
+对核坐标，$\partial L/\partial\dot{\bm R}_I=M_I\dot{\bm R}_I$。在上述约定下，固定轨道时的约束项不含核坐标，$\partial L/\partial\bm R_I=-\partial E/\partial\bm R_I$。其中仍包含离子势随原子移动的变化。因此
 \begin{equation}
 M_I\ddot{\bm R}_I=-\frac{\partial E}{\partial\bm R_I}.
 \end{equation}

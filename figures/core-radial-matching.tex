@@ -1,0 +1,20 @@
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.82\linewidth,height=5.8cm,
+  xlabel={距核距离 $r/a_0$},ylabel={约化径向振幅 $f$},
+  xmin=0,xmax=12,ymin=-0.27,ymax=0.50,
+  xtick={0,2,4,6,8,10,12},ytick={-0.2,0,0.2,0.4},
+  axis lines=left,tick label style={font=\small},label style={font=\small},
+  legend style={at={(0.98,0.06)},anchor=south east,draw=none,font=\small},
+  legend cell align=left]
+\addplot[gray!65,thin,forget plot] coordinates {(0,0) (12,0)};
+\addplot[gray,densely dotted,forget plot] coordinates {(4,-0.27) (4,0.49)};
+\node[font=\small,anchor=west] at (axis cs:4,0.47) {$r_c$};
+\addplot[blue!60!black,very thick,domain=0:12,samples=161]
+  {x*(x-2)*exp(-x/2)/sqrt(8)};
+\addlegendentry{全电子 $2s$}
+\addplot[orange!82!black,very thick,dashed,domain=0:4,samples=2]
+  {2*exp(-2)*x/sqrt(8)};
+\addlegendentry{芯内平滑试探函数}
+\end{axis}
+\end{tikzpicture}

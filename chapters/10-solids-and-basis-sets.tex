@@ -1,6 +1,6 @@
 \chapter{周期固体、基组与赝势}
 \section{平移对称性如何减少未知量}
-前几章说明了如何由电子密度建立 KS 方程，但真实晶体有宏观数量的原子，不能把每个原子附近的轨道都作为独立未知函数。理想晶体由同一小块空间连同其中的原子沿三个独立方向平移重复而成。能这样铺满晶体的最小体积单元称为原胞。不同原胞中的环境相同。我们要找出这种重复性对波函数施加了什么限制，再把求解范围缩小到一个原胞。本章继续采用原子单位；暂考虑实的局域标量 KS 势，忽略磁场和自旋轨道耦合。
+前几章说明了如何由电子密度建立 KS 方程，但真实晶体有宏观数量的原子，不能把每个原子附近的轨道都作为独立未知函数。理想晶体由同一小块空间连同其中的原子沿三个独立方向平移重复而成。能这样铺满晶体的最小体积单元称为原胞。不同原胞中的环境相同。我们先找出这种重复性对波函数施加的限制，把求解范围缩小到一个原胞。原胞里的电子仍会遇到两个截然不同的尺度，核附近的轨道急剧变化，成键区域的电子云较为平缓。怎样同时描述两者，并用算出的能量比较键的强弱，是本章后半要回答的问题。以下继续采用原子单位，先从实的局域标量 KS 势出发，忽略磁场和自旋轨道耦合。
 
 设三个线性无关的原胞平移向量为 $\bm a_1,\bm a_2,\bm a_3$，晶格向量为 $\bm R=\sum_i n_i\bm a_i$，其中 $n_i$ 为整数。取保持晶格周期的自洽解，有效势满足 $v_s(\bm r+\bm R)=v_s(\bm r)$。若电子态或磁序自发具有更长的周期，就应先选用能够容纳该周期的晶胞，不能强迫解保留较小原胞的对称性。
 
@@ -155,7 +155,15 @@ c_{n\bm k}(G)=\frac1{\sqrt{\Omega_{\rm cell}}}\int_{\rm cell}e^{-\ii\bm G\cdot\b
 \end{equation}
 把展开式与其共轭相乘并在原胞积分，平面波正交性消去不同 $G$ 的交叉项，故 $\int_{\rm cell}|u|^2\dd\bm r=\sum_G|c(G)|^2=1$。对导数则逐项作用：$\nabla e^{\ii\bm G\cdot\bm r}=\ii\bm G e^{\ii\bm G\cdot\bm r}$，再取散度给出 $\nabla^2e^{\ii\bm G\cdot\bm r}=-G^2e^{\ii\bm G\cdot\bm r}$。因此在 Fourier 表示中，求梯度和 Laplacian 分别变成乘 $\ii\bm G$ 与 $-G^2$；对保留的每个 Fourier 分量，这一步没有有限差分截断误差。
 
-原胞 KS 动能包含 $\bm k$。先有 $(\nabla+\ii\bm k)e^{\ii\bm G\cdot\bm r}=\ii(\bm k+\bm G)e^{\ii\bm G\cdot\bm r}$，再作用一次并乘 $-1/2$，得到 $|\bm k+\bm G|^2/2$ 乘原函数。动能因此在此基中对角。局域势的矩阵元则为
+如果直接展开带有 Bloch 相位的轨道 $\psi_{n\bm k}$，只须给式\eqref{solids:fourier}的每一项乘上 $e^{\ii\bm k\cdot\bm r}$。记得到的基函数为 $\zeta^{\bm k}_{G}(\bm r)=e^{\ii(\bm k+\bm G)\cdot\bm r}/\sqrt{\Omega_{\rm cell}}$。在同一 $\bm k$ 下投影时，基函数共轭中的 $e^{-\ii\bm k\cdot\bm r}$ 与轨道中的 Bloch 相位抵消，故 $\langle\zeta^{\bm k}_{G}|\psi_{n\bm k}\rangle_{\rm cell}=c_{n\bm k}(G)$。两种展开用的是同一组系数。
+
+对 $\zeta^{\bm k}_{G'}$ 求两次导数会带出 $-|\bm k+\bm G'|^2$。再与 $\zeta^{\bm k}_{G}$ 作原胞内积，正交性留下 Kronecker 符号。暂恢复电子质量 $m_e$ 和 $\hbar$，动能矩阵元为
+\begin{equation}\label{solids:bloch-kinetic}
+\left\langle\zeta^{\bm k}_{G}\left|-\frac{\hbar^2}{2m_e}\nabla^2\right|
+\zeta^{\bm k}_{G'}\right\rangle_{\rm cell}
+=\frac{\hbar^2|\bm k+\bm G'|^2}{2m_e}\,\delta_{GG'} .
+\end{equation}
+因此动能只乘各自的系数。回到原子单位，改用周期部分 $u$ 计算时，式\eqref{solids:cell-ks}中的 $\nabla+\ii\bm k$ 也恰好产生同一波矢 $\bm G'+\bm k$。局域势的矩阵元则为
 \begin{equation}
 \frac1{\Omega_{\rm cell}}\int_{\rm cell}
 e^{-\ii\bm G\cdot\bm r}v_s(\bm r)e^{\ii\bm G'\cdot\bm r}\dd\bm r
@@ -222,19 +230,148 @@ e^{\ii(Q+2\pi/h)x_j}=e^{\ii Qx_j}e^{2\pi\ii j}=e^{\ii Qx_j}.
 
 \subsection{同一 Fourier 表示怎样求 Hartree 势}
 
-第七章的 Hartree 势是密度与 $1/r$ 的卷积。对 $r\ne0$，直接求导得到 $\nabla^2(1/r)=0$；对包围原点的小球积分，散度定理给出 $\int\nabla^2(1/r)\dd^3r=4\pi r^2\partial_r(1/r)=-4\pi$。因此在分布意义下 $\nabla^2(1/r)=-4\pi\delta(\bm r)$。在 Hartree 势的积分中，这个等式使 Laplacian 选出当前位置的密度，形式上给出 Poisson 方程 $\nabla^2v_H=-4\pi n$。在周期晶胞中还要检查该方程的空间平均。
+在局域 KS 方程中，有效势 $v_s=v_{\rm ext}+v_H+v_{\rm xc}$ 含有给定的外势、电子之间的平均静电排斥以及交换关联势。第七章给出的 Hartree 项是数密度 $n$ 产生的电子势能。对孤立体系，它写作 $v_H(\bm r)=\int n(\bm r')/|\bm r-\bm r'|\,\dd^3r'$。如何在周期体系中利用同一个 Coulomb 核？对 $r\ne0$，直接求导得到 $\nabla^2(1/r)=0$。对包围原点的小球积分，散度定理给出 $\int\nabla^2(1/r)\dd^3r=4\pi r^2\partial_r(1/r)=-4\pi$。因此在分布意义下 $\nabla^2(1/r)=-4\pi\delta(\bm r)$。在 Hartree 势的积分中，这个等式使 Laplacian 选出当前位置的密度，形式上给出 Poisson 方程 $\nabla^2v_H=-4\pi n$。在周期晶胞中还要检查该方程的空间平均。
 
-采用 Fourier 系数 $n(G)=\Omega_{\rm cell}^{-1}\int_{\rm cell}n(\bm r)e^{-\ii\bm G\cdot\bm r}\dd\bm r$，将 $n$ 与 $v_H$ 均展开为平面波。Laplacian 将每项乘以 $-G^2$，比较同一 $G$ 的系数，得 $-G^2v_H(G)=-4\pi n(G)$。只有 $G\ne0$ 时才能相除，得到 $v_H(G)=4\pi n(G)/G^2$。令 $N_{\rm cell}=\int_{\rm cell}n\dd\bm r$ 表示每原胞电子数，则 $n(0)=N_{\rm cell}/\Omega_{\rm cell}$ 是平均电子数密度，\emph{不为零}。对周期势，晶胞相对两面上的通量相消，所以 $\int_{\rm cell}\nabla^2v\,\dd\bm r=0$。若源只含电子，右侧的平均值却不为零；这正是 $G=0$ 处不能相除的原因。中性晶胞将电子与离子的电荷一同计入后，总源的平均值为零。此时方程留下一个任意的常数势，可选定为能量零点。
+采用 Fourier 系数 $n(G)=\Omega_{\rm cell}^{-1}\int_{\rm cell}n(\bm r)e^{-\ii\bm G\cdot\bm r}\dd\bm r$，将 $n$ 与 $v_H$ 均展开为平面波。Laplacian 将每项乘以 $-G^2$，比较同一 $G$ 的系数，得 $-G^2v_H(G)=-4\pi n(G)$。只有 $G\ne0$ 时才能相除，得到 $v_H(G)=4\pi n(G)/G^2$。这里用了原子单位，若以 SI 单位计算电子的势能，右端还须乘回 Coulomb 系数 $e^2/(4\pi\epsilon_0)$。令 $N_{\rm cell}=\int_{\rm cell}n\dd\bm r$ 表示每原胞电子数，则 $n(0)=N_{\rm cell}/\Omega_{\rm cell}$ 是平均电子数密度，\emph{不为零}。对周期势，晶胞相对两面上的通量相消，所以 $\int_{\rm cell}\nabla^2v\,\dd\bm r=0$。若源只含电子，右侧的平均值却不为零，这正是 $G=0$ 处不能相除的原因。中性晶胞将电子与离子的电荷一同计入后，总源的平均值为零。此时方程留下一个任意的常数势，可选定为能量零点。
 
-平面波也可用来表示一个分子：把分子放在带有真空区的大超胞中，再使用周期边界。但此时计算的仍是周期重复的分子阵列；真空区的作用是减弱相邻副本的轨道重叠和相互作用。只取 $\Gamma$ 点并不会取消这些副本，仍须增大超胞、检查目标能量与力是否收敛。改变超胞大小、加密 $\bm k$ 网格和提高平面波截断分别控制周期副本影响、倒空间积分误差和原胞内函数表示误差，不能相互替代。
+\begin{samepage}
+把非零分量变回实空间，就得到电子密度相对于其均匀背景产生的 Hartree 势。举例说，若三维中性周期胞的电子数密度只沿 $x$ 起伏，$n(\bm r)=n_0+\delta n\cos(Qx)$，其中 $0<|\delta n|<n_0$，$Q$ 是沿 $x$ 的非零允许波数，那么电子密度在 $\pm Q$ 处的系数都是 $\delta n/2$。各乘 $4\pi/Q^2$ 后逆变换，这个起伏产生的势是 $(4\pi\delta n/Q^2)\cos(Qx)$。在密度峰处再放一个电子，它感受到较大的排斥势能。同样幅度的密度起伏，波长越长，产生的势起伏越大。\par
+\end{samepage}
 
-\section{赝势为何与基组选择相连}
-原子里靠近核、束缚较紧的电子称为芯电子；参与成键的外层电子称为价电子。若显式计算所有电子，价轨道在核附近既感受到很强的吸引，又必须与已占据的芯轨道正交，因而可能出现快速振荡。直接用平面波分辨这些细节需要很高的截断。赝势在芯区内用平滑价态与有效作用替代显式芯电子，同时希望保持芯区外的散射性质。在孤立参考原子中，可把轨道分成角向和径向两部分。固定角动量 $l$，用 $r_c$ 表示平滑处理的芯区半径，$R_l$ 和 $\widetilde R_l$ 分别表示原来的径向函数及其平滑替代。模守恒构造要求参考能量和芯区外径向函数匹配，并满足
+至此还只算出了一个势函数。要让它作用在试探轨道上，须在实空间计算 $v_H(\bm r)u(\bm r)$。在连续坐标表示中，这意味着
 \begin{equation}
-\int_0^{r_c}|R_l(r)|^2r^2\dd r=\int_0^{r_c}|\widetilde R_l(r)|^2r^2\dd r.
+ \langle\bm r|\hat v_H|\bm r'\rangle=v_H(\bm r)\delta(\bm r-\bm r'),\qquad
+ (\hat v_H u)(\bm r)=\int\langle\bm r|\hat v_H|\bm r'\rangle u(\bm r')\dd^3r' .
 \end{equation}
-其依据是芯区概率的保持：轨道写为 $R_l(r)Y_{lm}(\widehat{\bm r})$，体积元为 $r^2\dd r\dd\Omega$；用 $\int|Y_{lm}|^2\dd\Omega=1$ 积掉角变量，芯内概率便是上式的径向积分。这是赝轨道的构造条件，不能由任意平滑保证。不同角动量需要不同作用，因此赝势一般含非局域投影项；可转移性需在不同价态、成键和压强环境中检验。
+求 $v_H(\bm r)$ 需要全胞的密度，势一旦求好，它在 $\bm r$ 的作用却只用该点的轨道值。这也解释了同一个算符为何在实空间局域、在式\eqref{solids:pw-matrix}中却会耦合不同平面波。对局域 KS 势的一次计算，可以从占据轨道得到密度，用 Poisson 方程求 $v_H$，加上外势与交换关联势，在网格上与试探轨道相乘，再将结果变回倒空间，加上对角的动能项。所得是 $H\psi$ 的展开系数。例如对固定势中的一条归一化试探轨道，第五章的约束下降法从 $H\psi$ 中减去沿 $\psi$ 的分量，再沿残差的反方向更新轨道。计算做到了这一步，精度仍取决于留下了哪些分量。如果外势中含有点状原子核，要保留多少平面波才能算准？
 
-局域原子轨道基则以较少函数描述成键，但需要控制基组完备性与近线性相关。Slater 型基函数选取 $e^{-\zeta r}$ 的径向衰减，Gaussian 型选取多项式乘 $e^{-\alpha r^2}$，便于积分运算；$\zeta,\alpha>0$ 是基组参数，这些形式是表示函数的选择。移动原子会移动局域基，所以力中要考虑第四章的 Pulay 项。
+\section{核附近的价轨道怎样用平面波表示}\label{solids:core}
+\subsection{从全电子轨道到平滑价轨道}
+在全电子计算中，核电荷 $Z$ 对一个电子的裸吸引势是 $-Z/r$，所有占据电子都进入求解。靠近核的轨道束缚紧，称为芯轨道。参与成键的价轨道虽大多分布在更远处，却也须与芯轨道正交。例如在球对称原子中，$1s$ 与 $2s$ 的角向函数相同，而 $1s$ 的径向函数处处同号。要使两者的重叠积分为零，$2s$ 的径向函数必须变号。波函数穿过零点的位置称为节点。价轨道在狭小芯区的快速变化会要求很大的 $K_{\max}$，而每增加一个平面波，整个晶胞都要为它保存系数。
 
-基组、截断和采样都确定以后，每个核构型都能给出一个总能量和一组核力。下一章保持这些电子计算条件一致，只改变原子的位置，看看从邻近构型的力差能够读出什么。
+设想把两个原子从远处拉到成键距离。最外层电子要重排，紧束缚的深芯电子通常仍紧贴各自的原子核。冻结芯近似据此让选定的芯轨道保持参考原子的形状，随原子核一起平移，只优化价电子。例如硅的中性原子有 14 个电子，若冻结 $1s^2\,2s^2\,2p^6$，就显式求每原子的四个价电子。芯电子对价电子的屏蔽和正交要求仍有物理作用。引入\emph{赝势}时，再用有效离子算符同平滑的价轨道配对，使价电子在成键区域仍感受到合适的作用，而无需在平面波中重现芯区的全部节点。若所研究的能量或压力足以改变某些原先当作芯的态，就需要重新检验这项划分。
+
+在球对称参考原子中，将轨道写作 $R_\ell(r)Y_{\ell m}(\hat{\bm r})$。$Y_{\ell m}$ 是归一化的球谐函数，$\ell$ 决定角向形状，$m$ 标记同一 $\ell$ 的不同角向分量。引入约化径向函数 $u_\ell(r)=rR_\ell(r)$。这里的 $u_\ell$ 只依赖到原子核的距离，与 Bloch 态的周期部分 $u_{n\bm k}$ 是不同的函数。选一个芯区半径 $r_c$，求一条较平滑的 $\widetilde u_\ell$。在所选参考能量上，它在 $r_c$ 外与全电子解重合，在边界上接好函数及斜率。$r_c$ 是原子数据的长度参数。式\eqref{solids:wave-cutoff}的 $E_{\rm cut}$ 是展开既定轨道时的能量截断。
+
+\begin{figure}[htbp]
+\centering
+\input{figures/core-radial-matching}
+\caption{芯区匹配的例子。实线取氢原子 $2s$ 的约化径向函数，整体符号选成外侧为正。虚线在 $r_c$ 以内消去了节点，外侧与实线重合。两条曲线在边界连斜率也相等，芯内的平方积分却有差别。}
+\label{solids:radial-example}
+\end{figure}
+
+\begin{samepage}
+为什么只把两条曲线接上还不够？图\ref{solids:radial-example}给出可以直接计算的例子。用 Bohr 半径 $a_0$ 作长度单位，令 $x=r/a_0$，氢原子 $2s$ 解的无量纲形式是 $f(x)=\sqrt{a_0}\,u_{2s}(a_0x)=x(x-2)e^{-x/2}/\sqrt8$。在 $x=4$，因子 $(x-2)e^{-x/2}$ 的导数为零。把 $x<4$ 区间内的这个因子换成其边界值 $2e^{-2}$，就得到图中保留数值和斜率的直线。分别积分两条曲线的平方，得到的芯内权重为 $\int_0^4 x^2(x-2)^2e^{-x}\dd x/8=1-45e^{-4}\simeq0.176$ 和 $\int_0^4 x^2 e^{-4}\dd x/2=32e^{-4}/3\simeq0.195$。第一条曲线已归一化，其芯内权重就是概率。若把第二条曲线整体缩放来修正总范数，原已匹配的外部振幅也会改变。要同时保住两者，必须进一步调整芯内形状。\par
+\end{samepage}
+
+\subsection{模守恒保留了什么}
+由于 $\int |Y_{\ell m}|^2\dd\Omega=1$，体积元中的 $r^2$ 正好被吸收进 $|u_\ell|^2$，所以芯内概率就是 $\int_0^{r_c}|u_\ell|^2\dd r$。在上述能量与外部函数匹配的基础上，\emph{模守恒}赝势（norm-conserving，NC）还要求参考态满足
+\begin{equation}\label{solids:norm-conserving}
+\int_0^{r_c}|\widetilde u_\ell(r)|^2\dd r=\int_0^{r_c}|u_\ell(r)|^2\dd r .
+\end{equation}
+这个条件怎样影响电子从芯区散射出去的波？给定能量和芯外的势，径向方程是二阶的。边界的数值和斜率确定一条外部解，而把两者同时乘一个常数只改变整体振幅。因此边界的斜率与数值之比 $L_\ell(E)=u_\ell'(r_c,E)/u_\ell(r_c,E)$ 就决定了外部解的形状，也就固定了散射波在芯外的振荡相位。只要 $u_\ell(r_c,E)\ne0$，就可以考察这个比值随能量的变化。
+
+用原子单位，考虑某个角动量通道内实的、与能量无关的径向势 $V_\ell(r)$，其中含离心项 $\ell(\ell+1)/(2r^2)$。正则径向解满足 $u(0,E)=0$ 和 $u''=2(V_\ell-E)u$，撇号表示对 $r$ 求导。令 $w=\partial u/\partial E$，对方程求能量导数，得 $w''=2(V_\ell-E)w-2u$。用 $u$ 乘新方程，再减去 $w$ 乘原方程，含势的两项完全抵消，于是 $(uw'-u'w)'=-2u^2$。从零积到 $r_c$，下限因 $u(0)=w(0)=0$ 消失，上限除以 $u(r_c)^2$ 恰是比值的导数，
+\begin{equation}\label{solids:log-slope}
+ \frac{\partial L_\ell}{\partial E}
+ =\frac{u(r_c)w'(r_c)-u'(r_c)w(r_c)}{u(r_c)^2}
+ =-\frac{2}{u(r_c)^2}\int_0^{r_c}u(r)^2\dd r .
+\end{equation}
+若两种参考解在 $r_c$ 处有相同的数值和斜率，又满足式\eqref{solids:norm-conserving}，那么 $L_\ell$ 及其对能量的一阶变化都一致。这解释了模守恒怎样把单个参考态的匹配延伸到邻近能量。同一份原子数据在别的价态、键长或压力下仍能给出多准确的结果，称为它的\emph{可转移性}。离开参考环境后，可用这些条件下的全电子计算来检验。
+
+从平滑函数还可反推它所需的势。将同一径向方程用在无节点的参考函数 $\widetilde u_\ell$ 上，在 $0<r<r_c$ 内解出 $\widetilde V_\ell=E+\widetilde u_\ell''/(2\widetilde u_\ell)$。这是参考原子的径向有效势，含离心项和价电子的自洽势。构造供别的体系使用的离子赝势时，要把这些项分离出去，使新体系能从自己的价密度重新计算 Hartree 与交换关联作用。各角动量通道靠近芯区的程度不同，所得离子势通常要分通道作用，因而常含非局域部分。可将其作用理解为先把轨道投影到原子附近指定形状的函数上，按各通道分别处理，再把结果加回轨道。这样，同一点的输出还依赖邻近区域的轨道形状。实际计算 $H\psi$ 时，局域离子势和 Hartree 势仍可在网格上相乘，这些投影贡献另加。
+
+\subsection{超软赝势和 PAW 如何处理芯区}\label{solids:aug-core}
+如果强行让一条无节点曲线既平滑又保有原来的芯内概率，所需截断有时仍然很高。超软赝势（ultrasoft，US）放宽式\eqref{solids:norm-conserving}，以换取更平滑的辅助轨道。于是直接求 $|\widetilde\psi|^2$ 会漏掉芯区的密度差。原子数据提供局限在芯区的增广电荷函数，按轨道在各通道上的投影把密度差补回去。将补项一并积分，轨道的归一化和正交性相应写成 $\langle\widetilde\psi_i|\hat S_{\rm aug}|\widetilde\psi_j\rangle=\delta_{ij}$。其中 $\hat S_{\rm aug}$ 是包含芯区修正的重叠算符。按第五章的方法对这一归一化条件加乘子，轨道方程右端就成为 $\varepsilon_i\hat S_{\rm aug}|\widetilde\psi_i\rangle$。按普通内积计算，平面波基函数仍然彼此正交。表示这份额外密度时要单独检查网格精度，这也说明了式\eqref{solids:density-cutoff}的四倍关系为何只直接适用于平滑轨道的乘积。
+
+投影缀加波法（projector augmented-wave，PAW）还给出重建芯区价波函数的办法。以一个原子为例，原子数据为每个保留通道 $i$ 准备一对部分波 $\phi_i,\widetilde\phi_i$，分别是全电子形状和平滑形状，两者在球外相同。用配套投影函数 $\widetilde p_i$ 从平滑轨道 $\widetilde\psi$ 取出该通道的振幅 $a_i=\langle\widetilde p_i|\widetilde\psi\rangle$。将已含的平滑分量逐个换成全电子分量，便得到重建式
+\begin{equation}\label{solids:paw}
+ |\psi\rangle=|\widetilde\psi\rangle+
+ \sum_i\bigl(|\phi_i\rangle-|\widetilde\phi_i\rangle\bigr)a_i .
+\end{equation}
+多原子时对各个原子的通道求和。球外的差逐项为零，那里直接用平滑轨道。球内能恢复多少细节取决于保留的部分波。把这个线性重建记为 $\psi=\mathcal T\widetilde\psi$，全电子内积在平滑轨道上就写成 $\langle\widetilde\psi_i|\mathcal T^\dagger\mathcal T|\widetilde\psi_j\rangle$。通常的冻结芯实现仍把深芯保持在参考组态。到这里我们选择了怎样处理核附近的物理。对于剩下要解的轨道，还可以改变展开它们的函数，让每个函数从一开始就集中在成键原子附近。
+
+\section{一根化学键需要哪些原子基函数}\label{solids:atomic-basis}
+\subsection{为何用 Gaussian 函数表示原子轨道}
+想象两个氢原子从远处接近。相距很远时，一个以氢核为中心、随距离衰减的 $1s$ 函数就有合适的轮廓。成键时，可以把两个中心上的函数叠加，让电子同时分布到两颗核附近。这里的\emph{局域基}指各基函数集中在某个中心，组合出来的轨道可以跨过整条键，甚至延展到整个晶体。求解的是每条轨道在这些函数上的展开系数。
+
+设中心在 $\bm A$，记 $r_A=|\bm r-\bm A|$。Slater 型轨道（STO）的基本形式是 $r_A^{n-1}e^{-\zeta r_A}Y_{\ell m}(\widehat{\bm r-\bm A})$，其中正整数 $n\ge\ell+1$ 指定径向幂，$\zeta>0$ 控制衰减。球谐 Gaussian 型原函数（GTO）则取 $r_A^\ell e^{-\alpha r_A^2}Y_{\ell m}(\widehat{\bm r-\bm A})$，$\alpha>0$。两式都省略了归一化常数。以 $1s$ 为例，指数型 $e^{-\zeta r}$ 在核处的径向斜率为 $-\zeta$，可表示点核 Coulomb 吸引造成的尖点。单个 $e^{-\alpha r^2}$ 在原点的斜率为零，远处又比指数型衰减快。为什么还愿意用它做分子计算？
+
+考察两个不同中心 $\bm A,\bm B$ 上的 $s$ 型 Gaussian 的乘积。把指数中两个平方展开，$\bm r^2$ 的系数为 $\alpha+\beta$，线性项为 $-2\bm r\cdot(\alpha\bm A+\beta\bm B)$。配方后得到
+\begin{align}
+ e^{-\alpha|\bm r-\bm A|^2}e^{-\beta|\bm r-\bm B|^2}
+ &=e^{-\frac{\alpha\beta}{\alpha+\beta}|\bm A-\bm B|^2}
+   e^{-(\alpha+\beta)|\bm r-\bm P|^2},\nonumber\\[-2pt]
+ \bm P&=\frac{\alpha\bm A+\beta\bm B}{\alpha+\beta}.\label{solids:gaussian-product}
+\end{align}
+乘积是中心在 $\bm P$ 的一个 Gaussian 乘上与电子坐标无关的因子，两个中心越远，该因子越小。即使带有角向多项式，指数部分仍能这样合并。第五章的重叠积分和双电子积分中反复出现基函数的乘积，这个性质大大简化了多中心积分。
+
+要把原子形状拟合得更好，可以将同一中心、同一角动量但不同指数的几个原函数按预先选定的比例相加，这叫一个\emph{收缩函数}。紧的 Gaussian 着重核附近，松的 Gaussian 延伸得较远。可以用参考原子的 HF 轨道来拟合指数和收缩系数，也可以把一组分子的能量纳入优化。选定基组以后，这些参数就已确定，分子计算所优化的是各个收缩函数前面的轨道系数。比如用三个原 Gaussian 拟合氢的一个 $1s$ 函数（STO-3G），对每条分子轨道仍只贡献一个可自由变化的系数。
+
+\subsection{径向伸缩、沿键极化和弥散尾部}
+现在固定在其中一个氢核上。若只有一个固定形状的 $1s$ 函数，改变系数只会改变它在整条轨道中的权重。为使这个中心的电子云能独立收缩和伸展，可以给它两个不同径向尺度的 $s$ 函数 $s_1,s_2$。调节 $c_1s_1+c_2s_2$ 中两个系数的比例，就能在保持角向对称的同时把权重从近核移向远处。所谓单、双、三 $\zeta$（SZ、DZ、TZ），数的是给定价轨道形状可用的一、二、三套独立径向函数。一套径向函数本身就可以由多个 Gaussian 收缩而成。
+
+再设另一颗核沿 $+z$ 靠近。只用同一中心的 $s$ 函数，无论径向函数给多少个，离核同样远的 $+z$ 和 $-z$ 两点总有相同的振幅。要让该中心的电子云向键的一侧偏，加入一个角向部分正比于 $\cos\theta$ 的 $p_z$ 函数。在这两个点上，$s$ 分量均为 $a$，$p_z$ 分量则为 $+b$ 和 $-b$。叠加后密度之差为 $|a+b|^2-|a-b|^2=4\operatorname{Re}(a^*b)$，朝键的一侧就可能变得更密。这种让原子上的电子云能随环境改变角向形状的基函数称为\emph{极化函数}。沿 $z$ 的均匀弱电场产生的扰动势正比于 $z=r\cos\theta$。作用在角向为常数的 $s$ 态上，它首先混入 $p_z$ 的角向形状。更一般地，将 $\cos\theta\,Y_{\ell m}$ 展开为球谐函数，只出现允许的 $\ell+1$ 和 $\ell-1$ 分量。更高角动量还可描述更细的角向变形。
+
+因此要分开读基组名里的两个信息。在常用的价层基组命名中，DZVP 表示双 $\zeta$ 价层并加一套极化函数，TZV2P 表示三 $\zeta$ 价层并加两套极化函数。以给氢配置两个 $s$ 径向函数和一套 $p$ 极化函数为例，后者有 $p_x,p_y,p_z$ 三个方向，共有 $2+3=5$ 个空间基函数。换元素或换基组系列时，具体包含哪些角动量壳层，要看该基组给出的函数表。
+
+还有一种情况，两侧角向形状已经够灵活，电子云却伸不到足够远处。例如要比较中性分子与弱束缚负离子的总能量，额外电子可能有很长的尾巴。Gaussian 的指数因子在 $r=1/\sqrt\alpha$ 时才降到 $e^{-1}$，所以加入小 $\alpha$ 的\emph{弥散函数}能让远处也有可用的振幅。它解决的是尾部的长度尺度。Dunning 的关联一致基组按组增加径向与角向函数，使第六章所讲的价电子关联能可以随系列扩大逐步收敛。以 \texttt{cc-pVDZ} 和 \texttt{cc-pVTZ} 为例，\texttt{cc} 指关联一致，\texttt{pV} 指极化价层，\texttt{DZ}/\texttt{TZ} 指双或三 $\zeta$。\texttt{aug-cc-pVTZ} 再补弥散函数。用这套基组依然可以做单行列式 HF，是否允许电子关联取决于所用的多电子方法。
+
+\section{基组怎样影响能量差和核力}
+\subsection{给同一个分子增加真空或增加基函数}
+把双原子分子放进边长 $L$ 的周期立方盒中。对每个给定的 $\bm k$，式\eqref{solids:wave-cutoff}的截断球内每个倒格点对应一个平面波。由本章前面推得的正、倒格原胞体积关系，每个倒格点平均占 $(2\pi)^3/\Omega_{\rm cell}$ 的体积。当球内有许多点时，以截断球体积除以这一体积便给出估计
+\begin{equation}\label{solids:number-of-waves}
+ N_{\rm PW}\simeq
+ \frac{4\pi K_{\max}^3/3}{(2\pi)^3/\Omega_{\rm cell}}
+ =\frac{\Omega_{\rm cell} K_{\max}^3}{6\pi^2}.
+\end{equation}
+同一 $\bm k$ 的所有能带共用这组函数，每条轨道有自己的一组 $N_{\rm PW}$ 个展开系数。固定截断，让三个方向的盒长都加倍，即使只多出真空，平面波数也约为原来的八倍。采用原子中心基时，只要原子数和所选壳层没变，轨道基函数数目就不随真空增加。计算势所用的独立网格仍可能变大。两种表示只要采用周期边界，就都要检查相邻分子副本的相互作用。只取 $\Gamma$ 点仍保留这些副本。
+
+局域基也可以用于晶体。将同一种原子基函数 $\chi_\mu$ 的各晶格平移按相位相加，得 $\chi_{\mu\bm k}(\bm r)=\sum_{\bm R}e^{\ii\bm k\cdot\bm R}\chi_\mu(\bm r-\bm R)$，归一化可纳入系数。把 $\bm r$ 换成 $\bm r+\bm R_0$ 并重新编号 $\bm R-\bm R_0$，就提出 $e^{\ii\bm k\cdot\bm R_0}$，满足所需的 Bloch 条件。不同中心的基函数一般有非零重叠。以分子为例，把 $\psi=\sum_\nu c_\nu\chi_\nu$ 代入轨道方程，再左乘 $\langle\chi_\mu|$，得到第五章所见的广义本征方程
+\[
+ \sum_\nu H_{\mu\nu}c_\nu=\varepsilon\sum_\nu S_{\mu\nu}c_\nu,\qquad
+ H_{\mu\nu}=\langle\chi_\mu|\hat H|\chi_\nu\rangle,\quad
+ S_{\mu\nu}=\langle\chi_\mu|\chi_\nu\rangle .
+\]
+这里的重叠来自所选函数之间的几何关系，用普通全电子 Hamilton 算符也会出现。如果加入两个几乎相同的弥散函数，它们的差就几乎为零，重叠矩阵 $S$ 会有很小的本征值。第五章的正交化需要除以这些本征值的平方根，因而也会放大数值误差。平面波在给定截断下同样是有限的，优点是调高一个截断就能系统地扩大空间。局域基则可集中给芯层加紧函数、给成键区加极化函数或给远处加弥散函数。紧函数也使局域基较便于全电子计算，局域基同样可以配赝势。比较收敛时应跟踪所求的能量差或力。仅凭每条轨道用了多少个系数，无法判断两种基是否达到了相同精度。
+
+\subsection{片段借用邻居的函数为何会加强表观结合}\label{solids:bsse}
+回到同一对原子，或者把它们换成两个分子片段 $A,B$。在给定核构型下，若复合物比两个孤立片段的能量之和低，就得到负的相互作用能。现在把每个下标看作实际存在的片段，上标看作计算时可用的基函数中心。例如 $E_A^A$ 是片段 $A$ 用自己基组算出的能量。按这个记号，直接相减得到
+\[
+ \Delta E_{\rm raw}=E_{AB}^{AB}-E_A^A-E_B^B .
+\]
+这里所有计算采用同一种电子结构近似，单体保持在复合物中的内部几何和指定电子态。复合物里的电子可同时使用两套基函数。如果 $A$ 自己的基偏小，即使移走 $B$ 的核和电子，只把 $B$ 的基函数留在原处，$A$ 的能量也可能下降。这时 $B$ 是\emph{虚中心}。对于求变分最小值的方法，试探空间增大保证 $E_A^{AB}\le E_A^A$，$B$ 也有同样的不等式。直接相减就把两种来源的降能混到一起，这种因片段借用基函数而产生的误差称为\emph{基组重叠误差}（basis set superposition error，BSSE）。
+
+均衡校正（counterpoise）让三个能量都使用完整的复合物基组，写成 $\Delta E_{\rm cp}=E_{AB}^{AB}-E_A^{AB}-E_B^{AB}$。两种相互作用能的差恰好是两个片段借基所得的降能之和，
+\[
+ \Delta E_{\rm cp}-\Delta E_{\rm raw}
+ =(E_A^A-E_A^{AB})+(E_B^B-E_B^{AB}).
+\]
+例如取一组教学数值（Hartree），$E_{AB}^{AB}=-2.010$，两个单体用自己的基各为 $-1.000$，加入虚中心后各为 $-1.003$。直接相减给出 $-0.010$，采用共同基组则为 $-0.004$，其中 $0.006$ 的差来自两个单体各自降低的 $0.003$。扩大基组、跟踪这两个结果，才能判断相互作用能的基组误差是否已经足够小。若三个体系使用相同的固定晶胞、波矢和截断，移走一个片段也不会移走任何平面波，这种中心借基的机制便消失。周期副本的影响仍由盒长控制。
+
+\subsection{原子移动时，能量的斜率还包含什么}\label{solids:pulay}
+在同一条键上再走一步。若把一个原子沿坐标 $X$ 稍稍拉开，以它为中心的基函数也整组跟着走。即使两个构型都把轨道系数优化到了最低能量，它们的最优态也是在\emph{不同的试探空间}里求得的。求能量对 $X$ 的导数时，这种空间的移动如何计入？
+
+先用一个归一化单电子态看清这一点。设 $\varepsilon=\langle\psi|\hat H|\psi\rangle$，记残差 $|g\rangle=(\hat H-\varepsilon)|\psi\rangle$。对能量求导并减去 $\varepsilon\,\partial_X\langle\psi|\psi\rangle=0$，如第\ref{bo:hellmann-feynman}节所推，得到
+\[
+ \frac{\dd\varepsilon}{\dd X}=
+ \langle\psi|\partial_X\hat H|\psi\rangle+
+ 2\operatorname{Re}\langle\partial_X\psi|g\rangle .
+\]
+有限基中的本征方程只保证对每个基函数都有 $\langle\chi_\mu|g\rangle=0$。将 $\psi=\sum_\mu c_\mu\chi_\mu(X)$ 求导，系数变化产生 $\sum_\mu(\partial_Xc_\mu)\chi_\mu$，与残差的内积因此为零。基函数的变化还产生 $\sum_\mu c_\mu\partial_X\chi_\mu$，它可能指向原有空间以外。取能量导数的负号，得到有限基下的力
+\begin{equation}\label{solids:pulay-residual}
+ F_X=-\langle\psi|\partial_X\hat H|\psi\rangle
+     -2\operatorname{Re}\sum_\mu c_\mu^*
+             \langle\partial_X\chi_\mu|g\rangle .
+\end{equation}
+第二项是基组移动产生的 Pulay 力贡献。电子态在当前基中收敛，只保证系数变化的那一项消失。若已得到真正的本征态，残差本身为零。若固定晶胞、波矢和截断而只移动原子，平面波的 $\partial_X\chi_\mu$ 则逐个为零。后一种情况下，随核移动的离子势及其非局域投影仍有显式导数，必须计入力。若连晶胞也随应变改变，倒格矢会变，有限平面波基可产生相应的 Pulay 应力。
+
+还可以在熟悉的两中心问题上直接看到基函数导数。取 $\mathrm H_2^+$ 的一个电子，用两颗核上各一个归一化的实 $1s$ 型 Gaussian，记为 $\chi_A,\chi_B$，核间距为 $R$。令 $S(R)=\langle\chi_A|\chi_B\rangle$。成键的对称组合在未归一化时为 $\chi_A+\chi_B$，其模平方积分是 $1+1+2S$。记 $h=\langle\chi_A|\hat H|\chi_A\rangle=\langle\chi_B|\hat H|\chi_B\rangle$、$t=\langle\chi_A|\hat H|\chi_B\rangle$，其中 $\hat H$ 只含电子项。展开 $\langle\chi_A+\chi_B|\hat H|\chi_A+\chi_B\rangle$，四项相加得 $2h+2t$。除以模平方积分得到能量，再用商的求导法则对 $R$ 求导，
+\begin{equation}
+ \varepsilon_+(R)=\frac{h+t}{1+S},\qquad
+ \frac{\dd\varepsilon_+}{\dd R}=
+ \frac{h'+t'-\varepsilon_+ S'}{1+S},
+\end{equation}
+其中撇号表示对核间距的导数。若两个 Gaussian 的指数同为 $\alpha$，式\eqref{solids:gaussian-product}将重叠积分化成 $S(R)=e^{-\alpha R^2/2}S(0)$，而归一化给出 $S(0)=1$。所以 $R>0$ 时 $S'=-\alpha R S$ 确实非零。求 $h',t'$ 时，积分两侧的基函数也要一起求导。若只保留分母产生的 $S'$，仍会漏掉一部分基组移动的贡献。这条键的总能量还须加上核间排斥 $1/R$，再取负导数才得到沿键的力。
+
+对于多电子 KS 计算，要对含核间排斥的\emph{总能量}作同样的变分记账。式\eqref{solids:pulay-residual}的单轨道例子解释了基函数导数的来历。简单相加 KS 轨道能量会重复计数相互作用。实际可在给定构型两侧计算总能量，以 $-[E(X+\delta)-E(X-\delta)]/(2\delta)$ 检验解析力。沿键长找到力为零的构型以后，还有一个问题。将一个原子从这里轻轻推开，周围原子的力会怎样变化？下一章就用这一变化测量键的刚度。
