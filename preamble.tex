@@ -1,20 +1,19 @@
-\usepackage{amsmath,amssymb,bm,graphicx,booktabs}
-\usepackage{needspace}
-\usepackage[margin=27mm,headheight=15pt]{geometry}
-\usepackage{hyperref}
-\hypersetup{unicode=true,colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black,pdftitle={PHYS5120 计算物理}}
-\usepackage{xcolor}
-\usepackage{pgfplots}
+\usepackage{bm,needspace,pgfplots}
 \pgfplotsset{compat=1.18}
-\usepackage{fancyhdr}
+\hypersetup{
+  pdftitle={PHYS5120 计算物理},
+  pdfsubject={从原子运动到量子多体},
+  pdfkeywords={计算物理, 量子多体, 电子结构, 晶格振动}
+}
+\colorlet{coverlinecolor}{structurecolor}
+\setcounter{tocdepth}{2}
+% 正文给推导留出行距，长行内公式与汉字间的对齐余量由整行分摊。
+\AddToHook{cmd/mainmatter/after}{%
+  \setstretch{1.34}%
+  \xeCJKsetup{CJKglue={\hskip 0pt plus .20\ccwd minus .035\ccwd}}}
+\AtBeginEnvironment{titlepage}{\raggedright}
 \raggedbottom
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\small PHYS5120 计算物理}
-\fancyhead[R]{\small\thepage}
-\renewcommand{\headrulewidth}{0.3pt}
-\setlength{\parskip}{0.35em}
-\setlength{\emergencystretch}{2em}
+\setlength{\emergencystretch}{3em}
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\ii}{\mathrm{i}}
 \newcommand{\kb}{k_{\mathrm B}}

@@ -1,15 +1,13 @@
-\documentclass[UTF8,11pt,a4paper,openany,oneside]{ctexbook}
+\documentclass[lang=cn,scheme=chinese,color=blue,math=cm,11pt,twoside,openright]{elegantbook}
 \input{preamble}
-\begin{document}
-\frontmatter
 \title{PHYS5120 计算物理}
-\author{}
-\date{}
+\subtitle{从原子运动到量子多体}
+\cover{figures/cover.pdf}
+\begin{document}
 \maketitle
-\begingroup
-\setlength{\parskip}{0.08em}
+\frontmatter
+\hypersetup{pageanchor=true}
 \tableofcontents
-\endgroup
 \mainmatter
 \input{chapters/01-molecular-dynamics}
 \input{chapters/02-force-fields-and-transport}
