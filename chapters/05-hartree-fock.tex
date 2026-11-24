@@ -19,7 +19,9 @@ $E_{NN}(R)$ 对给定核构型是常数，不改变电子本征函数。若 $\ha
 \end{equation}
 这就是变分原理：限制试探态只能使最低能量升高，等号要求态完全处于基态子空间。这里必须保持电子反对称性；放宽交换对称性就改变了比较空间，上界保证不再自动成立。
 
-泛函是把函数映为数的规则。若 $F[\phi+\delta\phi]-F[\phi]=\int (\delta F/\delta\phi)\delta\phi+O(\delta\phi^2)$，线性项系数就是泛函导数。复函数变分可将 $\phi,\phi^*$ 暂作独立变量。引入归一化乘子，定义 $\mathcal L=\langle\phi|\hat H|\phi\rangle-\varepsilon(\langle\phi|\phi\rangle-1)$。保持 $\phi$ 不变而改变 $\phi^*$，逐项得到
+泛函是把函数映为数的规则。先取一个实函数 $n(\bm r)$，考察 $F[n]=\int n(\bm r)^2\dd\bm r$。若网格体积元都为 $\Delta V$，离散近似就是许多普通变量的函数 $F_h=\sum_j n_j^2\Delta V$。对第 $j$ 个格点求偏导得到 $2n_j\Delta V$，所有格点的一阶变化相加为 $\delta F_h=\sum_j 2n_j\delta n_j\Delta V$。在连续极限下，体积元留在积分中，$\delta F=\int 2n(\bm r)\delta n(\bm r)\dd\bm r$。任意小扰动前面的系数 $2n(\bm r)$ 就是\emph{泛函导数} $\delta F/\delta n(\bm r)$。这个例子也说明，将程序中的网格偏导换成连续泛函导数时，必须留意积分权重。
+
+波函数可以是复数。为什么求能量驻点时常常只写对 $\phi^*$ 的导数？先看一个复系数 $z=x+\ii y$。对实值能量 $F$，把两个实方向的导数合写成 $\partial F/\partial z^*=(\partial F/\partial x+\ii\,\partial F/\partial y)/2$。令它为零，实部与虚部就分别给出两个驻值条件。按这个定义有 $\partial z/\partial z^*=(1+\ii^2)/2=0$、$\partial z^*/\partial z^*=1$。对波函数的各个分量作同样处理，就可以在求导时暂将 $\phi,\phi^*$ 当成独立变量。引入归一化乘子，定义 $\mathcal L=\langle\phi|\hat H|\phi\rangle-\varepsilon(\langle\phi|\phi\rangle-1)$。保持 $\phi$ 不变而改变 $\phi^*$，逐项得到
 \begin{equation}
 \delta\mathcal L=\int\delta\phi^*\hat H\phi\,\dd x
 -\varepsilon\int\delta\phi^*\phi\,\dd x
@@ -371,6 +373,8 @@ K_{ab}=-\frac1{4\pi}\int(\nabla^2V_q^*)V_q\dd\bm r
 
 占据轨道的酉变换是保持内积不变的线性重组。它使 Slater 行列式乘上该变换矩阵的行列式，而酉矩阵的行列式模为一，因此整个多电子态只改变一个整体相位。我们可以利用这一自由度，在占据子空间对角化乘子矩阵。把重组后的轨道仍记为 $\phi_i$，式\eqref{hf:stationary}就化成正则轨道方程 $\hat f\phi_i=\varepsilon_i\phi_i$。轨道本征值由此出现，而不是预先假定每个电子各自具有一个独立能量。
 
+实际极小化可以逐条更新轨道，每次把新方向中沿其他占据轨道的分量减去，也可以同时更新整组轨道，再将它们正交归一化。两种算法都要使占据子空间能够转向原先未占据的方向。若只在已有的占据轨道之间做酉变换，上面的行列式论证表明能量会原样保留。
+
 乘以 $\phi_i^*$ 并积分再求和，得到 $\sum_i\varepsilon_i=\sum_i h_{ii}+\sum_{ij}(J_{ij}-K_{ij})$。这把每一对相互作用计了两次，所以
 \begin{equation}
 E_{\rm HF}=\sum_i\varepsilon_i-\frac12\sum_{ij}(J_{ij}-K_{ij}).
@@ -389,7 +393,13 @@ E_{\rm HF}=\sum_i\varepsilon_i-\frac12\sum_{ij}(J_{ij}-K_{ij}).
 \section{非正交基组怎样变成可解矩阵问题}
 本节讨论闭壳层空间方程，用 $M$ 个线性无关基函数 $\chi_\nu$ 展开空间轨道 $u_i=\sum_\nu C_{\nu i}\chi_\nu$，并允许基与系数为复数。定义重叠矩阵 $S_{\mu\nu}=\langle\chi_\mu|\chi_\nu\rangle$ 和 $F_{\mu\nu}=\langle\chi_\mu|\hat f|\chi_\nu\rangle$。将展开代入 $\hat f u_i=\varepsilon_i u_i$，再左乘 $\langle\chi_\mu|$，得到 $\sum_\nu F_{\mu\nu}C_{\nu i}=\varepsilon_i\sum_\nu S_{\mu\nu}C_{\nu i}$。将各个 $i$ 并列成矩阵，就是 $FC=SC\varepsilon$。同样将展开代入 $\langle u_i|u_j\rangle=\delta_{ij}$，得到 $C^\dagger SC=I$。
 
-先说明密度矩阵的来源，再构造 $F$。第\ref{hf:exchange}节已从行列式得到一体约化密度矩阵的核。把它写成算符时，$|u_i\rangle\langle u_i|$ 表示先取内积 $\langle u_i|\psi\rangle$，再乘以 $u_i$；即提取输入函数沿该轨道的分量。闭壳层每条空间轨道占据两个电子，所以自旋求和后的一体密度算符是
+在这类基组中，对轨道作投影和读取展开系数是两个操作。设 $\psi=\sum_\nu c_\nu\chi_\nu$，左乘 $\langle\chi_\mu|$ 得 $b_\mu=\langle\chi_\mu|\psi\rangle=\sum_\nu S_{\mu\nu}c_\nu$。故 $b=Sc$，还要解一次重叠矩阵方程才能取回 $c$。例如两个归一化基函数的重叠为实数 $s$，取 $\psi=\chi_1$，直接投影会读到 $(1,s)$，而原展开系数就是 $(1,0)$。将 $c=S^{-1}b$ 代回展开，便得到这个有限基空间的正交投影算符
+\[
+ \hat\Pi=\sum_{\mu\nu}|\chi_\mu\rangle(S^{-1})_{\mu\nu}\langle\chi_\nu| .
+\]
+它对基空间内的每个向量还原其自身，对与全部基函数正交的向量给出零。取 $S=I$ 时才化成各基矢外积的简单求和。
+
+接下来用占据轨道构造 $F$。第\ref{hf:exchange}节已从行列式得到一体约化密度矩阵的核。算符 $|u_i\rangle\langle u_i|$ 先取内积 $\langle u_i|\psi\rangle$，再乘以 $u_i$，这样就提取了输入函数沿该轨道的分量。闭壳层每条空间轨道占据两个电子，所以自旋求和后的一体密度算符是
 \begin{equation}
 \hat\gamma=2\sum_{i=1}^{N/2}|u_i\rangle\langle u_i|
 =\sum_{\lambda\kappa}P_{\lambda\kappa}|\chi_\lambda\rangle\langle\chi_\kappa|,
@@ -433,7 +443,7 @@ F_{\mu\nu}=h_{\mu\nu}+\sum_{\lambda\kappa}P_{\lambda\kappa}
 \end{equation}
 实基与实系数时 $P$ 为实对称矩阵，同一坐标的两个基函数可以互换，便恢复常见的实数公式。对复基不能擅自沿用这些额外对称性。$F$ 依赖 $P$，而 $P$ 又依赖 $F$ 的本征向量，这就是矩阵层面的自洽循环。
 
-若基线性无关，对任意非零系数 $a$，$a^\dagger Sa=\|\sum_\mu a_\mu\chi_\mu\|^2>0$，所以 $S$ 正定。将它对角化为 $S=UsU^\dagger$，其中 $s$ 是正本征值构成的对角矩阵。令 $X=Us^{-1/2}U^\dagger$，逐个消去相邻的 $U^\dagger U$，有
+若基线性无关，对任意非零系数 $a$，$a^\dagger Sa=\|\sum_\mu a_\mu\chi_\mu\|^2>0$，所以 $S$ 正定。直接左乘 $S^{-1}$ 虽能消去方程右边的 $S$，但 $(S^{-1}F)^\dagger=FS^{-1}$，只有二者可交换时才等于 $S^{-1}F$。怎样保留普通 Hermitian 本征问题的结构？将 $S$ 对角化为 $S=UsU^\dagger$，其中 $s$ 是正本征值构成的对角矩阵。令 $X=Us^{-1/2}U^\dagger$，逐个消去相邻的 $U^\dagger U$，有
 \begin{equation}
 X^\dagger SX=Us^{-1/2}s\,s^{-1/2}U^\dagger=UIU^\dagger=I.
 \end{equation}

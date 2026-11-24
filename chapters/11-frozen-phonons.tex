@@ -30,6 +30,8 @@ C_{I\alpha,J\beta}=-\left.\frac{\partial F_{I\alpha}}{\partial R_{J\beta}}\right
 \end{equation}
 两次计算给出一整列。逐列做，在完全不利用对称性时共需 $6N$ 个位移构型。若每个力分量有大小至多 $\delta F$ 的数值误差，两次误差相减后至多为 $2\delta F$，除以 $2\Delta$ 后可达 $\delta F/\Delta$。实际应先使参考构型的残余力足够小，并用相同截断、电子波矢网格和自洽精度算两侧的力。将 $\Delta$ 减半时，若结果先趋稳、再变得起伏，后者提示力的数值精度已限制了差分。
 
+例如对一个弯曲的水分子，把氧沿 $x$ 正、反各推一次，记录两组共九个力分量。它们的差给出 $9\times9$ 矩阵中列标为 $\mathrm O x$ 的整列。要独立得到转置位置上的元素，还需换一个位移方向。例如 $C_{\mathrm H y,\mathrm O x}$ 读的是推氧时氢的 $y$ 向力，$C_{\mathrm O x,\mathrm H y}$ 读的是推氢时氧的 $x$ 向力。混合导数相等，使这两次实验给出同一个耦合。数值上可先比较两者之差，再将矩阵替换为 $(C+C^{\mathsf T})/2$ 以消除小的反对称误差。若相差已与耦合本身一样大，取平均只会掩盖力或位移精度的问题。
+
 \subsection{两颗原子的力怎样成为两列}
 只允许两颗原子沿键方向运动，以 $u_1,u_2$ 为相对各自平衡位置的位移，键的伸长为 $u_2-u_1$。取教学模型 $E-E_0=k(u_2-u_1)^2/2$，其中 $k=2\,\mathrm{eV}/\text{\AA}^2$。分别求偏导并取负号，得 $F_1=k(u_2-u_1)$、$F_2=-F_1$。以下四个静态结果取 $\Delta=0.01\,\text{\AA}$，力的单位为 $\mathrm{eV}/\text{\AA}$。
 \begin{center}
@@ -76,8 +78,12 @@ $C$ 的单位是能量除以长度平方，等价于质量除以时间平方；$
 
 本征值为负时又会怎样？沿归一化实本征向量 $e$ 取位移 $u_{I\alpha}=s e_{I\alpha}/\sqrt{M_I}$。由式\eqref{phonon:curvature}，二次能量变化为 $s^2 e^{\mathsf T}De/2=\omega^2s^2/2$。若 $\omega^2=-\gamma^2<0$，两侧小位移都会降低能量，而且运动方程变成 $\ddot s=\gamma^2s$，含有随时间增长的 $e^{\gamma t}$ 解。谱图中常把这个虚频画在横轴下方。实际遇到它时，可以沿该本征向量做正、负两次静态位移并比较能量，同时检查力精度和超胞大小。若负曲率随收敛保留，就找到了该结构局部失稳的方向；若本征值恰为零，二次项本身无法判定更高阶项的符号。
 
+亚稳结构处在局部能谷中。若内部振动方向都有正曲率，沿任一这样的方向轻推就有线性回复力。即使别处有更低的能谷，中间的势垒也可使它长时间留在原处。冻结位移测得当前构型附近的曲率。要判断它是否亚稳，还须比较其他构型的能量并考察通往它们的路径。
+
 \section{零模数量取决于系统}
 孤立非线性分子的整体平移和转动不改变能量，通常有三个平移及三个转动零模，剩 $3N-6$ 个振动模；线性分子只有两个独立转动方向，剩 $3N-5$ 个振动模。绕线性分子的键轴转动时，所有核都留在原位，这正是它少一个转动自由度的原因。固定周期晶胞不能任意刚体转动而保持边界不变；三个独立的整体平移仍然可行，对应所有原胞同相移动的三个零模。
+
+回到自由的水分子，九个坐标减去六个刚体运动，剩三个内部振型。可以用两条 O--H 键的长度和两键的夹角来描述它们。两条键同向伸缩、反向伸缩，以及角度开合，给出了三个直观的位移图像。实际振型由质量加权矩阵决定，同样在交换两个氢后保持对称的伸缩和弯曲可以相互混合。
 
 沿 $\beta$ 方向整体平移一个小距离 $a$，即 $u_{J\gamma}=a\delta_{\beta\gamma}$。代入力公式，得到 $F_{I\alpha}=-a\sum_JC_{I\alpha,J\beta}$。整体平移不改变平衡结构的力，而 $a$ 可任取，所以 $\sum_JC_{I\alpha,J\beta}=0$，称声学和规则。它既是物理约束，也是数值检验；强制修正不能替代检查原始力的收敛。
 
@@ -131,7 +137,7 @@ D_{\kappa\alpha,\kappa'\beta}(\bm q)=\frac1{\sqrt{M_\kappa M_{\kappa'}}}\sum_l C
 \end{figure}
 
 \section{从正则模到量子能级与自由能}
-知道每个模的频率以后，还能求晶体受热时储存了多少振动能。第一章的经典平均给每个二次自由度相同的热能；低温下，一次振动所能增加的能量却有最小份额。晶格正则模的一个能量量子称为声子。下面从已经求出的频率算出这份能量，再对各份能量按热平衡概率求平均。本节恢复 $\hbar$。先对有限体系的实对称 $D$ 取正交本征向量 $e_{a\lambda}$，其中 $a$ 合并原子与方向指标，$\lambda$ 标记模。令质量加权位移 $y_a=\sqrt{M_a}u_a=\sum_\lambda e_{a\lambda}Q_\lambda$。正交性给出 $\sum_a\dot y_a^2=\sum_\lambda\dot Q_\lambda^2$，而 $De_\lambda=\omega_\lambda^2e_\lambda$ 给出 $\sum_{ab}y_aD_{ab}y_b=\sum_\lambda\omega_\lambda^2Q_\lambda^2$。因此谐 Hamilton 函数解耦为 $\sum_\lambda(\Pi_\lambda^2+\omega_\lambda^2Q_\lambda^2)/2$，其中 $\Pi_\lambda=\dot Q_\lambda$ 是该正则坐标的共轭动量。
+晶体受热时能储存多少振动能？量子力学中，一个晶格正则模每多激发一份能量，就多了一个声子。下面从频率求出这份能量，再取热平衡平均。本节恢复 $\hbar$。取有限体系实对称矩阵 $D$ 的正交归一本征向量 $e_{a\lambda}$，$a$ 合并原子与方向指标，$\lambda$ 标记模。将质量加权位移展开为 $y_a=\sqrt{M_a}u_a=\sum_\lambda e_{a\lambda}Q_\lambda$。正交性给出 $\sum_a\dot y_a^2=\sum_\lambda\dot Q_\lambda^2$，本征方程 $De_\lambda=\omega_\lambda^2e_\lambda$ 给出 $\sum_{ab}y_aD_{ab}y_b=\sum_\lambda\omega_\lambda^2Q_\lambda^2$。谐 Hamilton 函数于是分解为 $\sum_\lambda(\Pi_\lambda^2+\omega_\lambda^2Q_\lambda^2)/2$，其中 $\Pi_\lambda=\dot Q_\lambda$ 是共轭动量。
 
 对一个 $\omega>0$ 的模，量子化要求 $[\hat Q,\hat\Pi]=\ii\hbar$。定义
 \begin{equation}
@@ -158,4 +164,4 @@ Z_\omega=\sum_{n=0}^\infty e^{-\beta\hbar\omega(n+1/2)}
 \begin{equation}
 F_{\rm vib}=\sum_{\bm q\nu}\left[\frac{\hbar\omega_{\bm q\nu}}2+\kb T\ln(1-e^{-\beta\hbar\omega_{\bm q\nu}})\right],
 \end{equation}
-对有限周期晶体，遍历所有允许波矢和正频分支得到总振动自由能；除以原胞数即得每胞量。整体平移没有回复力，上面的几何级数对它不收敛，这里取固定质心，去掉这部分运动。对稳定晶体，加上静态平衡结构的能量，就可在谐近似下比较同温同体积的两种结构。要检查高温极限，先对配分函数求导：$\partial_\beta Z_\omega=-\sum_n E_ne^{-\beta E_n}=-Z_\omega\langle E_\omega\rangle$，所以 $\langle E_\omega\rangle=-\partial_\beta\ln Z_\omega=\hbar\omega/2+\hbar\omega/(e^{\beta\hbar\omega}-1)$。令 $z=\beta\hbar\omega\ll1$，由 $e^z-1=z+z^2/2+O(z^3)$ 得 $1/(e^z-1)=z^{-1}[1-z/2+O(z^2)]=1/z-1/2+O(z)$。代回后两个 $\hbar\omega/2$ 项抵消，留下 $\langle E_\omega\rangle=1/\beta+O(\beta\hbar^2\omega^2)\simeq\kb T$，恢复经典极限。
+这里对有限周期晶体的全部正频模求和，除以原胞数即得每胞量。整体平移没有回复力，对应的几何级数不收敛，故取固定质心。加上静态结构能量，就可在谐近似下比较同温同体积的稳定结构。高温时应回到经典均分结果。对配分函数求导，$\partial_\beta Z_\omega=-\sum_n E_ne^{-\beta E_n}=-Z_\omega\langle E_\omega\rangle$，故 $\langle E_\omega\rangle=-\partial_\beta\ln Z_\omega=\hbar\omega/2+\hbar\omega/(e^{\beta\hbar\omega}-1)$。令 $z=\beta\hbar\omega\ll1$，由 $e^z-1=z+z^2/2+O(z^3)$ 得 $1/(e^z-1)=1/z-1/2+O(z)$。两项 $\hbar\omega/2$ 抵消，剩下 $\langle E_\omega\rangle\simeq1/\beta=\kb T$。

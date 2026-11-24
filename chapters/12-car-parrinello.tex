@@ -29,6 +29,13 @@
 \end{equation}
 用这组力完成一次核的 Verlet 更新，时间步才从 $m$ 变成 $m+1$。新位置的外势已经改变，需要再次求电子基态。
 
+内外循环也说明一次计算里“温度”可以指不同的对象。式\eqref{cp:bo-surface}在每个构型选电子基态，即电子取零温极限。核却可以按第一章的热分布取得初速度，在这张面上振动或扩散。若物理模型要求电子始终与温度为 $T_e>0$ 的热库平衡，固定电子数时应使用第七章的正则自由能。设 $E_\nu(R)$ 为含核排斥的各电子态能量，$\beta_e=1/(\kb T_e)$，则
+\[
+ Z_e(R)=\sum_\nu e^{-\beta_e E_\nu(R)},\qquad
+ \mathcal A_e(R)=-\beta_e^{-1}\ln Z_e(R).
+\]
+固定 $T_e$ 对 $R$ 求导，指数的导数给出 $-\beta_e\nabla_R E_\nu$，对数的导数给出 $1/Z_e$。因此力 $-\nabla_R\mathcal A_e=\sum_\nu p_\nu(-\nabla_R E_\nu)$ 是按 $p_\nu=e^{-\beta_e E_\nu}/Z_e$ 加权的力。在有隙的非简并基态极限 $T_e\to0$，这个式子回到式\eqref{cp:bo-force}。下文讨论在电子基态势能面附近的运动。
+
 相邻核构型的基态轨道通常很接近。1985 年 Car 与 Parrinello 提出把轨道作为带有可调惯性的坐标，让它和核在同一时间网格上前进。轨道偏离能量最低处时，能量对轨道的梯度会把它拉回，轨道调整得够快才可能跟上移动的谷底。Car--Parrinello 分子动力学（CPMD，以下简记 CP）由此把每步的基态求解换成了一个动力学问题。这个轨道运动用来近似基态核力，真实电子的含时量子演化另有方程。
 
 \section{扩展 Lagrange 函数与约束}
@@ -140,6 +147,7 @@ Euler--Lagrange 方程给出 $\ddot\theta=-(\Delta/\mu)\sin\theta$。可以用�
  F_{\rm CP}=-U'(R)+\frac{\Delta}{2}\theta_0'(R)\sin\eta,\qquad
  F_{\rm BO}=-U'(R).
 \end{equation}
+\Needspace{0.61\textheight}
 只要基态随键长转动，力的偏差就可以对 $\eta$ 是一阶。图\ref{cp:energy-curves}给出一个可以复算的截面。取长度单位 $a$ 和参考键长 $R_0$，令 $x=(R-R_0)/a$，选 $U=\Delta x^2/2$、$\theta_0=x$。假如某一步轨道还在 $\theta=0$，那么在 $x=0.2$ 处，它高于基态的能量仅为 $\Delta\sin^2(0.1)\simeq0.010\,\Delta$。同一点的力却多了 $-\Delta\sin(0.2)/(2a)\simeq-0.099\,\Delta/a$，而基态的回复力为 $-0.200\,\Delta/a$。两条能量曲线在这里高度很接近，斜率给出的回复力却相差近一半。
 
 \begin{figure}[htbp]

@@ -69,6 +69,17 @@
 \end{equation}
 这说明“核重所以电子总能跟上”不充分：能隙小或接近交叉时，导数耦合可能很大。
 
+可以用两条能级直接看见这个效应。取一个核位移 $Q$，在两条固定正交电子基矢中写出模型
+\begin{equation}\label{bo:avoided-crossing}
+ H_e(Q)=\begin{pmatrix}gQ&v\\v&-gQ\end{pmatrix},\qquad g>0,\quad v>0 .
+\end{equation}
+这里 $g$ 是能量随位移改变的斜率，$v$ 是使两种电子排布相互混合的能量矩阵元。解 $\det(H_e-EI)=E^2-g^2Q^2-v^2=0$，得到 $E_\pm=\pm\sqrt{g^2Q^2+v^2}$。两条原先会在 $Q=0$ 相交的直线，经耦合后在此留下宽 $2v$ 的能隙，称为避免交叉。在中心，归一化本征矢为 $(1,1)/\sqrt2$ 与 $(1,-1)/\sqrt2$，分别属于 $E_+$ 与 $E_-$。而 $\partial_QH_e$ 是对角元为 $g,-g$ 的矩阵，它把后一向量变成前一向量的 $g$ 倍。由刚推出的非简并公式，
+\[
+ \big|\langle\phi_+|\partial_Q\phi_-\rangle\big|_{Q=0}
+ =\frac{g}{2v}.
+\]
+两态在每个 $Q$ 都正交，导数耦合衡量的却是核稍作移动时一个态向另一个态转过多少。最小能隙越窄，同样的核位移引起的转动就越大。若对称性使 $v$ 严格为零，这两种固定排布可以直接交叉，此时在简并点应重新考察耦合矩阵，不能除以零能隙。
+
 \section{Born--Oppenheimer 近似到底丢掉了什么}\label{bo:approx}
 若核运动在相关时间内不会显著转移电子通道，而且导数修正对所求精度足够小，通常最低阶 BO 近似便忽略这些导数项，并选定一张电子面。此时
 \begin{equation}
@@ -176,6 +187,7 @@ $\nabla_{\bm R}|\bm R-\bm r|^{-1}=-(\bm R-\bm r)/|\bm R-\bm r|^3$，将这两项
 \end{align}
 第一项把核拉向电子云，第二项使同号的核彼此远离。本章的 $\hat H_e$ 已包含 $E_{NN}$，故第二项已包含在式\eqref{bo:force}中；若用不含核排斥的 $\hat H_{\rm el}$，才需另加 $-\nabla_I E_{NN}$。
 
+\Needspace{0.49\textheight}
 对一般归一化近似态 $\phi$，令 $E=\langle\phi|H|\phi\rangle$。在三项求导式的第一、第三项中分别写 $H=E+(H-E)$；含 $E$ 的部分仍由归一化抵消，其余两项互为共轭，得到
 \begin{equation}
 \partial_I E=\langle\phi|\partial_IH|\phi\rangle

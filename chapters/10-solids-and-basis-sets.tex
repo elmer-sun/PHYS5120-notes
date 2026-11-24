@@ -117,6 +117,31 @@ MP 网格包含零点的条件是 $2m=M+1$，所以一维奇数划分包含 $\Ga
 
 能带图回答的是另一个问题：本征值沿选定方向怎样变化。通常先用体积分网格得到自洽密度与势，再固定该势，沿高对称路径求 $\varepsilon_{n\bm k}$。一条路径在三维倒空间中没有体积，不能代替密度和总能量所需的体积分。加密路径上的绘图点只会使曲线更细，不会自动改善自洽密度。
 
+\Needspace{8\baselineskip}
+\subsection{石墨烯的两条能带在哪里相接}\label{solids:graphene}
+用一个可以手算的二维晶体来看网格怎样影响读图。石墨烯的碳原子排成蜂窝，每个原胞里有两个位置，记为 A 和 B。取平移向量 $\bm a_1=a(1,0)$、$\bm a_2=a(1/2,\sqrt3/2)$，$a$ 是相邻两个 A 点的距离。把 A 放在胞原点，B 放在 $(\bm a_1+\bm a_2)/3$。由 $\bm a_i\cdot\bm b_j=2\pi\delta_{ij}$，两条倒格基矢为
+\[
+ \bm b_1=\frac{2\pi}{a}(1,-1/\sqrt3),\qquad
+ \bm b_2=\frac{2\pi}{a}(0,2/\sqrt3).
+\]
+在倒空间连接原点与六个最近倒格点，六条线段的垂直平分线围成六角形的第一 Brillouin 区。图\ref{solids:graphene-zone}中的 $M=(\bm b_1+\bm b_2)/2$ 在一条边的中点。该边与朝向 $\bm b_1$ 的另一条边相交于 $K=(2\bm b_1+\bm b_2)/3$。代入上式可验，$K$ 到原点、$\bm b_1$ 和 $\bm b_1+\bm b_2$ 的距离都等于 $4\pi/(3a)$。对面的角点 $K'=-K$ 与它由时间反演相连，二者之差 $2K$ 不是倒格向量，故代表两个不同的 Bloch 波矢。
+
+\begin{figure}[htbp]
+\centering
+\input{figures/graphene-cell-zone}
+\caption{左图的菱形是实空间原胞。蓝色实心点和橙色空心点分别为 A、B 两组碳位置，每个 A 都有三个 B 近邻。右图画同一晶格的第一 Brillouin 区，阴影三角形是理想六角对称下的不可约区域。它的三条边给出一条能带绘图路径。}
+\label{solids:graphene-zone}
+\end{figure}
+
+为何专门去角点算能量？垂直碳层的 $p_z$ 轨道形成靠近占据边界的两条 $\pi$ 能带。用每个碳上的一条轨道作正交基，取两个位置相同的在位能为零，只保留最近邻 A 与 B 之间的矩阵元 $-t$，其中 $t>0$ 有能量单位。这就是本例的紧束缚模型。设 A、B 在原点胞的振幅为 $c_A,c_B$，在 $\bm R$ 胞都另乘 $e^{\ii\bm k\cdot\bm R}$。原点的 A 接到原点胞、$-\bm a_1$ 胞与 $-\bm a_2$ 胞的 B，三个 B 振幅相加便在方程右侧给出
+\[
+ E c_A=-t\gamma(\bm k)c_B,\qquad
+ \gamma(\bm k)=1+e^{-\ii\bm k\cdot\bm a_1}+e^{-\ii\bm k\cdot\bm a_2}.
+\]
+从 B 看回相邻的 A，平移方向反转，故 $Ec_B=-t\gamma(\bm k)^*c_A$。两式组成的二阶矩阵有特征方程 $E^2-t^2|\gamma|^2=0$，两条能带即 $E_\pm=\pm t|\gamma|$。在 $\Gamma$ 三项同相，给 $E_\pm=\pm3t$。在 $M$，两个跨胞相位都是 $-1$，给 $E_\pm=\pm t$。在 $K$，两个相位角相差 $2\pi/3$，三项之和为 $1+e^{-4\pi\ii/3}+e^{-2\pi\ii/3}=0$。两条带在这里接触，在 $K'$ 也接触。中性模型每胞有两个 $\pi$ 电子，计入自旋后正好填满下方的一条带，占据与空带之间的能隙为零。
+
+如果只列一个 $\Gamma$ 中心的 $2\times2$ 网格上的本征值，会看到什么？该网格的两个倒格分数坐标只取 $0,1/2$，所得四点是 $\Gamma$ 与三个等价的边中点。表中最小的两带间距于是为 $2t$，真正的接触点恰好漏掉了。$\Gamma$ 中心的 $3\times3$ 网格允许分数 $1/3,2/3$，便含有 $K$。实际 KS 计算先用收敛的面积积分网格自洽求势，再固定该势，沿 $\Gamma$、$M$、$K$、$\Gamma$ 组成的路径做非自洽（NSCF）求解，就能专门检查接触点。图中的三角形有面积，其边界只有长度，因而沿边作图与在区内作积分需要不同的采样点。
+
 \subsection{怎样从能带图读出有效质量}
 能带图上一条曲线的斜率和弯曲程度有什么物理含义？选定一条能带，把波矢集中在某个值附近的态叠加起来，就能组成空间上相对集中的波包。跟踪其中心在弱外力下的运动，可以把图的形状与速度、加速度联系起来。本节恢复 $\hbar$ 以显示量纲。假设外力足够弱，可忽略带间跃迁，并只考虑能带色散对速度的贡献。取初始波包中心为坐标原点。相邻波矢分量的相位差为 $\delta\bm k\cdot\bm r-\delta\varepsilon\,t/\hbar$；用 $\delta\varepsilon=\nabla_k\varepsilon\cdot\delta\bm k$，使这些分量保持相干的波包中心满足 $\bm r/t=\nabla_k\varepsilon/\hbar$，故群速度为 $v_\alpha=\hbar^{-1}\partial\varepsilon/\partial k_\alpha$。
 
@@ -125,7 +150,7 @@ MP 网格包含零点的条件是 $2m=M+1$，所以一维奇数划分包含 $\Ga
 \dot v_\alpha=\sum_\beta\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}F_\beta,
 \qquad (m^{*-1})_{\alpha\beta}=\frac1{\hbar^2}\frac{\partial^2\varepsilon}{\partial k_\alpha\partial k_\beta}.
 \end{equation}
-例如若带底附近有 $\varepsilon(k)=\varepsilon_0+\hbar^2 k^2/(2m^*)$，一阶导数给出速度 $\hbar k/m^*$，二阶导数给出加速度 $F/m^*$。相同外力作用下，带底越平坦，波包的速度改变得越慢。
+例如若带底附近有 $\varepsilon(k)=\varepsilon_0+\hbar^2 k^2/(2m^*)$，一阶导数给出速度 $\hbar k/m^*$，二阶导数给出加速度 $F/m^*$。相同外力作用下，带底越平坦，波包的速度改变得越慢。石墨烯在 $K$ 点恰有两带简并，那里缺少作上述单带抛物线近似所需的孤立带底。
 
 \section{把连续函数变成有限未知量}
 确定 $\bm k$ 以后，式\eqref{solids:cell-ks}中的 $u_{n\bm k}(\bm r)$ 仍是连续函数。计算机需要有限个数来表示它：可以存储实空间网格上的函数值，也可以存储某组基函数的展开系数。两者都须检查分辨率，但导数的处理方式不同。
@@ -143,7 +168,7 @@ MP 网格包含零点的条件是 $2m=M+1$，所以一维奇数划分包含 $\Ga
 -\frac{\psi_{j+1}-2\psi_j+\psi_{j-1}}{2h^2}+v_j\psi_j
 \simeq\varepsilon\psi_j.
 \end{equation}
-每一行只连接一个点及其相邻两点，边界处则按周期条件连接首尾。三维 Laplacian 是三个方向二阶导数之和，分别沿各轴应用同一推导即可。缩小 $h$ 降低导数截断误差，但这里改变了微分算符的离散近似，通常不具有下节嵌套变分基的能量单调性。
+每一行只连接一个点及其相邻两点，边界处则按周期条件连接首尾。三维 Laplacian 是三个方向二阶导数之和，分别沿各轴应用同一推导即可。缩小 $h$ 会降低截断误差，数值函数值中的误差却可能被放大。若每个函数值的绝对误差至多为 $\eta$，由分子三个系数的绝对值之和 $1+2+1=4$，所得二阶导数的这部分误差可达 $4\eta/h^2$。此外，改变 $h$ 会改变微分算符的离散近似，通常也不具有下节嵌套变分基的能量单调性。
 
 \section{平面波为什么方便}
 \subsection{从 Fourier 系数到矩阵方程}
@@ -154,6 +179,8 @@ u_{n\bm k}=\frac1{\sqrt{\Omega_{\rm cell}}}\sum_Gc_{n\bm k}(G)e^{\ii\bm G\cdot\b
 c_{n\bm k}(G)=\frac1{\sqrt{\Omega_{\rm cell}}}\int_{\rm cell}e^{-\ii\bm G\cdot\bm r}u_{n\bm k}\dd\bm r.
 \end{equation}
 把展开式与其共轭相乘并在原胞积分，平面波正交性消去不同 $G$ 的交叉项，故 $\int_{\rm cell}|u|^2\dd\bm r=\sum_G|c(G)|^2=1$。对导数则逐项作用：$\nabla e^{\ii\bm G\cdot\bm r}=\ii\bm G e^{\ii\bm G\cdot\bm r}$，再取散度给出 $\nabla^2e^{\ii\bm G\cdot\bm r}=-G^2e^{\ii\bm G\cdot\bm r}$。因此在 Fourier 表示中，求梯度和 Laplacian 分别变成乘 $\ii\bm G$ 与 $-G^2$；对保留的每个 Fourier 分量，这一步没有有限差分截断误差。
+
+在 $\Gamma$ 点选实轨道时，式\eqref{solids:fourier}的投影积分取共轭，给出 $c(-\bm G)=c(\bm G)^*$。因此对同一条轨道，每对非零 $\pm\bm G$ 只需存一个复系数，$c(0)$ 为实数。这里节省的是一个波矢内部的平面波系数。前面合并 $\bm k$ 与 $-\bm k$ 的积分权重，节省的才是需要求解的 Bloch 波矢数。
 
 如果直接展开带有 Bloch 相位的轨道 $\psi_{n\bm k}$，只须给式\eqref{solids:fourier}的每一项乘上 $e^{\ii\bm k\cdot\bm r}$。记得到的基函数为 $\zeta^{\bm k}_{G}(\bm r)=e^{\ii(\bm k+\bm G)\cdot\bm r}/\sqrt{\Omega_{\rm cell}}$。在同一 $\bm k$ 下投影时，基函数共轭中的 $e^{-\ii\bm k\cdot\bm r}$ 与轨道中的 Bloch 相位抵消，故 $\langle\zeta^{\bm k}_{G}|\psi_{n\bm k}\rangle_{\rm cell}=c_{n\bm k}(G)$。两种展开用的是同一组系数。
 
@@ -310,6 +337,8 @@ e^{\ii(Q+2\pi/h)x_j}=e^{\ii Qx_j}e^{2\pi\ii j}=e^{\ii Qx_j}.
 
 \subsection{径向伸缩、沿键极化和弥散尾部}
 现在固定在其中一个氢核上。若只有一个固定形状的 $1s$ 函数，改变系数只会改变它在整条轨道中的权重。为使这个中心的电子云能独立收缩和伸展，可以给它两个不同径向尺度的 $s$ 函数 $s_1,s_2$。调节 $c_1s_1+c_2s_2$ 中两个系数的比例，就能在保持角向对称的同时把权重从近核移向远处。所谓单、双、三 $\zeta$（SZ、DZ、TZ），数的是给定价轨道形状可用的一、二、三套独立径向函数。一套径向函数本身就可以由多个 Gaussian 收缩而成。
+
+例如碳的 \texttt{6-31G} 是一套分裂价层基组。数字 6 表示把六个原 Gaussian 收缩为一个描述 $1s$ 芯层的函数。数字 3 和 1 表示价层使用两套径向尺度，内侧用三个原 Gaussian 收缩，外侧用一个。每套都提供一个 $s$ 和三个方向的 $p$ 函数。因此一个碳中心给每条分子轨道提供 $1+(1+3)+(1+3)=9$ 个可调系数。收缩中的原函数数、独立的基函数数和碳的电子数，在这一次计数中各有不同的含义。
 
 再设另一颗核沿 $+z$ 靠近。只用同一中心的 $s$ 函数，无论径向函数给多少个，离核同样远的 $+z$ 和 $-z$ 两点总有相同的振幅。要让该中心的电子云向键的一侧偏，加入一个角向部分正比于 $\cos\theta$ 的 $p_z$ 函数。在这两个点上，$s$ 分量均为 $a$，$p_z$ 分量则为 $+b$ 和 $-b$。叠加后密度之差为 $|a+b|^2-|a-b|^2=4\operatorname{Re}(a^*b)$，朝键的一侧就可能变得更密。这种让原子上的电子云能随环境改变角向形状的基函数称为\emph{极化函数}。沿 $z$ 的均匀弱电场产生的扰动势正比于 $z=r\cos\theta$。作用在角向为常数的 $s$ 态上，它首先混入 $p_z$ 的角向形状。更一般地，将 $\cos\theta\,Y_{\ell m}$ 展开为球谐函数，只出现允许的 $\ell+1$ 和 $\ell-1$ 分量。更高角动量还可描述更细的角向变形。
 
