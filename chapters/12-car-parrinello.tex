@@ -1,45 +1,76 @@
 \chapter{让电子变量与原子核一起推进}
-\section{Born--Oppenheimer 动力学的计算负担}
-上一章从几组静态的力算出了键的伸缩频率。现在设想把这根键拉长后松手，要跟踪它经过哪些键长，甚至跟踪振幅大到谐近似失效时的运动。我们需要在轨迹经过的每个构型上求力。若已有显式的经典力场，给定原子坐标就能计算力；用电子结构求力，还须决定在这些坐标上采用哪组电子轨道。
+\section{Born--Oppenheimer 动力学中的两层循环}
+上一章从几组静态的力算出了键的伸缩频率。现在把这根键拉长后松手，想知道键长怎样随时间变化，甚至想跟踪振幅大到谐近似失效时的运动。为此要在轨迹经过的每个构型上求力。用经典力场时，给出原子坐标就能算力。用电子结构求力，还须决定在这些位置上采用哪组电子轨道。
 
-记 $E[\{\phi\},R]$ 为核固定在 $R$、电子占据轨道为 $\{\phi\}$ 时的总能量，包含核间排斥。对所有满足正交条件的占据轨道取最小值，定义 $E_{\rm BO}(R)$。Born--Oppenheimer 分子动力学（BOMD）先在当前 $R$ 求这个最小值，从基态算核力，以第一章的 Verlet 算法推进核，再在新位置重复。一次核时间步里通常会有多次电子自洽迭代。前一步的轨道可以给下一步提供很好的初猜；但只要基态力尚未收敛，核所受的力就还带有电子求解误差。
+用 $R$ 表示所有核的位置，$\Phi=\{\phi_i\}$ 表示一组占据轨道。把第七章式\eqref{dft:energy}按轨道计算的 KS 总能量简记为 $E[\Phi,R]$，其中已包含核间排斥。下面采用固定晶胞和不随原子移动的基组，以普通内积约束单占据自旋轨道。固定核作一次基态电子计算，就是在这些条件下求
+\begin{equation}\label{cp:bo-surface}
+ E_{\rm BO}(R)=\min_{\langle\phi_i|\phi_j\rangle=\delta_{ij}}E[\Phi,R].
+\end{equation}
+把一系列 $R$ 各自的最小值连起来，就得到 Born--Oppenheimer（BO）势能面。分子动力学只用到轨迹沿途的能量和力，因而可以走到哪一组核位置，就在那里求一次电子基态。图\ref{cp:bo-loops}用 $m$ 标记核的时间步，用 $s$ 标记同一核构型内电子自洽迭代的轮次，$n_{\rm in}$ 与 $n_{\rm out}$ 分别是每一轮的输入、输出密度。
 
-相邻时间步的核位置只差一点，基态轨道也常连续变化。能否利用这一点，让轨道随核一起走？Car--Parrinello 分子动力学（CPMD，以下简记 CP）保留电子能量作为势能，并给轨道引入惯性。偏离能量谷底时，能量对轨道的梯度会把轨道拉回。谷底又在随核移动，轨道能跟得多好，将决定算出的核力有多准。
+\begin{figure}[htbp]
+\centering
+\input{figures/bo-md-loops}
+\caption{Born--Oppenheimer 动力学的内外循环。右侧箭头返回同一个核构型继续求密度，左侧箭头进入下一个核时间步。}
+\label{cp:bo-loops}
+\end{figure}
 
-这里的轨道运动是辅助数值动力学，与实际电子的含时 Schrödinger 演化有不同的方程。下面采用固定晶胞和不随原子移动的轨道基，取固定单占据的自旋轨道，以普通内积施加正交约束。若用闭壳层双占据空间轨道，能量和轨道惯性项都须一致处理占据因子。固定截断的平面波配模守恒赝势使用这里的普通内积。第\ref{solids:aug-core}节中超软赝势的重叠算符随原子移动，采用这种表示时，约束本身也会对核坐标产生导数。
+先看固定核位置 $R^m$ 的内循环。起始构型可用各原子密度的叠加作初猜，以后可以沿用上一核步的密度。第七章的自洽场方法（SCF）在每轮由输入密度 $n_{\rm in}^{(s)}$ 构造 $\hat H_{\rm KS}[n_{\rm in}^{(s)},R^m]$，求本征轨道，再按给定电子数填充。由此得到输出密度
+\[
+ n_{\rm out}^{(s)}(\bm r)=\sum_{i\,{\rm occ}}\sum_\sigma
+          |\phi_i^{(s)}(\bm r,\sigma)|^2 ,
+\]
+其中 $\sigma$ 为自旋。若输入、输出密度仍有差别，就混合它们作为下一轮输入。这一来一回只增加 $s$，核仍在 $R^m$，物理时间也仍是 $mh$，$h$ 为核时间步长。
+
+当电子已收敛到基态 $\Phi_0(R^m)$，才取势能面的负梯度推进原子核。沿 $R$ 求式\eqref{cp:bo-surface}的导数时，最优轨道也会变，但能量在满足正交条件的轨道变化方向上已驻定。因此如第\ref{bo:hellmann-feynman}节所示，
+\begin{equation}\label{cp:bo-force}
+ \bm F_I^{\rm BO}(R)=-\nabla_{\bm R_I}E_{\rm BO}(R)
+ =-\left.\frac{\partial E[\Phi,R]}{\partial\bm R_I}\right|_{\Phi=\Phi_0(R)} .
+\end{equation}
+用这组力完成一次核的 Verlet 更新，时间步才从 $m$ 变成 $m+1$。新位置的外势已经改变，需要再次求电子基态。
+
+相邻核构型的基态轨道通常很接近。1985 年 Car 与 Parrinello 提出把轨道作为带有可调惯性的坐标，让它和核在同一时间网格上前进。轨道偏离能量最低处时，能量对轨道的梯度会把它拉回，轨道调整得够快才可能跟上移动的谷底。Car--Parrinello 分子动力学（CPMD，以下简记 CP）由此把每步的基态求解换成了一个动力学问题。这个轨道运动用来近似基态核力，真实电子的含时量子演化另有方程。
 
 \section{扩展 Lagrange 函数与约束}
 保留真实核动能，以电子能量泛函作为势能，再给轨道速度添加正的二次项，其系数 $\mu$ 是可选择的虚拟惯性参数。用乘子加入轨道正交约束，定义扩展 Lagrange 函数
-\begin{equation}
+\begin{equation}\label{cp:lagrangian}
 L=\frac12\sum_I M_I|\dot{\bm R}_I|^2+
 \mu\sum_i\langle\dot\phi_i|\dot\phi_i\rangle-E[\{\phi\},R]
 +\sum_{ij}\Lambda_{ij}(\langle\phi_i|\phi_j\rangle-\delta_{ij}).
 \end{equation}
-两个动能项都带正号，核动能含速度平方。$\mu$ 的量纲使 $\mu\langle\dot\phi|\dot\phi\rangle$ 为能量；它不是电子的真实质量。本章取复轨道约定，不在该项前再放 $1/2$。
+这里 $M_I$ 是第 $I$ 个核的质量。把 $|\dot\phi_i(\bm r,\sigma)|^2$ 在空间积分并对自旋求和，就得到轨道速度的内积，量纲为时间的负二次方。故 $\mu$ 的量纲是能量乘时间平方。为看清系数，把复轨道写成 $a+\ii b$，则 $|\dot\phi|^2=\dot a^2+\dot b^2$。本章相当于给 $a,b$ 各配一个系数为 $2\mu$ 的惯性，按通常的“惯性乘速度平方的一半”相加，恰得式\eqref{cp:lagrangian}中的 $\mu|\dot\phi|^2$。若改用双占据空间轨道，电子能量和轨道动能中的占据因子要用同一约定。
 
-对每个坐标重复第一章作用量变分中的分部积分，端点变化为零后，任意内部路径变化的系数必须为零。这给出 Euler--Lagrange 方程
-\begin{equation}
-\frac{\dd}{\dd t}\frac{\partial L}{\partial\dot q}=\frac{\partial L}{\partial q}.
+依第一章的作用量变分，各坐标满足 Euler--Lagrange 方程 $\dd(\partial L/\partial\dot q)/\dd t=\partial L/\partial q$。对核坐标，$\partial L/\partial\dot{\bm R}_I=M_I\dot{\bm R}_I$。在固定轨道下求 $\partial L/\partial\bm R_I$ 时，普通正交约束不含核坐标，只有能量中的离子势和核间排斥随核位置变化。于是
+\begin{equation}\label{cp:ion-eom}
+M_I\ddot{\bm R}_I=-\left.\frac{\partial E[\Phi,R]}{\partial\bm R_I}\right|_{\Phi}.
 \end{equation}
-对核坐标，$\partial L/\partial\dot{\bm R}_I=M_I\dot{\bm R}_I$。在上述约定下，固定轨道时的约束项不含核坐标，$\partial L/\partial\bm R_I=-\partial E/\partial\bm R_I$。其中仍包含离子势随原子移动的变化。因此
-\begin{equation}
-M_I\ddot{\bm R}_I=-\frac{\partial E}{\partial\bm R_I}.
-\end{equation}
-对 $\phi_i^*$ 作独立变分，$\delta L/\delta\dot\phi_i^*=\mu\dot\phi_i$，而 $\delta L/\delta\phi_i^*=-\delta E/\delta\phi_i^*+\sum_j\Lambda_{ij}\phi_j$。把二者代入同一 Euler--Lagrange 方程，再使用第七章已推导的单占据轨道能量导数 $\delta E/\delta\phi_i^*=\hat H_{\rm KS}\phi_i$，得到
-\begin{equation}
+和式\eqref{cp:bo-force}对照，两个公式取的是同一个偏导数。BO 在该构型已优化的轨道上取值，CP 在当时实际传播到的轨道上取值。这里的普通内积适用于如固定平面波基配模守恒赝势的情形。若用第\ref{solids:aug-core}节中随核移动的增广重叠算符，约束本身也会对核坐标产生导数。
+
+对轨道可分别变分实、虚部，等价地把 $\phi_i$ 与 $\phi_i^*$ 当作独立变量。轨道动能对 $\dot\phi_i^*$ 的导数为 $\mu\dot\phi_i$。约束项中的 $\langle\phi_a|\phi_b\rangle$ 对 $\phi_i^*$ 变分只在 $a=i$ 时留下 $\phi_b$，故这部分给出 $\sum_j\Lambda_{ij}\phi_j$。第七章式\eqref{dft:ks}的推导已给出单占据轨道的能量导数 $\delta E/\delta\phi_i^*=\hat H_{\rm KS}\phi_i$。将三项合起来，得到
+\begin{equation}\label{cp:orbital-eom}
 \mu\ddot\phi_i=-\frac{\delta E}{\delta\phi_i^*}+\sum_j\Lambda_{ij}\phi_j
 =-\hat H_{\rm KS}\phi_i+\sum_j\Lambda_{ij}\phi_j.
 \end{equation}
-乘子矩阵取 Hermitian 形式，使约束项为实数并维持轨道正交。静止时的驻值方程可经占据子空间酉变换化为 KS 本征方程；传播中的轨道则未必是瞬时基态。
+\subsection{正交约束给轨道什么加速度}
+乘子矩阵取 Hermitian 形式，使约束项为实数。为什么需要这一项，可以先看单轨道。沿运动始终有 $\langle\phi|\phi\rangle=1$。一次求时间导数给出 $2\operatorname{Re}\langle\phi|\dot\phi\rangle=0$，再求一次得 $\operatorname{Re}\langle\phi|\ddot\phi\rangle=-\langle\dot\phi|\dot\phi\rangle$。在式\eqref{cp:orbital-eom}左乘 $\langle\phi|$ 并取实部，单轨道乘子因而满足
+\[
+ \Lambda=\langle\phi|\hat H_{\rm KS}|\phi\rangle-\mu\langle\dot\phi|\dot\phi\rangle .
+\]
+设在固定核下从静止释放一个试探态，初始加速度便正比于 $-(\hat H_{\rm KS}-\langle\hat H_{\rm KS}\rangle)\phi$。这正是第\ref{hf:constrained-descent}节得到的约束下降方向。在那里它决定试探态往哪边更新，在 CP 中它决定轨道速度怎样改变。有了惯性，经过最低点时轨道可以继续向前，电子势能也可以重新上升。
+
+回到多轨道，并暂把核固定。若轨道停在一个定态，式\eqref{cp:orbital-eom}左端为零，故 $\hat H_{\rm KS}\phi_i=\sum_j\Lambda_{ij}\phi_j$。与 $\phi_k$ 作内积即得 $\Lambda_{ik}=\langle\phi_k|\hat H_{\rm KS}|\phi_i\rangle$。这说明 $H_{\rm KS}$ 作用后的结果完全落在占据轨道所张成的空间内。在这个空间里选择使乘子对角的正交轨道，就得到逐轨道的 KS 本征方程。正交重组同占据数的轨道保持密度。至于这个定态是极小值还是别的驻点，还要看稍稍扰动轨道以后能量如何变化。
 
 \subsection{走一个时间步时求哪些量}
-取固定步长 $h$，上标 $n$ 表示时刻 $nh$。已知相邻两步的核位置与轨道，用中心差分 $\ddot q^n\simeq(q^{n+1}-2q^n+q^{n-1})/h^2$ 代入上面的两条方程，分别解出下一步：
+取固定步长 $h$，沿用核时间步指标 $m$。在 $mh$ 两侧展开 $q(t)$ 并相加，奇数阶导数抵消，有 $q^{m+1}+q^{m-1}=2q^m+h^2\ddot q^m+O(h^4)$。在这里 $q$ 可以是一个核坐标，也可以是轨道的一个基展开系数。用式\eqref{cp:ion-eom}和式\eqref{cp:orbital-eom}替换各自的加速度，舍去局部的四阶项，就得到两条 Verlet 递推式
 \begin{align}
- \bm R_I^{n+1}&=2\bm R_I^n-\bm R_I^{n-1}+\frac{h^2}{M_I}\bm F_I^n,\\
- \phi_i^{n+1}&=2\phi_i^n-\phi_i^{n-1}
- +\frac{h^2}{\mu}\left[-\hat H_{\rm KS}^n\phi_i^n+\sum_j\Lambda_{ij}^n\phi_j^n\right].
+ \bm R_I^{m+1}&=2\bm R_I^m-\bm R_I^{m-1}+\frac{h^2}{M_I}\bm F_I^m,\\
+ \phi_i^{m+1}&=2\phi_i^m-\phi_i^{m-1}
+ -\frac{h^2}{\mu}\left[\hat H_{\rm KS}^m\phi_i^m-\sum_j\Lambda_{ij}^m\phi_j^m\right].
+ \label{cp:orbital-verlet}
 \end{align}
-这里先由当前轨道构造密度，借用第十章的方法求 $\hat H_{\rm KS}^n\phi_i^n$，并在同一个电子态和核构型上求 $\bm F_I^n$。第二式里的乘子要使新轨道满足 $\langle\phi_i^{n+1}|\phi_j^{n+1}\rangle=\delta_{ij}$。一条轨道的长度正确，并不能防止它转向另一条已占据轨道，因此多轨道的约束必须一起处理。CP 每一步仍要计算 Hamilton 算符的作用和核力；节省的是沿整条轨迹反复将电子能量迭代到最低点的工作。初始化时应先在起始构型收敛电子基态，并给定满足约束的初速度；从静止释放核和轨道就是一种简单初态。
+在第 $m$ 步，先由 $\Phi^m$ 构造密度和有效势，借用第十章的方法算出 $\hat H_{\rm KS}^m\phi_i^m$，并在同一组轨道和核位置上求力。式\eqref{cp:orbital-verlet}中除乘子项外的部分给出新轨道的预测值，再沿旧占据轨道 $\{\phi_j^m\}$ 作修正。各个 $\Lambda_{ij}^m$ 要一起选定，使\emph{新一步}的轨道满足 $\langle\phi_i^{m+1}|\phi_j^{m+1}\rangle=\delta_{ij}$。逐条归一化只能校正对角元，两条轨道的重叠还可能非零。求这些正交修正时，参与预测的有效势已由第 $m$ 步给定。
+
+一个简单极限可以核对递推的时间指标和符号。固定核，设一条归一化本征轨道连续两步相同，$\hat H_{\rm KS}\phi=\varepsilon\phi$。若只用 $H_{\rm KS}\phi$，预测值会变成 $(1-h^2\varepsilon/\mu)\phi$。取连续接回原态的约束解 $\Lambda^m=\varepsilon$，括号内的两项抵消，轨道就停在原处。一般运动从起始构型已收敛的基态出发，并给定满足正交约束一阶导数的初速度。核和轨道同时从静止释放就是一种这样的初态。
 
 \subsection{积分时哪一个能量守恒}
 守恒量也应从这个辅助 Lagrange 函数推导。把核坐标、轨道的实部与虚部以及约束乘子合并记为广义坐标 $q_a$，定义 $\mathcal E=\sum_a\dot q_a\partial L/\partial\dot q_a-L$。逐项求时间导数，含 $\ddot q_a$ 的项抵消，得到
@@ -53,30 +84,43 @@ M_I\ddot{\bm R}_I=-\frac{\partial E}{\partial\bm R_I}.
 E_{\rm ext}=\frac12\sum_I M_I|\dot{\bm R}_I|^2+
 \mu\sum_i\langle\dot\phi_i|\dot\phi_i\rangle+E[\{\phi\},R].
 \end{equation}
-这不等于物理核动能加 BO 基态能量：虚拟电子动能也包含其中。数值积分还会带误差。仅见 $E_{\rm ext}$ 近似守恒，不能证明核始终在正确的基态面上运动。
+把真实的核动能记作 $K_{\rm nuc}$，轨道的虚拟动能记作 $K_\phi$。在同一构型上，从扩展能量中扣除 $K_{\rm nuc}+E_{\rm BO}(R)$，剩下 $K_\phi+E[\Phi,R]-E_{\rm BO}(R)$。第一项取决于轨道运动有多快，后两项之差衡量轨道偏离基态的能量代价。检查 $E_{\rm ext}$ 的漂移可以发现积分误差，要检验核所受的力，还得知道轨道怎样跟随基态。
 
-\section{两能级模型解释频率分离}
-为看清虚拟惯性有多大影响，先把核固定。在一个只有两条能级的模型中，轨道偏离基态的程度只需一个混合角就能描述。令 $H|1\rangle=\varepsilon_1|1\rangle$、$H|2\rangle=\varepsilon_2|2\rangle$，$\Delta=\varepsilon_2-\varepsilon_1>0$。在实系数的两态子空间，以归一化试探态 $|\phi\rangle=\cos(\theta/2)|1\rangle+\sin(\theta/2)|2\rangle$ 描述偏离基态的程度。求导得 $|\dot\phi\rangle=(\dot\theta/2)[-\sin(\theta/2)|1\rangle+\cos(\theta/2)|2\rangle]$。由两态正交性，速度范数中的交叉项为零，余下 $\dot\theta^2[\sin^2(\theta/2)+\cos^2(\theta/2)]/4$。能量期望值同样只有 $\varepsilon_1\cos^2(\theta/2)+\varepsilon_2\sin^2(\theta/2)$；使用 $\cos^2=1-\sin^2$，两者分别成为
+\section{固定核时，两能级轨道为什么像一个摆}
+守恒量约束的是总量。要知道轨道会在谷底附近摆动多快，先把核固定，留一个电子和两条正交能量本征态。令 $H|1\rangle=\varepsilon_1|1\rangle$、$H|2\rangle=\varepsilon_2|2\rangle$，能级差 $\Delta=\varepsilon_2-\varepsilon_1>0$。在实系数子空间内，归一化使两个展开系数落在单位圆上。用混合角的一半参数化它们，
+\[
+ |\phi(\theta)\rangle=\cos(\theta/2)|1\rangle+\sin(\theta/2)|2\rangle .
+\]
+于是 $\theta=0$ 恰为基态，$\theta=\pi$ 恰为较高能态。任意角度处高能态的概率是 $P_2=\sin^2(\theta/2)$。各本征态在这里都固定，时间求导只作用在两个系数上，得 $|\dot\phi\rangle=(\dot\theta/2)[-\sin(\theta/2)|1\rangle+\cos(\theta/2)|2\rangle]$。两态正交使速度范数只剩对角项。能量期望值也只是 $\varepsilon_1(1-P_2)+\varepsilon_2P_2$。因此
 \begin{equation}
 \langle\dot\phi|\dot\phi\rangle=\dot\theta^2/4,\qquad
 \langle\phi|H|\phi\rangle=\varepsilon_1+\Delta\sin^2(\theta/2).
 \end{equation}
-因此 $L=\mu\dot\theta^2/4-\varepsilon_1-\Delta\sin^2(\theta/2)$。逐项求导有
+将这两项代回扩展 Lagrange 函数，得 $L=\mu\dot\theta^2/4-\varepsilon_1-\Delta\sin^2(\theta/2)$。逐项求导有
 \begin{equation}
 \frac{\partial L}{\partial\dot\theta}=\frac\mu2\dot\theta,\qquad
 \frac{\partial L}{\partial\theta}=-\Delta\sin\frac\theta2\cos\frac\theta2
 =-\frac\Delta2\sin\theta.
 \end{equation}
-Euler--Lagrange 方程成为 $(\mu/2)\ddot\theta=-(\Delta/2)\sin\theta$。小振幅时用 $\sin\theta=\theta+O(\theta^3)$，再除以 $\mu/2$；试取 $\theta\propto e^{\ii\omega_et}$，有 $-\omega_e^2+\Delta/\mu=0$。故
-\begin{equation}
-\ddot\theta+(\Delta/\mu)\theta=0,\qquad \omega_e=\sqrt{\Delta/\mu}.
+Euler--Lagrange 方程给出 $\ddot\theta=-(\Delta/\mu)\sin\theta$。可以用重力摆读这个式子。摆长 $\ell$、摆球质量 $m_b$，从竖直向下方向量角 $\vartheta$。重力沿切线的分量为 $-m_b g\sin\vartheta$，切向加速度为 $\ell\ddot\vartheta$。两者代入 Newton 方程后，有 $\ddot\vartheta=-(g/\ell)\sin\vartheta$。在轨道问题里，$\Delta/\mu$ 起到 $g/\ell$ 的作用。混合角表示的是两态振幅，摆的向下和倒立两个平衡位置分别对应低能态和高能态。
+
+在 $\theta=0$ 附近，用 $\sin\theta=\theta+O(\theta^3)$ 并试取 $\theta\propto e^{\ii\omega_e t}$，二阶导数带出 $-\omega_e^2$，所以小振幅角频率满足
+\begin{equation}\label{cp:electronic-frequency}
+ \ddot\theta+\frac{\Delta}{\mu}\theta\simeq0,\qquad \omega_e^2=\frac{\Delta}{\mu}.
 \end{equation}
-这个频率描述轨道偏离静止谷底后的自由振荡。能隙 $\Delta$ 小，能量曲线平，回复较弱；虚拟惯性 $\mu$ 小，同样的回复作用能使轨道更快地调整。要把这一结论用于运动的核，还需回答谷底移动本身会激起多大偏差。
+反过来，在高能态附近写 $\theta=\pi+\xi$，由 $\sin(\pi+\xi)\simeq-\xi$ 得 $\ddot\xi\simeq+(\Delta/\mu)\xi$。精确放在高能态上也能静止，轻微扰动却可以随时间增长。这给出了前面区分驻点和基态的具体例子。基态附近的 $\omega_e$ 是算法的辅助频率，改变 $\mu$ 就能调节。在真实的含时量子演化中，两态积累的相对相位为 $-\Delta t/\hbar$，这里恢复了 $\hbar$ 以显示其物理频率。接下来要将辅助频率和\emph{核的振动频率}比较，看看原子运动中轨道能否跟上基态。
 
 \section{核在振动时，轨道能否跟上}
-仍在前述两个固定的正交基矢所张成的空间里用角度 $\theta$ 表示轨道，现在允许 Hamilton 算符随键长变化。设瞬时基态在这组固定基底中的角度为 $\theta_0(t)$。为单独考察跟随误差，先规定键按上一章的伸缩模做小振动，角频率为 $\Omega$，忽略轨道误差对这次试验运动的反馈。在线性范围内，基态角度的变化与键长变化成正比，可选择角度原点使 $\theta_0(t)=A\cos\Omega t$，其中 $A$ 很小。设能隙在这段运动中近似为常量。将固定核模型里的角度换为相对基态的夹角 $\eta=\theta-\theta_0$，展开 $\sin^2(\eta/2)$，便得到瞬时能量高于谷底的量 $\Delta\eta^2/4$。虚拟动能仍为 $\mu\dot\theta^2/4$，因为轨道的速度要在固定基底中计算。
+现在允许 Hamilton 算符随键长 $R$ 改变。仍在一组\emph{固定}的正交基矢中量角，轨道的角度为 $\theta$，瞬时基态的角度为 $\theta_0(R)$。两个态的重叠为 $\cos(\theta/2)\cos(\theta_0/2)+\sin(\theta/2)\sin(\theta_0/2)=\cos[(\theta-\theta_0)/2]$。因此相对于当前基态的偏角 $\eta=\theta-\theta_0(R)$ 决定高能态所占的概率。用 $U(R)$ 表示含核排斥的基态能量，并设两能级的间隔在这一小段键长上可取常数 $\Delta$，则在这个模型中
+\begin{equation}\label{cp:moving-energy}
+ E(\theta,R)=U(R)+\Delta\sin^2\!\frac{\eta}{2},\qquad
+ E(\theta,R)-U(R)=\frac{\Delta}{4}\eta^2+O(\Delta\eta^4).
+\end{equation}
+动能仍为 $\mu\dot\theta^2/4$，因为速度是在固定基底中对实际轨道求导。即使 $\eta$ 一直很小，谷底的移动本身也需要轨道具有速度。
 
-对 $\theta$ 取变分得 $\ddot\theta=-\omega_e^2(\theta-\theta_0)$。从两边减去 $\ddot\theta_0$，偏差本身满足
+为单独考察轨道对核的跟随，先规定键按上一章的伸缩模作小振动，暂时忽略轨道误差对核的反馈。在线性范围内，$\theta_0(R)$ 的改变量与键长变化成正比。选取角度原点后，可写成 $\theta_0(t)=A\cos\Omega t$，其中 $\Omega$ 为核的角频率，$A$ 为小振幅。
+
+对 $\theta$ 变分得 $\ddot\theta=-\omega_e^2\sin(\theta-\theta_0)$。在 $|\eta|\ll1$ 时取 $\sin\eta\simeq\eta$，再从两边减去 $\ddot\theta_0$，偏差满足
 \begin{equation}\label{cp:tracking}
  \ddot\eta+\omega_e^2\eta=-\ddot\theta_0=A\Omega^2\cos\Omega t .
 \end{equation}
@@ -84,15 +128,25 @@ Euler--Lagrange 方程成为 $(\mu/2)\ddot\theta=-(\Delta/2)\sin\theta$。小振
 \[
  \frac{B}{A}=\frac{1}{(\omega_e/\Omega)^2-1}.
 \]
-例如 $\omega_e=10\Omega$ 时，受迫部分的振幅是谷底振幅的 $1/99$；若电子辅助频率降到核频率的两倍，即 $\omega_e=2\Omega$，这个比值升到 $1/3$。完整解还包括频率为 $\omega_e$ 的自由振动，其振幅由初态决定；守恒传播不会自动消除它。两频率接近时上述小偏差估计失效。这就解释了为什么既要让轨道初态靠近基态，又要让相关的电子辅助频率充分高于核频率。在金属或小能隙体系中，低能电子方向容易破坏这种分离。
+例如 $\omega_e=10\Omega$ 时，受迫部分的振幅是谷底振幅的 $1/99$；若电子辅助频率降到核频率的两倍，即 $\omega_e=2\Omega$，这个比值升到 $1/3$。这些比值指受迫部分。若在键长振动的转折点从瞬时基态静止释放轨道，初始 $\eta(0)=\dot\eta(0)=0$。为抵消受迫解在起点的偏差 $B$，还须加上自由解 $-B\cos\omega_e t$，于是 $\eta(t)=B(\cos\Omega t-\cos\omega_e t)$。即使从谷底出发，轨道偏差也同时含有快慢两种振荡。当两频率接近时，驱动可以激起很大的响应，小偏差估计随之失效。因此除了选好初态，还要让相关的电子辅助频率充分高于核频率。在金属或小能隙体系中，低能电子方向容易破坏这种分离。
 
 减小 $\mu$ 能提高 $\omega_e$，也增加了积分负担。第\ref{md:stability}节已从谐振子的递推式求得 Verlet 的稳定条件 $h\omega<2$。CP 每步同时推进核和轨道，这个条件也要对辅助振动满足。即使没有越过稳定边界，要准确跟踪振动相位仍可能需要更短的步长。在许多电子自由度的体系中，和核频率比较的是最低的相关辅助频率，限制步长的却是最高频率。即使在两能级模型里，将 $\mu$ 减为四分之一也会使 $\omega_e$ 加倍，保持相同的 $h\omega_e$ 就得把步长减半。
 
 \section{用同一条键检验动力学}
 设我们关心的输出是键的伸缩周期。从平衡附近稍微拉长这根键、由静止释放，可以从键长随时间的相邻两个同向峰之间读出周期。作为参照，上一章两原子模型给出小振幅极限 $2\pi/\sqrt{k(1/M_1+1/M_2)}$。实际计算可在同一电子近似下用冻结位移取得局部曲率，或直接用收敛的 BO 力作短轨迹对照。比较时需保持初始核构型、质量和核速度一致。
 
-若 CP 给出的周期发生偏移，可以分开检查两种误差。先固定 $\mu$ 减半时间步，比较周期、正交残差以及扩展能量的漂移，以检查离散积分。再从一条已用足够小步长积分的轨迹上抽取若干构型，在\emph{原来的核位置}重新收敛电子基态。此时可直接比较两种核力，也可计算
-\[
- \delta E(t)=E[\{\phi^{\rm CP}(t)\},R(t)]-E_{\rm BO}(R(t)).
-\]
-同样的能量泛函、基组和占据约束下，基态是变分最小值，故精确比较应有 $\delta E\ge0$。它衡量偏离谷底的能量代价。力是沿核坐标的导数，能量差小到什么程度足以给出准确的周期，仍需由力或周期本身检验。最后减小 $\mu$ 并相应缩短步长，观察周期是否趋于 BO 参照值。这样，即使两条轨迹都很好地守恒各自的扩展能量，也能用键的实际运动辨认出虚拟惯性造成的偏差。
+怎样从电子轨道的跟随误差判断键的运动会受多大影响？固定同一键长时，式\eqref{cp:moving-energy}给出的能量偏差对小 $\eta$ 是二阶。求核力却要按式\eqref{cp:ion-eom}在当前轨道不动时改变 $R$。此时 $\partial_R\eta=-\theta_0'(R)$，而 $\partial_\eta\sin^2(\eta/2)=\tfrac12\sin\eta$。分别对试探态能量和基态能量取负导数，得
+\begin{equation}\label{cp:force-error}
+ F_{\rm CP}=-U'(R)+\frac{\Delta}{2}\theta_0'(R)\sin\eta,\qquad
+ F_{\rm BO}=-U'(R).
+\end{equation}
+只要基态随键长转动，力的偏差就可以对 $\eta$ 是一阶。图\ref{cp:energy-curves}给出一个可以复算的截面。取长度单位 $a$ 和参考键长 $R_0$，令 $x=(R-R_0)/a$，选 $U=\Delta x^2/2$、$\theta_0=x$。假如某一步轨道还在 $\theta=0$，那么在 $x=0.2$ 处，它高于基态的能量仅为 $\Delta\sin^2(0.1)\simeq0.010\,\Delta$。同一点的力却多了 $-\Delta\sin(0.2)/(2a)\simeq-0.099\,\Delta/a$，而基态的回复力为 $-0.200\,\Delta/a$。两条能量曲线在这里高度很接近，斜率给出的回复力却相差近一半。
+
+\begin{figure}[htbp]
+\centering
+\input{figures/cp-energy-curves}
+\caption{蓝色下实线和灰色上实线是两个本征态的能量，橙色虚线是沿途固定 $\theta=0$ 的试探态能量。右图放大左图点框，标出 $x=0.2$ 处的两份能量。纵轴对横轴的斜率乘以 $-\Delta/a$ 就是相应的核力。沿实际 CP 轨迹，求导时应固定当时的轨道。}
+\label{cp:energy-curves}
+\end{figure}
+
+实际计算中，先固定 $\mu$ 减半步长，比较周期、正交残差和扩展能量漂移，检查时间离散误差。再抽取几个构型，在\emph{原来的核位置}重新收敛电子基态，同时比较核力和能量。按式\eqref{cp:bo-surface}，在同一基组和电子近似下应有 $E[\Phi^{\rm CP},R]-E_{\rm BO}(R)\ge0$。最后减小 $\mu$ 并相应缩短步长，检验键的伸缩周期是否趋于 BO 参照值。这样，上一章由静态位移测得的刚度，就能用来检验沿轨迹得到的核运动。

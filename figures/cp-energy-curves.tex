@@ -1,0 +1,28 @@
+\begin{tikzpicture}
+\pgfplotsset{
+  cp axis/.style={axis lines=left,tick label style={font=\footnotesize},
+    label style={font=\small},title style={font=\small},samples=121,no markers},
+  cp ground/.style={thick,blue!65!black},
+  cp trial/.style={thick,dashed,orange!80!black}}
+\begin{axis}[cp axis,name=overview,width=.52\linewidth,height=5.3cm,
+  title={两能级与试探态},xlabel={$x=(R-R_0)/a$},ylabel={$E/\Delta$},
+  xmin=-1.15,xmax=1.15,ymin=-.035,ymax=1.75,
+  xtick={-1,0,1},ytick={0,.5,1,1.5},domain=-1.15:1.15]
+\addplot[gray!70!black,thick] {1+x^2/2};
+\addplot[cp ground] {x^2/2};
+\addplot[cp trial]  {x^2/2+(1-cos(deg(x)))/2};
+\draw[gray!75,densely dotted] (axis cs:0,0) rectangle (axis cs:.32,.08);
+\end{axis}
+\begin{axis}[cp axis,at={(overview.east)},anchor=west,xshift=1.05cm,
+  width=.435\linewidth,height=5.3cm,title={平衡键长附近的放大图},xlabel={$x$},
+  xmin=0,xmax=.32,ymin=0,ymax=.08,
+  xtick={0,.1,.2,.3},ytick={0,.02,.04,.06,.08},
+  scaled ticks=false,tick label style={font=\footnotesize,/pgf/number format/fixed},
+  domain=0:.32]
+\addplot[cp ground] {x^2/2};
+\addplot[cp trial]  {x^2/2+(1-cos(deg(x)))/2};
+\draw[gray] (axis cs:.2,.02) -- (axis cs:.2,.029966711);
+\addplot[only marks,mark=*,mark size=1.5pt,blue!65!black] coordinates {(.2,.02)};
+\addplot[only marks,mark=*,mark size=1.5pt,orange!80!black] coordinates {(.2,.029966711)};
+\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,19 @@
+\begin{tikzpicture}[
+  x=1cm,y=1cm,>=stealth,font=\small,
+  bo node/.style={draw=blue!45!black,fill=blue!3,rounded corners=2pt,
+               line width=.55pt,minimum width=6.1cm,minimum height=.68cm,align=center},
+  pathline/.style={->,semithick,draw=blue!55!black}]
+\node[bo node] (ions)    at (0,3.30) {给定当前核位置 $R^m$};
+\node[bo node] (solve)   at (0,2.20) {从 $n_{\rm in}^{(s)}$ 建势，解 KS 方程};
+\node[bo node] (density) at (0,1.10) {由占据轨道求 $n_{\rm out}^{(s)}$，检查密度残差};
+\node[bo node] (advance) at (0,-0.25) {取基态核力，做 Verlet 更新，得到 $R^{m+1}$};
+\draw[pathline] (ions) -- (solve);
+\draw[pathline] (solve) -- (density);
+\draw[pathline] (density) -- node[right,font=\footnotesize] {已收敛} (advance);
+\draw[pathline] (density.east) -- (3.65,1.10) -- (3.65,2.20) -- (solve.east);
+\node[anchor=west,align=left,font=\footnotesize] at (3.69,1.65)
+  {未收敛，混合密度\\$s\mapsto s+1$};
+\draw[pathline] (advance.west) -- (-3.68,-0.25) -- (-3.68,3.30) -- (ions.west);
+\node[anchor=east,align=right,font=\footnotesize] at (-3.72,1.57)
+  {下一个核步\\$m\mapsto m+1$};
+\end{tikzpicture}
