@@ -14,12 +14,12 @@ E_g=I-A=E(N+1)+E(N-1)-2E(N).
 \end{equation}
 这个定义比较的是三个不同电子数体系的多体总能量。KS 轨道隙 $\varepsilon_L-\varepsilon_H$ 则来自同一个辅助算符；$H$ 表示最高占据轨道，$L$ 表示最低未占据轨道，二者常分别简记为 HOMO 和 LUMO。两者从定义上就没有自动相等的理由。
 
-例如，假设某个模型在固定核位置给出 $E(N-1)=-9.5$、$E(N)=-10.0$、$E(N+1)=-10.2$ Hartree，则 $I=0.5$、$A=0.2$，基本带隙为 $0.3$ Hartree。这些只是说明定义的模型数值，不对应某种真实材料。计算到这里尚未使用任何 KS 轨道能量。
+例如，假设某个模型在固定核位置给出 $E(N-1)=-9.5$、$E(N)=-10.0$、$E(N+1)=-10.2$ Hartree，则 $I=0.5$、$A=0.2$，基本带隙为 $0.3$ Hartree。这个带隙已经能从三个基态总能量读出。
 
 吸收光子则保持总电子数不变，只把体系变成一个激发态。原来被占据的位置少了一个电子，这个缺位称为空穴。被激发的电子与留下的空穴还会相互作用，因而光学激发能也不能直接与基本带隙混同。
 
-\section{分数电子数是统计平均，不是切开电子}
-为了研究 $E(N)$ 在整数附近怎样变化，我们希望连续地改变平均电子数。这不要求存在“半个电子”的单次观测。可以考虑一种统计制备：以概率 $1-\eta$ 准备 $N$ 电子基态，以概率 $\eta$ 准备 $N+1$ 电子基态，其中 $0\le\eta\le1$。
+\section{用整数粒子数的系综得到连续的平均电子数}
+为了研究 $E(N)$ 在整数附近怎样变化，我们希望连续地改变平均电子数。为此考虑一种统计制备。以概率 $1-\eta$ 准备 $N$ 电子基态，以概率 $\eta$ 准备 $N+1$ 电子基态，其中 $0\le\eta\le1$。
 
 统计混合以各次制备的概率加权其投影算符。对粒子数算符取迹，得到 $\langle\hat N\rangle=(1-\eta)N+\eta(N+1)=N+\eta$，因此
 \begin{equation}
@@ -39,7 +39,7 @@ n_\eta(\bm r)&=\Tr[\Gamma\hat n(\bm r)]\notag\\
 n_N(\bm r)=N\sum_s\int
 |\Psi_N(\bm r,s,x_2,\ldots,x_N)|^2\dd x_2\cdots\dd x_N.
 \end{equation}
-对 $\bm r$ 积分，波函数归一化给出 $\int n_N=N$；混合密度的积分因此是 $(1-\eta)N+\eta(N+1)=N+\eta$。不同粒子数的波函数甚至不在同一个固定粒子数空间里，不能把它们的多体模平方直接当成同一个三维函数相加。
+对 $\bm r$ 积分，波函数归一化给出 $\int n_N=N$；混合密度的积分因此是 $(1-\eta)N+\eta(N+1)=N+\eta$。
 
 能量期望值同样按概率相加，所以这种制备的能量为
 \begin{equation}\label{spectra:linear}
@@ -64,7 +64,7 @@ $E(N)-E(M)=\sum_{k=M+1}^N d_k\le(N-M)\mu$。
 \begin{equation}
 E(M)\ge E(N)+(M-N)\mu.
 \end{equation}
-将它乘 $p_M$ 后求和，并使用式\eqref{spectra:convex-search}的两个约束，得到任何制备的能量都不低于 $E(N)+(\nu-N)\mu$。令 $\nu=N+\eta$，而只取 $p_N=1-\eta,p_{N+1}=\eta$ 正好达到这个下界，才证明了式\eqref{spectra:linear}。若相邻两点不是下凸包上的相邻顶点，就必须比较其他整数态；不能仅凭写出一个混合态就宣布它已最优。
+将它乘 $p_M$ 后求和，并使用式\eqref{spectra:convex-search}的两个约束，得到任何制备的能量都不低于 $E(N)+(\nu-N)\mu$。令 $\nu=N+\eta$，而只取 $p_N=1-\eta,p_{N+1}=\eta$ 正好达到这个下界，才证明了式\eqref{spectra:linear}。若下凸包的边跨过了某个整数点，最低能量由这条边两端的粒子数态混合得到。
 
 将右侧区间的直线写成 $E(N+\eta)=E(N)+\eta[E(N+1)-E(N)]$，对平均电子数 $N+\eta$ 求导，斜率就是方括号。左侧同理，将 $E(N-1+\eta)=E(N-1)+\eta[E(N)-E(N-1)]$ 对 $\eta$ 求导，再令 $\eta\to1$。代入电离能与亲和能的定义，得到
 \begin{equation}\label{spectra:slopes}
@@ -98,7 +98,7 @@ $\delta n=(\partial n_\nu/\partial\nu)\delta\nu+o(\delta\nu)$。
 =\mu\frac{\dd}{\dd\nu}\int n_\nu\dd\bm r
 =\mu\frac{\dd\nu}{\dd\nu}=\mu.
 \end{equation}
-所以化学势是约束电子数的乘子，也是沿平衡态增加平均电子数的能量代价。整数处一般没有单一的双侧导数，只能分别取 $\mu^-$ 与 $\mu^+$；不能在有拐角的地方仍假定一个光滑导数。
+所以化学势是约束电子数的乘子，也是沿平衡态增加平均电子数的能量代价。整数处出现拐角时，就有分别对应移除和加入电子的两个单侧斜率 $\mu^-$ 与 $\mu^+$。
 
 \section{Janak 关系：轨道本征值首先是能量导数}\label{spectra:janak-section}
 现在回到 KS 能量表达式，让某条自旋轨道的占据 $f_i$ 连续变化，密度为 $n=\sum_i f_i|\phi_i|^2$，仍沿用第七章自旋求和后的空间因子记法。先把轨道固定，则 $\partial n/\partial f_i=|\phi_i|^2$。上一节的链式法则也适用于任意参数：令 $n=n(\bm r,\xi)$，便有 $\partial F/\partial\xi=\int(\delta F/\delta n)(\partial n/\partial\xi)\dd\bm r$。取 $\xi=f_i$，对每个能量项分别计算：
@@ -121,7 +121,7 @@ $\delta n=(\partial n_\nu/\partial\nu)\delta\nu+o(\delta\nu)$。
 \begin{equation}
 E(f_i=1)-E(f_i=0)=\int_0^1\varepsilon_i(f_i)\dd f_i.
 \end{equation}
-一般近似中，本征值会随占据变化，故不能随意把积分换成某个端点的本征值。
+因此完整加入一个电子的能量代价取决于整段占据区间内本征值的平均值。在近似泛函中，本征值通常会随占据改变。
 
 例如把第 $N$ 个电子的占据从一降到零，积分方向必须反过来；加入第 $N+1$ 个电子时则从零升到一。将本征值所对应的平均电子数写出，得
 \begin{align}\label{spectra:occupation-integrals}
@@ -135,7 +135,7 @@ A&=-\int_0^1\varepsilon_{N+1}(N+f)\dd f.
 \]
 其中 $c>0$ 是曲率，量纲为能量。由 $E(N+1)-E(N)=-A$，导数为 $-A+c(f-1/2)$。整个区间的平均斜率是 $-A$，恰在 $f=1/2$ 取得，而从右侧紧靠 $N$ 的斜率是 $-A-c/2$。即使 $N$ 很大，单凭增加的一个电子只占总数很小的比例，也推不出 $c$ 很小。对精确系综，能用单侧极限取代积分的依据是前面证明的分段线性，它使导数在段内恒定。
 
-对精确泛函，在整数左侧只改变前沿最高占据轨道的占据，其他占据固定，便有 $\dd N=\dd f_H$。Janak 关系给出 $\dd E/\dd N=\partial E/\partial f_H=\varepsilon_H$，而分段线性给出同一个导数为 $-I$。因此在有限束缚体系中，把精确 KS 势在无穷远取为零，并从下方接近整数电子数，就得到 $\varepsilon_H^-=-I$。前沿若简并，可对简并轨道分配占据，公共本征值给出相同导数。这里并不能据此断言其他本征值都等于真实激发能。
+对精确泛函，在整数左侧只改变前沿最高占据轨道的占据，其他占据固定，便有 $\dd N=\dd f_H$。Janak 关系给出 $\dd E/\dd N=\partial E/\partial f_H=\varepsilon_H$，而分段线性给出同一个导数为 $-I$。因此在有限束缚体系中，把精确 KS 势在无穷远取为零，并从下方接近整数电子数，就得到 $\varepsilon_H^-=-I$。前沿若简并，可对简并轨道分配占据，公共本征值给出相同导数。
 
 \section{为什么精确 KS 轨道隙仍可能不等于基本带隙}
 越过整数 $N$ 后，下一个电子开始进入最低未占据轨道。若有效势完全不变，右侧导数就应等于原来的 $\varepsilon_L^-$。但精确能量要求右侧斜率为 $-A$；这两者一般不同。缺少的部分如何进入 KS 描述？
@@ -170,7 +170,7 @@ E_g=\left.\frac{\delta T_s}{\delta n}\right|_+
 E_s(N-\eta)=E_s(N)-\eta\varepsilon_H^-,\qquad
 E_s(N+\eta)=E_s(N)+\eta\varepsilon_L^-.
 \end{equation}
-因此辅助体系的移除能和亲和能为 $I_s=E_s(N-1)-E_s(N)=-\varepsilon_H^-$、$A_s=E_s(N)-E_s(N+1)=-\varepsilon_L^-$，相减得到 $I_s-A_s=\varepsilon_L^--\varepsilon_H^-$。这里 $E_s$ 是\emph{固定势的非相互作用体系}的能量；它不等于把占据数改变后重新求自洽的真实体系能量泛函，也不推翻第七章对 KS 总能量重复计数的分析。
+因此辅助体系的移除能和亲和能为 $I_s=E_s(N-1)-E_s(N)=-\varepsilon_H^-$、$A_s=E_s(N)-E_s(N+1)=-\varepsilon_L^-$，相减得到 $I_s-A_s=\varepsilon_L^--\varepsilon_H^-$。这里 $E_s$ 是\emph{固定势的非相互作用体系}的能量，适合用来单独识别轨道隙的贡献。
 
 式\eqref{spectra:fixed-ks-energy}还直接给出两侧斜率 $\mu_s^-=\varepsilon_H^-$、$\mu_s^+=\varepsilon_L^-$。相应的密度 Euler 方程是
 $\delta T_s/\delta n+v_s^-=\mu_s^\pm$。
@@ -205,7 +205,7 @@ n(r)\ \text{的主导指数为}\ e^{-2\sqrt{-2\varepsilon_H}\,r}.
 \Psi_N(x,Y)\simeq a(x)\Psi_0^{N-1}(Y),\qquad
 H_{N-1}\Psi_0^{N-1}=E(N-1)\Psi_0^{N-1}.
 \end{equation}
-这里 $\Psi_0^{N-1}$ 是归一化的剩余离子基态，$a$ 是外侧电子的振幅。这只是在该远距离区域使用的最低通道近似，并未把全空间的相关波函数改成独立粒子乘积。
+这里 $\Psi_0^{N-1}$ 是归一化的剩余离子基态，$a$ 是外侧电子的振幅。在所考察的远处，剩余离子的最低通道决定了 $a$ 的衰减。
 
 在相同的主导阶，$H_N\simeq-\tfrac12\nabla_{\bm r}^2+H_{N-1}$；随距离衰减的 Coulomb 项会修正幂次，暂不影响所比较的常数能量差。把渐近形式代入 $H_N\Psi_N=E(N)\Psi_N$，再乘以 $\Psi_0^{N-1*}$ 对 $Y$ 积分，离子态的归一化给出
 \begin{equation}

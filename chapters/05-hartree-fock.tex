@@ -19,7 +19,7 @@ $E_{NN}(R)$ 对给定核构型是常数，不改变电子本征函数。若 $\ha
 \end{equation}
 这就是变分原理：限制试探态只能使最低能量升高，等号要求态完全处于基态子空间。这里必须保持电子反对称性；放宽交换对称性就改变了比较空间，上界保证不再自动成立。
 
-泛函是把函数映为数的规则。先取一个实函数 $n(\bm r)$，考察 $F[n]=\int n(\bm r)^2\dd\bm r$。若网格体积元都为 $\Delta V$，离散近似就是许多普通变量的函数 $F_h=\sum_j n_j^2\Delta V$。对第 $j$ 个格点求偏导得到 $2n_j\Delta V$，所有格点的一阶变化相加为 $\delta F_h=\sum_j 2n_j\delta n_j\Delta V$。在连续极限下，体积元留在积分中，$\delta F=\int 2n(\bm r)\delta n(\bm r)\dd\bm r$。任意小扰动前面的系数 $2n(\bm r)$ 就是\emph{泛函导数} $\delta F/\delta n(\bm r)$。这个例子也说明，将程序中的网格偏导换成连续泛函导数时，必须留意积分权重。
+泛函是把函数映为数的规则。先取一个实函数 $n(\bm r)$，考察 $F[n]=\int n(\bm r)^2\dd\bm r$。若网格体积元都为 $\Delta V$，离散近似就是许多普通变量的函数 $F_h=\sum_j n_j^2\Delta V$。对第 $j$ 个格点求偏导得到 $2n_j\Delta V$，所有格点的一阶变化相加为 $\delta F_h=\sum_j 2n_j\delta n_j\Delta V$。在连续极限下，体积元留在积分中，$\delta F=\int 2n(\bm r)\delta n(\bm r)\dd\bm r$。任意小扰动前面的系数 $2n(\bm r)$ 就是\emph{泛函导数} $\delta F/\delta n(\bm r)$。
 
 波函数可以是复数。为什么求能量驻点时常常只写对 $\phi^*$ 的导数？先看一个复系数 $z=x+\ii y$。对实值能量 $F$，把两个实方向的导数合写成 $\partial F/\partial z^*=(\partial F/\partial x+\ii\,\partial F/\partial y)/2$。令它为零，实部与虚部就分别给出两个驻值条件。按这个定义有 $\partial z/\partial z^*=(1+\ii^2)/2=0$、$\partial z^*/\partial z^*=1$。对波函数的各个分量作同样处理，就可以在求导时暂将 $\phi,\phi^*$ 当成独立变量。引入归一化乘子，定义 $\mathcal L=\langle\phi|\hat H|\phi\rangle-\varepsilon(\langle\phi|\phi\rangle-1)$。保持 $\phi$ 不变而改变 $\phi^*$，逐项得到
 \begin{equation}
@@ -43,7 +43,7 @@ E=\langle\phi|H|\phi\rangle.
 \qquad
 \phi_{\rm new}=\frac{\widetilde\phi}{\sqrt{\langle\widetilde\phi|\widetilde\phi\rangle}}.
 \end{equation}
-操作顺序就是：计算 $H\phi$，减去 $\alpha H\phi$，再把所得向量除以它的范数。波浪号表示尚未归一化的中间结果；最后一步只改变整体长度，不改变各分量之间的比例。若中间结果为零，就需减小步长重算。
+最后的归一化只改变向量的整体长度，各能量本征态分量的比例由第一步决定。
 
 \paragraph{方法二：沿 $-(H-E)\phi$ 下降。}
 归一化约束的乘子给出的梯度是 $(H-\lambda)\phi$。怎样确定下降过程中的 $\lambda$？先用连续变化看清楚，令
@@ -78,7 +78,7 @@ E=\langle\phi|H|\phi\rangle,\qquad
 =1-2\alpha\operatorname{Re}\langle\phi|r\rangle+\alpha^2\|r\|^2
 =1+\alpha^2\|r\|^2.
 \end{equation}
-因此每步再归一化可消除这个二阶偏差；这不改变方法二已经从梯度中去掉 $E\phi$ 的事实。两种方法的区别在于\emph{下降方向的选择}，不是“一个归一化、另一个绝不归一化”。
+因此每步再归一化可消除这个二阶偏差。下面在同一个初态上比较这两个方向。
 
 \subsection{同一个例子，比较两个方向}
 取两个正交能量本征态作为基，设
@@ -104,7 +104,7 @@ H\phi=\frac1{\sqrt2}\begin{pmatrix}0\\2\end{pmatrix},\qquad
 \phi_B&=\frac1{\sqrt{2.08}}\begin{pmatrix}1.2\\0.8\end{pmatrix},
 & E_B&=2\frac{0.8^2}{2.08}\simeq0.61538.
 \end{align}
-两种方法都把能量从 $1$ 降低了。接下来各自把新态作为输入，再算 $H\phi$；方法二还要更新当前能量 $E$，不能一直使用初始的 $E=1$。相同步长下两种方法的结果可以不同，这个例子不意味着某一种方法总是更快。
+两次更新都降低了高能态的占据，能量也都从 $1$ 降了下来。再走一步时，应在各自的新态上计算 $H\phi$，方法二所用的 $E$ 也随新态改变。
 
 \subsection{两种方法怎样联系，何时停止}
 方法一虽然先走了包含长度变化的方向，但后面的归一化会在一阶上消掉这部分。具体地，
@@ -124,9 +124,9 @@ E_{\rm new}-E
 &=-\alpha\bigl(\langle r|H\phi\rangle+\langle H\phi|r\rangle\bigr)+O(\alpha^2)\notag\\
 &=-2\alpha\|r\|^2+O(\alpha^2).
 \end{align}
-最后一步用了 $H\phi=E\phi+r$ 和 $\langle\phi|r\rangle=0$。故残差非零、步长足够小时，能量下降。实际迭代时检查新能量，若没有下降，就减小 $\alpha$ 并从原态重算；接受新态后重复，直到 $\|(H-E)\phi\|$ 足够小，此时 $H\phi\simeq E\phi$。
+最后一步用了 $H\phi=E\phi+r$ 和 $\langle\phi|r\rangle=0$。故残差非零、步长足够小时，能量下降。残差的范数衡量态离本征方程还有多远。当它趋于零时，能量也趋于驻定。
 
-这两种方向都可用于寻找基态，不是分别对应基态和激发态。初态需有基态分量；若初态恰好是激发本征态，残差也为零，不能只凭零残差判定它是基态。多轨道问题还要保持轨道间的正交，后文再用乘子矩阵处理。
+寻找基态时，初态要含有基态分量。激发本征态同样满足 $H\phi=E\phi$，所以还要结合所得能量和所选的态空间来判断找到了哪个态。多条轨道共同变分时，还要保持它们相互正交。
 
 \section{Hartree 乘积如何产生平均场}
 刚才的下降法演示了怎样在给定的空间里寻找最低能量，但一次更新仍要存放整个试探波函数。若把每个电子的状态分别用一条轨道表示，计算需要的函数就少得多。为看清这种选择怎样改变电子间的作用，将固定核电子 Hamilton 算符简写为 $\hat H=\sum_i\hat h(i)+\sum_{i<j}r_{ij}^{-1}$，其中 $\hat h=-\nabla^2/2+v_{\rm ext}$，$v_{\rm ext}(\bm r;R)=-\sum_I Z_I/|\bm r-\bm R_I|$ 是固定原子核产生的外势。我们先暂时放宽电子的交换约束，取归一化单粒子函数的乘积 $\Psi_H=\prod_i\phi_i(x_i)$。$x=(\bm r,s)$ 包括位置与自旋，$\int\dd x$ 代表空间积分和自旋求和。
@@ -212,7 +212,7 @@ n_2(x,x')=\sum_{ij}\left[
 \begin{equation}\label{hf:energy}
 E_{\rm HF}=\sum_i h_{ii}+\frac12\sum_{ij}(J_{ij}-K_{ij}).
 \end{equation}
-$i=j$ 时 $J_{ii}=K_{ii}$，故这里可把自项纳入求和而不产生自相互作用。交换不是额外的一种经典力，而是反对称态的干涉结果。若自旋轨道的自旋部分正交，交换积分的自旋积分为零，所以交换仅在同自旋通道出现。
+$i=j$ 时 $J_{ii}=K_{ii}$，同一电子与自身的排斥恰好抵消。交换项来自行列式中两种电子排布的振幅干涉。若两个轨道的自旋函数正交，交换积分中的自旋内积为零，所以只有同自旋轨道之间留下交换贡献。
 
 为看其空间意义，令 $n(x)=\gamma(x,x)$。式\eqref{hf:pair-density}的第一项正好是 $n(x)n(x')$，第二项是 $\gamma(x,x')\gamma^*(x,x')$，所以 $n_2=n(x)n(x')-|\gamma(x,x')|^2$。给定 $n(x)>0$ 处的电子后，其他电子的条件密度为 $n_2(x,x')/n(x)$；与 $n(x')$ 相减，定义交换孔 $h_x(x,x')=-|\gamma(x,x')|^2/n(x)$。其积分可逐项计算：
 \begin{equation}
@@ -331,7 +331,7 @@ Coulomb Green 函数满足 $-\nabla^2V_q=4\pi q$，且 $K_{ab}=\int q^*V_q\dd\bm
 K_{ab}=-\frac1{4\pi}\int(\nabla^2V_q^*)V_q\dd\bm r
 =\frac1{4\pi}\int|\nabla V_q|^2\dd\bm r\ge0.
 \end{equation}
-因此交换降低三重态的能量。对简并或近简并的原子轨道，这解释了优先单占据并使自旋平行的趋势。若轨道能量分裂较大、轨道可重新弛豫或关联很强，还必须比较完整总能量；不能用这个固定双轨道例子宣称所有体系都偏好最大自旋。Pauli 限制同样作用于完整坐标 $x=(\bm r,s)$：相同自旋电子在相同位置的振幅为零，反自旋电子则可以占据同一空间轨道。
+因此交换降低三重态的能量。对简并或近简并的原子轨道，这解释了优先单占据并使自旋平行的趋势。若较高轨道与较低轨道相距较远，占据较高轨道本身就要付出能量。实际自旋排列取决于这一代价与交换降能、轨道弛豫和关联的共同作用。Pauli 限制同样作用于完整坐标 $x=(\bm r,s)$：相同自旋电子在相同位置的振幅为零，反自旋电子则可以占据同一空间轨道。
 
 \section{轨道变分与 Fock 算符}
 现在对行列式能量求驻值。先只改变第 $i$ 条轨道的复共轭 $\phi_i^*$，把 $\phi_i$ 与其他轨道暂作独立变量。自项 $J_{ii}-K_{ii}$ 恒为零，先将它消去。对 $j\ne i$，直接积分的变化为
@@ -373,7 +373,7 @@ K_{ab}=-\frac1{4\pi}\int(\nabla^2V_q^*)V_q\dd\bm r
 
 占据轨道的酉变换是保持内积不变的线性重组。它使 Slater 行列式乘上该变换矩阵的行列式，而酉矩阵的行列式模为一，因此整个多电子态只改变一个整体相位。我们可以利用这一自由度，在占据子空间对角化乘子矩阵。把重组后的轨道仍记为 $\phi_i$，式\eqref{hf:stationary}就化成正则轨道方程 $\hat f\phi_i=\varepsilon_i\phi_i$。轨道本征值由此出现，而不是预先假定每个电子各自具有一个独立能量。
 
-实际极小化可以逐条更新轨道，每次把新方向中沿其他占据轨道的分量减去，也可以同时更新整组轨道，再将它们正交归一化。两种算法都要使占据子空间能够转向原先未占据的方向。若只在已有的占据轨道之间做酉变换，上面的行列式论证表明能量会原样保留。
+占据子空间若向某条空轨道转动，多电子态和能量就可以随之改变。沿占据轨道内部的酉变换则只改变整体相位。变分时可逐条更新并投去其他占据轨道的分量，也可更新整组轨道后一起恢复正交。
 
 乘以 $\phi_i^*$ 并积分再求和，得到 $\sum_i\varepsilon_i=\sum_i h_{ii}+\sum_{ij}(J_{ij}-K_{ij})$。这把每一对相互作用计了两次，所以
 \begin{equation}
@@ -405,7 +405,7 @@ E_{\rm HF}=\sum_i\varepsilon_i-\frac12\sum_{ij}(J_{ij}-K_{ij}).
 =\sum_{\lambda\kappa}P_{\lambda\kappa}|\chi_\lambda\rangle\langle\chi_\kappa|,
 \qquad P_{\lambda\kappa}=2\sum_{i=1}^{N/2}C_{\lambda i}C_{\kappa i}^*.
 \end{equation}
-这里 $\kappa$ 是基函数指标，不是自旋。将 ket 与 bra 的基展开各代入一次就得到第二个等号。坐标表示与电子数分别为
+将 ket 与 bra 的基展开各代入一次就得到第二个等号。坐标表示与电子数分别为
 \begin{align}
 \gamma(\bm r,\bm r')&=\sum_{\lambda\kappa}P_{\lambda\kappa}
 \chi_\lambda(\bm r)\chi_\kappa^*(\bm r'),
@@ -447,9 +447,9 @@ F_{\mu\nu}=h_{\mu\nu}+\sum_{\lambda\kappa}P_{\lambda\kappa}
 \begin{equation}
 X^\dagger SX=Us^{-1/2}s\,s^{-1/2}U^\dagger=UIU^\dagger=I.
 \end{equation}
-在 $FC=SC\varepsilon$ 中取 $C=XC'$ 并左乘 $X^\dagger$，得到 $X^\dagger FXC'=X^\dagger SXC'\varepsilon=C'\varepsilon$。又因 $(X^\dagger FX)^\dagger=X^\dagger F^\dagger X=X^\dagger FX$，变换后的矩阵仍为 Hermitian 矩阵。小重叠本征值通过 $s^{-1/2}$ 放大误差，应控制近线性相关。每轮检查密度残差、能量变化和 $C^\dagger SC=I$，必要时混合新旧密度以减小振荡。
+在 $FC=SC\varepsilon$ 中取 $C=XC'$ 并左乘 $X^\dagger$，得到 $X^\dagger FXC'=C'\varepsilon$。由于 $(X^\dagger FX)^\dagger=X^\dagger F^\dagger X=X^\dagger FX$，这是普通的 Hermitian 本征方程。很小的重叠本征值意味着某些基函数组合几乎为零，$s^{-1/2}$ 会放大这些方向的误差。
 
-实际循环先计算 $h,S$、双电子积分与 $X$，由一体方程的最低 $N/2$ 条轨道构造初始 $P$。也可用 $P=0$ 启动第一次 $F=h$，但零矩阵并非 $N$ 电子密度。每轮建 $F[P]$，对角化 $F'=X^\dagger FX$，还原 $C=XC'$，占据最低轨道并更新 $P$，直到输入输出一致。
+对闭壳层分子，占据最低的 $N/2$ 条空间轨道给出密度矩阵 $P$，$P$ 决定 $F$，其最低轨道又给出新的 $P$。二者相容时，电子在由同一组占据轨道产生的平均场中达到自洽。
 
 总能量也能直接用矩阵计算。因为
 $\Tr(Ph)=2\sum_i h_{ii}$，而
@@ -457,7 +457,7 @@ $\Tr[P(F-h)]=2\sum_{ij}(2J_{ij}-K_{ij})$，式\eqref{hf:closed-energy}给出
 \begin{equation}
 E_{\rm RHF}=\frac12\Tr[P(h+F)].
 \end{equation}
-第二个迹中的二来自双占据，前面的 $1/2$ 防止重复计数；完整核势能还须加 $E_{NN}$。四中心积分有 $M^4$ 个存储位置，$M^2$ 个 Fock 矩阵元各作双重求和，朴素构造也需 $O(M^4)$ 工作；稠密对角化通常为 $O(M^3)$。利用稀疏性或积分近似的算法可改变这些成本。
+第二个迹中的二来自双占据，前面的 $1/2$ 扣除了重复计入的电子对作用。加上核间排斥 $E_{NN}$ 才得到该核构型的总势能。
 
 \section{Koopmans 结论的边界}\label{hf:koopmans}
 自洽计算输出总能量，还会给每条轨道一个本征值。若把一个电子从分子中移走，所需的能量能否直接从这张本征值表中读出？先做一个受控的比较：保持核位置和所有轨道形状不动，只改变占据。回到自旋轨道表示，把相互作用组合简记为 $B_{ij}=J_{ij}-K_{ij}$。它满足 $B_{ij}=B_{ji}$、$B_{ii}=0$。设原占据集合为 $\mathcal O$，固定所有轨道，从占据轨道 $k$ 移去一个电子。对删去 $k$ 前后的能量明确作差：

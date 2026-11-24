@@ -15,12 +15,12 @@
 \label{cp:bo-loops}
 \end{figure}
 
-先看固定核位置 $R^m$ 的内循环。起始构型可用各原子密度的叠加作初猜，以后可以沿用上一核步的密度。第七章的自洽场方法（SCF）在每轮由输入密度 $n_{\rm in}^{(s)}$ 构造 $\hat H_{\rm KS}[n_{\rm in}^{(s)},R^m]$，求本征轨道，再按给定电子数填充。由此得到输出密度
+固定核位置 $R^m$ 时，电子在当前密度产生的势中重排。第七章的自洽场方法（SCF）由输入密度 $n_{\rm in}^{(s)}$ 建立 $\hat H_{\rm KS}[n_{\rm in}^{(s)},R^m]$，在它的低能轨道上填入电子，得到输出密度
 \[
  n_{\rm out}^{(s)}(\bm r)=\sum_{i\,{\rm occ}}\sum_\sigma
           |\phi_i^{(s)}(\bm r,\sigma)|^2 ,
 \]
-其中 $\sigma$ 为自旋。若输入、输出密度仍有差别，就混合它们作为下一轮输入。这一来一回只增加 $s$，核仍在 $R^m$，物理时间也仍是 $mh$，$h$ 为核时间步长。
+其中 $\sigma$ 为自旋。输入与输出相容时，轨道与它们产生的势达到自洽。图中内循环每多一轮，改变的是对同一核构型的电子密度估计，核所处的物理时刻始终是 $mh$，$h$ 为核时间步长。
 
 当电子已收敛到基态 $\Phi_0(R^m)$，才取势能面的负梯度推进原子核。沿 $R$ 求式\eqref{cp:bo-surface}的导数时，最优轨道也会变，但能量在满足正交条件的轨道变化方向上已驻定。因此如第\ref{bo:hellmann-feynman}节所示，
 \begin{equation}\label{cp:bo-force}
@@ -67,7 +67,7 @@ M_I\ddot{\bm R}_I=-\left.\frac{\partial E[\Phi,R]}{\partial\bm R_I}\right|_{\Phi
 
 回到多轨道，并暂把核固定。若轨道停在一个定态，式\eqref{cp:orbital-eom}左端为零，故 $\hat H_{\rm KS}\phi_i=\sum_j\Lambda_{ij}\phi_j$。与 $\phi_k$ 作内积即得 $\Lambda_{ik}=\langle\phi_k|\hat H_{\rm KS}|\phi_i\rangle$。这说明 $H_{\rm KS}$ 作用后的结果完全落在占据轨道所张成的空间内。在这个空间里选择使乘子对角的正交轨道，就得到逐轨道的 KS 本征方程。正交重组同占据数的轨道保持密度。至于这个定态是极小值还是别的驻点，还要看稍稍扰动轨道以后能量如何变化。
 
-\subsection{走一个时间步时求哪些量}
+\subsection{核和轨道怎样一起运动}
 取固定步长 $h$，沿用核时间步指标 $m$。在 $mh$ 两侧展开 $q(t)$ 并相加，奇数阶导数抵消，有 $q^{m+1}+q^{m-1}=2q^m+h^2\ddot q^m+O(h^4)$。在这里 $q$ 可以是一个核坐标，也可以是轨道的一个基展开系数。用式\eqref{cp:ion-eom}和式\eqref{cp:orbital-eom}替换各自的加速度，舍去局部的四阶项，就得到两条 Verlet 递推式
 \begin{align}
  \bm R_I^{m+1}&=2\bm R_I^m-\bm R_I^{m-1}+\frac{h^2}{M_I}\bm F_I^m,\\
@@ -75,9 +75,9 @@ M_I\ddot{\bm R}_I=-\left.\frac{\partial E[\Phi,R]}{\partial\bm R_I}\right|_{\Phi
  -\frac{h^2}{\mu}\left[\hat H_{\rm KS}^m\phi_i^m-\sum_j\Lambda_{ij}^m\phi_j^m\right].
  \label{cp:orbital-verlet}
 \end{align}
-在第 $m$ 步，先由 $\Phi^m$ 构造密度和有效势，借用第十章的方法算出 $\hat H_{\rm KS}^m\phi_i^m$，并在同一组轨道和核位置上求力。式\eqref{cp:orbital-verlet}中除乘子项外的部分给出新轨道的预测值，再沿旧占据轨道 $\{\phi_j^m\}$ 作修正。各个 $\Lambda_{ij}^m$ 要一起选定，使\emph{新一步}的轨道满足 $\langle\phi_i^{m+1}|\phi_j^{m+1}\rangle=\delta_{ij}$。逐条归一化只能校正对角元，两条轨道的重叠还可能非零。求这些正交修正时，参与预测的有效势已由第 $m$ 步给定。
+在同一组核位置和轨道上，核感受总能量对位置的负梯度，轨道则受 $-\hat H_{\rm KS}^m\phi_i^m$ 驱动。这两份作用同时给出下一步的位移。沿旧占据轨道的乘子项修正轨道位移，使新轨道满足 $\langle\phi_i^{m+1}|\phi_j^{m+1}\rangle=\delta_{ij}$。多条轨道的长度和彼此夹角都受这个条件约束。
 
-一个简单极限可以核对递推的时间指标和符号。固定核，设一条归一化本征轨道连续两步相同，$\hat H_{\rm KS}\phi=\varepsilon\phi$。若只用 $H_{\rm KS}\phi$，预测值会变成 $(1-h^2\varepsilon/\mu)\phi$。取连续接回原态的约束解 $\Lambda^m=\varepsilon$，括号内的两项抵消，轨道就停在原处。一般运动从起始构型已收敛的基态出发，并给定满足正交约束一阶导数的初速度。核和轨道同时从静止释放就是一种这样的初态。
+一个简单极限可以核对递推的时间指标和符号。固定核，设一条归一化本征轨道连续两步相同，$\hat H_{\rm KS}\phi=\varepsilon\phi$。若只用 $H_{\rm KS}\phi$，预测值会变成 $(1-h^2\varepsilon/\mu)\phi$。取连续接回原态的约束解 $\Lambda^m=\varepsilon$，括号内的两项抵消，轨道就停在原处。研究基态附近的运动时，可先让核和基态轨道都从静止释放，此时正交约束及其一阶时间导数也同时满足。
 
 \subsection{积分时哪一个能量守恒}
 守恒量也应从这个辅助 Lagrange 函数推导。把核坐标、轨道的实部与虚部以及约束乘子合并记为广义坐标 $q_a$，定义 $\mathcal E=\sum_a\dot q_a\partial L/\partial\dot q_a-L$。逐项求时间导数，含 $\ddot q_a$ 的项抵消，得到
@@ -157,4 +157,4 @@ Euler--Lagrange 方程给出 $\ddot\theta=-(\Delta/\mu)\sin\theta$。可以用�
 \label{cp:energy-curves}
 \end{figure}
 
-实际计算中，先固定 $\mu$ 减半步长，比较周期、正交残差和扩展能量漂移，检查时间离散误差。再抽取几个构型，在\emph{原来的核位置}重新收敛电子基态，同时比较核力和能量。按式\eqref{cp:bo-surface}，在同一基组和电子近似下应有 $E[\Phi^{\rm CP},R]-E_{\rm BO}(R)\ge0$。最后减小 $\mu$ 并相应缩短步长，检验键的伸缩周期是否趋于 BO 参照值。这样，上一章由静态位移测得的刚度，就能用来检验沿轨迹得到的核运动。
+现在可以用两项物理量判断这根键的运动。第一项是同一键长上的回复力。在轨迹经过的几个核构型上求出基态力，与当时的 CP 力比较，就能看到轨道滞后使这根键多受了多大的力。第二项是振动周期。用足以分辨最快振动的步长，减小虚拟惯性 $\mu$，观察周期是否趋近由静态曲率得到的 BO 结果。固定 $\mu$ 时将步长减半，则能单独检查时间离散对周期的影响。小振幅下，这根键的回复力由势能面的斜率决定，振动周期由曲率和核质量决定。同一条轨迹可以同时检验这两个量。

@@ -2,11 +2,11 @@
 \section{势能模型怎样决定计算的问题}
 上一章假定已知 $U(R)$。现在必须说明它包含什么物理。对键长在平衡值 $r_0$ 附近展开，令 $\delta r=r-r_0$，有 $U(r)=U(r_0)+U'(r_0)\delta r+U''(r_0)\delta r^2/2+O(\delta r^3)$。极小值处 $U'(r_0)=0$；选择 $U(r_0)$ 为零点，并定义刚度 $k_b=U''(r_0)$，保留到二阶就得到 $U_b=k_b(r-r_0)^2/2$。键角的小变化可作同样展开。这种谐近似适合小振幅，不能可靠描述断键。
 
-非键作用常包含 Coulomb 项与短程排斥、色散项。以中性稀有气体的简单模型为例，先选择经验形式 $u(r)=A/r^{12}-B/r^6$，其中 $A,B>0$。这是一种模型假设，并非从经典力学推出的定律。令势能过零的位置为 $\sigma$，则 $A=B\sigma^6$；令 $y=(\sigma/r)^6$，势能成为 $(B/\sigma^6)(y^2-y)$。配方 $y^2-y=(y-1/2)^2-1/4$ 表明势阱深度为 $B/(4\sigma^6)$。将它定义为 $\epsilon$，就有 $B=4\epsilon\sigma^6$、$A=4\epsilon\sigma^{12}$，得到 Lennard--Jones 对势
+非键作用常包含 Coulomb 项与短程排斥、色散项。以中性稀有气体的简单模型为例，先选择经验形式 $u(r)=A/r^{12}-B/r^6$，其中 $A,B>0$。令势能过零的位置为 $\sigma$，则 $A=B\sigma^6$；令 $y=(\sigma/r)^6$，势能成为 $(B/\sigma^6)(y^2-y)$。配方 $y^2-y=(y-1/2)^2-1/4$ 表明势阱深度为 $B/(4\sigma^6)$。将它定义为 $\epsilon$，就有 $B=4\epsilon\sigma^6$、$A=4\epsilon\sigma^{12}$，得到 Lennard--Jones 对势
 \begin{equation}
 u(r)=4\epsilon[(\sigma/r)^{12}-(\sigma/r)^6],\qquad U=\sum_{i<j}u(r_{ij}).
 \end{equation}
-$\epsilon$ 是势阱深度，$\sigma$ 是势能过零的距离，$r_{ij}=|\bm r_i-\bm r_j|$。远距离 $r^{-6}$ 吸引反映瞬时偶极涨落之间的量子相关；诱导偶极的能量标度也提示这一幂律，但不能把它当成 London 色散的完整推导。$r^{-12}$ 是方便的经验排斥形式，不是普适定律。
+$\epsilon$ 是势阱深度，$\sigma$ 是势能过零的距离，$r_{ij}=|\bm r_i-\bm r_j|$。远距离 $r^{-6}$ 的吸引来自两原子瞬时偶极涨落之间的关联，第八章将推导这个幂次。短程正项描述原子靠近时迅速增强的排斥，指数十二是这个经验势的选择。
 
 令 $\bm r_{ij}=\bm r_i-\bm r_j$。由 $r_{ij}^2=\bm r_{ij}\cdot\bm r_{ij}$ 求导，$2r_{ij}\nabla_i r_{ij}=2\bm r_{ij}$，故 $\nabla_i r_{ij}=\bm r_{ij}/r_{ij}$。先对距离求导：
 \begin{equation}
@@ -28,7 +28,7 @@ Lennard--Jones 模型有自然单位 $\sigma,\epsilon,m$。定义 $r^*=r/\sigma$
 \frac{m\sigma^2}{\epsilon\tau^2}\frac{\dd^2r^*}{\dd t^{*2}}
 =-\frac{\partial U^*}{\partial r^*}.
 \end{equation}
-选择 $\tau^2=m\sigma^2/\epsilon$，即 $\tau=\sigma\sqrt{m/\epsilon}$，左侧系数变成一。这就是只含无量纲变量的运动方程。“令 $m=\epsilon=\sigma=1$”是在选择单位，不是把实际粒子性质改成一。
+选择 $\tau^2=m\sigma^2/\epsilon$，即 $\tau=\sigma\sqrt{m/\epsilon}$，左侧系数变成一。这就是只含无量纲变量的运动方程。在这套单位中，粒子的质量、势阱深度和长度参数的数值都等于一。
 
 直接在 $r_c$ 之外把势能设零会产生能量跳跃。若内部仅加常数 $a$，连续条件 $u(r_c)+a=0$ 给出 $a=-u(r_c)$，即平移截断 $u_s(r)=u(r)-u(r_c)$。它不改变内部导数，故力通常仍在边界跳变。若允许加线性项 $a+b(r-r_c)$，势与力同时连续要求 $u(r_c)+a=0$、$u'(r_c)+b=0$。解得 $a=-u(r_c)$、$b=-u'(r_c)$，因而
 \begin{equation}
@@ -65,7 +65,7 @@ $g(r)$ 因而是相对于无关联分布的局部概率增强。计算时对每�
 \end{align}
 这里 $r^2=\sum_{\alpha=1}^d r_\alpha^2$，每一项的二阶导数为二，所以 $\nabla^2r^2=2d$；最后再用概率归一化。因此三维中均方位移的长时间斜率为 $6D$，所得 $D$ 称为\emph{自扩散系数}。若把点源初态的扩散方程从 $t=0$ 起作为理想模型，从零初始位移积分就有 $\langle|\Delta\bm r(t)|^2\rangle=6Dt$；真实微观轨迹在短时却有 $\Delta\bm r\simeq\bm v(0)t$，均方位移正比于 $t^2$。实际拟合应选取长时间线性区，并允许截距非零；局域振动形成的平台也不是扩散区。
 
-宏观浓度梯度引起的流也常写成 Fick 形式 $\bm j_c=-D_c\nabla c$，但此时跟踪的是浓度分布的集体变化。$D_c$ 与这里跟踪标记粒子所得的 $D$ 一般不同，不能仅因两条方程形式相同就将它们等同。
+宏观浓度梯度引起的流也常写成 Fick 形式 $\bm j_c=-D_c\nabla c$，但此时跟踪的是浓度分布的集体变化。$D_c$ 与这里跟踪标记粒子所得的 $D$ 分别反映集体浓度涨落的弛豫和单个粒子的位移，数值一般不同。
 
 在许多份平衡样品里各标记一个粒子，把各自的起点都选作位移原点。经过时间 $t$，这些位移的分布是什么形状？先看无限长的一维直线。点源关于原点对称，常数 $D$ 的量纲为长度平方除以时间，唯一能由 $D,t$ 组成的扩散长度是 $\sqrt{Dt}$。令 $\xi=x/\sqrt{Dt}$，取 $p(x,t)=f(\xi)/\sqrt{Dt}$，则 $\int p\,\dd x=\int f\,\dd\xi$ 保持不变。代入 $\partial_t p=D\partial_x^2p$，约掉公共因子后得到
 \[
@@ -93,7 +93,7 @@ $g(r)$ 因而是相对于无关联分布的局部概率增强。计算时对每�
 \begin{equation}
 D=\frac13\int_0^\infty C_v(s)\dd s.
 \end{equation}
-前提是相关函数可积且存在正常扩散极限。多粒子自扩散取各粒子自身相关的平均，不能随意加入不同粒子间的交叉项。速度相关的 Fourier 谱能显示振动频率；只有在适当谐性、质量加权和归一化条件下，才能把它直接解释为振动态密度。
+这个关系要求速度相关可积，而且位移在长时间进入正常扩散区。对多个标记粒子测量自扩散时，取每个粒子与它自身速度的相关，再对粒子平均。若关注振动，速度相关的 Fourier 谱给出频率信息。在谐近似下，配上相应的质量权重与归一化，还能由它得到振动态密度。
 
 怎样把角括号换成轨迹的数据？设单组分液体的平衡生产段每隔 $\delta t$ 保存一帧，共有 $M$ 帧。对于延迟 $t=\ell\delta t$，第 $s$ 帧与第 $s+\ell$ 帧都须落在文件里，故只有 $M-\ell$ 个时间起点。令 $\bm r_{i,s}$ 为第 $s$ 帧粒子 $i$ 的展开坐标，$\bm v_{i,s}$ 为该帧速度。用每个粒子轮流作标记，得到
 \begin{align}
@@ -104,10 +104,16 @@ D=\frac13\int_0^\infty C_v(s)\dd s.
  &=\frac{\sum_{s=0}^{M-\ell-1}\sum_{i=1}^N
              \bm v_{i,s+\ell}\cdot\bm v_{i,s}}{N(M-\ell)} .
 \end{align}
-例如五帧数据在延迟两帧时可以配成 $(0,2),(1,3),(2,4)$ 三对，到延迟四帧就只剩一对。重叠的时间段共享运动历史，时间起点数也不能当成独立样本数。实际可比较不同生产段给出的长时斜率与相关积分平台，再确定可信的时间区间。这也说明取总时长的一半作为最大延迟只是一种取舍。
+例如五帧数据在延迟两帧时可以配成 $(0,2),(1,3),(2,4)$ 三对，到延迟四帧就只剩一对。较长的延迟只剩少量配对，重叠的时间段又共享一部分运动历史。将轨迹分段，比较各段的位移斜率与速度相关积分，有助于看出哪些延迟上的估计仍然可靠。
 
 \section{电输运为何不能只看单粒子扩散}
 想象一对电荷分别为 $+q$ 和 $-q$ 的离子一起向右走同样远。两个粒子的均方位移都增加，向右输送的净电荷却相互抵消。要从平衡轨迹求电导，需要先把所有粒子的\emph{带符号运动}相加，再求这种总运动与自身的相关。令粒子 $i$ 的电荷为 $q_i$，用展开坐标写出体系的电偶极矩 $\bm M=\sum_iq_i\bm r_i$，求导得到总电流 $\bm J=\dot{\bm M}=\sum_iq_i\bm v_i$。从无外场平衡体系出发，施加弱的均匀电场 $\bm E(t)$。电荷在场中的势能使 Hamilton 函数改变为 $H=H_0-\bm E(t)\cdot\bm M$。无场时正反方向运动等可能，平均电流为零。弱场稍微改变不同微观状态所占的权重，下文求这部分与外场成正比的改变，这就是线性响应。
+
+先看一束沿直线以速度 $v$ 匀速前进的粒子。起初粒子都未被标记，随后用光脉冲在沿途给粒子作标记。设 $q(x,s)\dd s$ 为从时刻 $s$ 起的短时间里，位置 $x$ 处新增的标记粒子数密度。时刻 $t$ 在 $x$ 看到的粒子，在时刻 $s$ 经过的位置是 $x-v(t-s)$。因此此刻的标记粒子数密度为
+\[
+ f_{\rm tag}(x,t)=\int_0^t q\bigl(x-v(t-s),s\bigr)\dd s .
+\]
+对于液体，粒子受相互作用，直线要换成相空间中无外场时的轨迹。我们先求出弱电场每一瞬间怎样改变轨迹上的概率，再将这种改变沿轨迹累积起来。
 
 将全部位置和动量分量分别记为 $R_a,P_a$，定义 Poisson 括号 $\{A,B\}=\sum_a(\partial_{R_a}A\,\partial_{P_a}B-\partial_{P_a}A\,\partial_{R_a}B)$。对不显含时间的 $A$ 用链式法则，并代入 Hamilton 方程 $\dot R_a=\partial_{P_a}H$、$\dot P_a=-\partial_{R_a}H$，得到 $\dot A=\{A,H\}$。概率守恒要求 $\partial_t\rho+\nabla_\Gamma\cdot(\rho\dot\Gamma)=0$；Hamilton 速度场的散度为 $\sum_a(\partial_{R_a}\partial_{P_a}H-\partial_{P_a}\partial_{R_a}H)=0$，于是 $\partial_t\rho=-\{\rho,H\}$。
 
@@ -117,18 +123,17 @@ D=\frac13\int_0^\infty C_v(s)\dd s.
 =\beta\rho_0\sum_\alpha E_\alpha(t)J_\alpha,
 \qquad \mathcal L_0 A=\{A,H_0\}.
 \end{equation}
-这里 $\mathcal L_0$ 表示沿无外场轨迹的导数。把从初始相点 $\Gamma$ 出发、经过时间 $t$ 的相点记为 $\Phi_t\Gamma$，定义传播记号 $e^{t\mathcal L_0}A(\Gamma)=A(\Phi_t\Gamma)$。密度满足相反符号的演化，故用 $e^{-t\mathcal L_0}$ 传播。若初始扰动为零，把每一时刻产生的源沿无外场轨迹传播并相加，即得
+$\mathcal L_0$ 是沿无场 Hamilton 轨迹的导数。记 $\Phi_u\Gamma$ 为相点 $\Gamma$ 沿无场轨迹前进时间 $u$ 后的位置。那么在时刻 $t$ 到达 $\Gamma$ 的轨迹，在时刻 $s$ 经过 $\Gamma_s=\Phi_{s-t}\Gamma$。沿途的全导数 $\dd[\delta\rho(\Gamma_s,s)]/\dd s=(\partial_s+\mathcal L_0)\delta\rho(\Gamma_s,s)$ 正好是上一式的左侧。又因无场能量 $H_0$ 沿轨迹守恒，$\rho_0(\Gamma_s)=\rho_0(\Gamma)$。初态是无场平衡态，故 $\delta\rho(\Gamma_0,0)=0$。沿轨迹从 $s=0$ 积到 $t$，便得到这个相点处的概率改变量
 \begin{equation}
-\delta\rho(t)=\beta\int_0^t e^{-(t-s)\mathcal L_0}
-\left[\rho_0\sum_\alpha E_\alpha(s)J_\alpha\right]\dd s.
+ \delta\rho(\Gamma,t)=\beta\rho_0(\Gamma)\sum_\alpha\int_0^t
+ E_\alpha(s)J_\alpha(\Phi_{s-t}\Gamma)\dd s .
 \end{equation}
-对该式求导会得到上面的源项与 $-\mathcal L_0\delta\rho$，因此它确实解出了一阶演化方程。转为平均值时，可令 $\Gamma'=\Phi_{-\tau}\Gamma$；相空间体积不变，$\rho_0(\Phi_{-\tau}\Gamma)=\rho_0(\Gamma)$，所以
+要得到此刻的电流，就乘以 $J_\gamma(\Gamma)$ 并对相点积分。把积分变量换成电场起作用时的相点 $\Gamma'=\Phi_{s-t}\Gamma$。无场运动保持相空间体积和 $\rho_0$，所以电流乘积的平均为
 \begin{equation}
-\int A(\Gamma)e^{-\tau\mathcal L_0}[\rho_0 B](\Gamma)\dd\Gamma
-=\int A(\Phi_\tau\Gamma')\rho_0(\Gamma')B(\Gamma')\dd\Gamma'
-=\langle A(\tau)B(0)\rangle_0.
+ \int\dd\Gamma'\,\rho_0(\Gamma')J_\gamma(\Phi_{t-s}\Gamma')J_\alpha(\Gamma')
+ =\langle J_\gamma(t-s)J_\alpha(0)\rangle_0 .
 \end{equation}
-在扰动密度中取 $A=J_\gamma$、$B=J_\alpha$、$\tau=t-s$，就有
+这个相关函数正是可在平衡轨迹上测量的量。早时 $\alpha$ 方向的电流涨落与后来 $\gamma$ 方向的电流保留多少相关，决定了那一刻的场对当前电流的贡献。将各个时刻的贡献相加，得到
 \begin{equation}
 \delta\langle J_\gamma(t)\rangle
 =\beta\sum_\alpha\int_0^t E_\alpha(s)
@@ -149,7 +154,7 @@ D=\frac13\int_0^\infty C_v(s)\dd s.
 \sigma_{\rm NE}=\frac{\sum_s N_s q_s^2(6D_s)}{6V\kb T}
 =\sum_s\frac{\rho_s q_s^2D_s}{\kb T}.
 \end{equation}
-因此 Nernst--Einstein 近似丢掉的是不同离子的协同运动，而不是一种积分误差。
+Nernst--Einstein 近似由此把电导写成各物种的自扩散贡献之和。本节开头那对同向运动的正、负离子说明了交叉项的作用。两者的自扩散都可以很大，合起来输送的电荷却为零。
 
 \section{温度梯度怎样引出热流相关}
 晶体中的原子可以一直停留在各自平衡位置附近，却仍能通过相互作用把能量传给邻居。把样品两端维持在略有不同的温度，能量由热端流向冷端；单位截面积的热流与温度梯度之比给出热导率的大小。现在沿用电导的思路，问没有外加温差时的热流涨落怎样决定这个系数。先限于无宏观质量流、能流就是热流的情形，例如固定质心且没有物质输运的固体。令 $e(\bm r)$ 是局部能量密度，$\bm j_Q(\bm r)$ 是热流密度，能量守恒为 $\dot e=-\nabla\cdot\bm j_Q$，总热流定义为 $\bm J_Q=\int\bm j_Q\dd\bm r$。
@@ -172,7 +177,7 @@ D=\frac13\int_0^\infty C_v(s)\dd s.
 \begin{equation}
 \kappa=\frac1{3V\kb T^2}\int_0^\infty\langle\bm J_Q(t)\cdot\bm J_Q(0)\rangle\dd t.
 \end{equation}
-推导中的 $\bm J_Q$ 是总流，所以分母含 $V$；若存储的是总流除以体积，相关函数前则应乘 $V$。具体热流必须满足所用势能的能量连续性方程。存在物质流的流体或混合物还要剔除平流及相应耦合贡献，不能无条件把能流当作导热热流。周期边界与多体势下，也不能不加修正地把 $\sum_i e_i\bm r_i$ 的时间导数当成完整热流。这里求的是体相线性响应系数，实际可用周期体系的平衡相关估计，并检查有限尺寸误差。
+这里 $\bm J_Q$ 是整个体系的热流。若轨迹存储的是热流密度 $\bm J_Q/V$，代入两次后，相关积分的系数须由 $1/(3V\kb T^2)$ 改为 $V/(3\kb T^2)$。热流的具体表达式取决于势能怎样在原子间传递。存在物质输运时，还须从能流中分离随物质流动输送的能量。下面看周期边界怎样影响这种测量。
 
 若只关心 $z$ 方向，将平衡总热流在一段时间内累加，定义 $G_z(t)-G_z(0)=\int_0^t J_{Q,z}(s)\dd s$。在上述零平均热流条件下，把式\eqref{transport:integrated-correlation}的一个速度分量换成 $J_{Q,z}$，就有
 \begin{align}
